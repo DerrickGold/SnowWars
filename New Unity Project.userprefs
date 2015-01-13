@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Vector.cs">
+    <Files>
+      <File FileName="Assets/MyScripts/Projectile.cs" Line="1" Column="1" />
+      <File FileName="Assets/MyScripts/BulletTest.cs" Line="1" Column="1" />
+      <File FileName="Assets/MyScripts/CSCharacterMotor.cs" Line="1" Column="1" />
+      <File FileName="Assets/MyScripts/TerrainFootprints.cs" Line="1" Column="1" />
+      <File FileName="Assets/Vector.cs" Line="33" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
