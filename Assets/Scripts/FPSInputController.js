@@ -1,5 +1,4 @@
 private var motor : CharacterMotor;
-private var player: FPSInputController;
 
 // Use this for initialization
 function Awake () {
@@ -8,7 +7,7 @@ function Awake () {
 
 // Update is called once per frame
 function Update () {
-	// Get the input vector from keyboard or analog stick
+	// Get the input vector from kayboard or analog stick
 	var directionVector = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 	
 	if (directionVector != Vector3.zero) {
@@ -28,11 +27,6 @@ function Update () {
 		directionVector = directionVector * directionLength;
 	}
 	
-	if (Input.GetMouseButtonDown(0)) {
-		Debug.Log("Mouse clicked :D");
-		var snowball : GameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-		snowball.transform.position = player.transform.position;
-	}
 	// Apply the direction to the CharacterMotor
 	motor.inputMoveDirection = transform.rotation * directionVector;
 	motor.inputJump = Input.GetButton("Jump");
@@ -40,5 +34,4 @@ function Update () {
 
 // Require a character controller to be attached to the same game object
 @script RequireComponent (CharacterMotor)
-@script RequireComponent (FPSInputController)
 @script AddComponentMenu ("Character/FPS Input Controller")

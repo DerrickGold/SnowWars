@@ -39,69 +39,34 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Nuaj\Editor\CubeMapRendererWindow.cs" />
-     <Compile Include="Assets\Nuaj\Editor\LightningEditor.cs" />
-     <Compile Include="Assets\Nuaj\Editor\MapLocatorEditor.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorBase.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorCloudLayer.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorCloudVolume.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorMain.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorPerspective.cs" />
-     <Compile Include="Assets\Nuaj\Editor\Module Editors\ModuleEditorSatellites.cs" />
-     <Compile Include="Assets\Nuaj\Editor\NuajEditor.cs" />
-     <Compile Include="Assets\Nuaj\Editor\NuajGUIHelpers.cs" />
-     <Compile Include="Assets\Nuaj\Editor\OrchestratorEditor.cs" />
-     <None Include="Assets\Nuaj\Resources\Shaders\PlanetDataInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\Noise3DSupportInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Utility\DownsampleZ.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveComplexInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Header.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\RenderEnvironmentSimple.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Utility\ImageScalerLog.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\ToneMapping.shader" />
+     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Editor\ChunkEditor.cs" />
+     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Editor\OnRun.cs" />
+     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Editor\TerraEditor.cs" />
+     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Editor\TerraMapGeneratorEditor.cs" />
+     <Compile Include="Assets\Terrain\Editor\TerrainToolkitEditor.cs" />
+     <None Include="Assets\TerraVolPack\TerraVol\Shaders\WavingGrassBillboard.shader" />
+     <None Include="Assets\TerraVolPack\TerraVol\Shaders\GrassOnMeshGenerator.cginc" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveSimpleInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\ComposeAtmosphere.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\CloudVolumeShadow.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\CloudVolume.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveComplex.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Satellites\RenderSatellites.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\ToneMappingInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\RenderEnvironmentComplex.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\ShadowMapInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Satellites\RenderSatellitesInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\FogVolumeInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\CloudVolumeInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\CloudLayer.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\FogVolume.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Utility\ClearTexture.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\LocalVariationsInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\RenderEnvironmentNone.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\LightSupportInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Utility\ImageScaler.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Clouds\CloudLayerInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveSimple.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\SkyCompositionInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveNoneInc.cginc" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveNone.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\ComposeReflection.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\Sky\BuildDensityTexture.shader" />
-     <None Include="Assets\Nuaj\Resources\Shaders\RenderLightCookie.shader" />
+     <None Include="Assets\TerraVolPack\TerraVol\Shaders\TerrainShader.shader" />
+     <None Include="Assets\TerraVolPack\TerraVol\Shaders\WavingGrass.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/Editor/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/Editor/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
- <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="protobuf-net">
+ <HintPath>C:/Users/Curtis/Desktop/SnowWars/Assets/TerraVolPack/Plugins/protobuf-net.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
