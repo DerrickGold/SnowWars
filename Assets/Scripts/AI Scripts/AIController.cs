@@ -18,17 +18,20 @@ public class AIController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		switch(state) {
-		case default:
-			break;
-
-
 		case State.WALKING:
+
+
 			break;
 
 		case State.PLAYERTRACK:
 			break;
 
 		case State.ATTACKING:
+			//Rigidbody instantiatedProjectile = Instantiate(Common.snowball.rigidbody, transform.position, transform.rotation) as Rigidbody;
+			//instantiatedProjectile.AddForce (transform.forward * 1200.0f);
+			//Common.sfx[SNOWBALL_THROW].Play();
+
+			state = State.WALKING;
 			break;
 
 		case State.DEAD:
@@ -43,11 +46,15 @@ public class AIController : MonoBehaviour {
 
 
 	void OnTriggerEnter(Collider collision) {
-
+		//If another npc or character is in range, switch the target
+		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
 	}
 
 	void OnTriggerExit(Collider collision) {
 
 	}
+
+
+
 
 }
