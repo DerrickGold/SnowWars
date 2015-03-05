@@ -9,25 +9,27 @@ public class PlayerController : MonoBehaviour
         IDLE,
         WALKING,
         RUNNING,
-        JUMPING,
     };
     private PlayerState state;
+    private bool isJumping = false;
     private float hp = 100.0f;
     private Vector3 moveDirection = Vector3.zero;
 
     //Game variables
-    public GameObject snowball;
+    //public GameObject snowball;
 
     void Start()
     {
         state = PlayerState.IDLE;
+        Common.player = gameObject;
+        
     }
 
     void Update()
     {
+        //Get the direction the player is moving
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         
-
         switch (state)
         {
             case PlayerState.IDLE:
@@ -35,8 +37,6 @@ public class PlayerController : MonoBehaviour
             case PlayerState.WALKING:
                 break;
             case PlayerState.RUNNING:
-                break;
-            case PlayerState.JUMPING:
                 break;
         }
     }
