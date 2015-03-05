@@ -7,7 +7,7 @@ public class BulletTest : MonoBehaviour
 {
 	public GameObject projectile;
 	[SerializeField]
-	private new AudioSource audio;
+	private AudioSource audio;
 
 	void Update () 
 	{

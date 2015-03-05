@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -50,71 +50,11 @@
      <Compile Include="Assets\Scripts\CSCharacterMotor.cs" />
      <Compile Include="Assets\Scripts\CSFPSInputController.cs" />
      <Compile Include="Assets\Scripts\MouseLook.cs" />
-     <Compile Include="Assets\Scripts\Player\DEBUG\DEBUGCameraController.cs" />
-     <Compile Include="Assets\Scripts\Player\DEBUG\DEBUGPlayerController.cs" />
-     <Compile Include="Assets\Scripts\Player\DEBUG\HUDDebugger.cs" />
-     <Compile Include="Assets\Scripts\Player\playerController.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
      <Compile Include="Assets\Scripts\TerrainFootprints.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Builder\BuildHelper.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Builder\ChunkBuilder.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Builder\MarchingCubes.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Builder\MarchingCubesTables.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\ActionData.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\BlockData.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\BlockPool.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\Chunk2D.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\ChunkData.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\ChunkPool.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Data\MeshData.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Generator\GrassGenerator.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Generator\PerlinNoise2D.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Generator\PerlinNoise3D.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Generator\TerraMapGenerator.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Generator\TerrainGenerator.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\ITerraVolEnhance.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Map\Block.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Map\BlockSet.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Map\Chunk.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Map\TerraBuilder.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Map\TerraMap.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\PathFinder\MinHeap.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\PathFinder\PathDebuger.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\PathFinder\PathFinder.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\PathFinder\PathTester.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\PathFinder\SearchNode.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Recorder\WorldRecorder.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Thread\BuilderThread.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Thread\GeneratorThread.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Thread\GrassThread.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Thread\ThreadManager.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\BuildUtils.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Grid2.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Grid3.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\PrefabPool.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\ProtoVector2.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\ProtoVector3.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\TerraEditorException.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Vector2i.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Vector2iComparer.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Vector3Utils.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Vector3i.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts\Utils\Vector3iComparer.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts_to_customize\Builder.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts_to_customize\MyMouseLook.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts_to_customize\PlayerSpawn.cs" />
-     <Compile Include="Assets\TerraVolPack\TerraVol\Scripts_to_customize\TerraVolEnhance.cs" />
-     <Compile Include="Assets\Terrain\TerrainToolkit.cs" />
-     <None Include="Assets\TerraVolPack\TerraVol\Shaders\WavingGrassBillboard.shader" />
-     <None Include="Assets\TerraVolPack\TerraVol\Shaders\GrassOnMeshGenerator.cginc" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
-     <None Include="Assets\TerraVolPack\TerraVol\Shaders\TerrainShader.shader" />
-     <None Include="Assets\TerraVolPack\TerraVol\Shaders\WavingGrass.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="protobuf-net">
- <HintPath>C:/Users/Curtis/Desktop/SnowWars/Assets/TerraVolPack/Plugins/protobuf-net.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

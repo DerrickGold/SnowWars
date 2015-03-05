@@ -1,31 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour
-{
-    [SerializeField]
-    private new AudioSource audio;
-	private bool collided = false;
-
-	void Start() 
-    {
+public class Projectile : MonoBehaviour {
+	float speed = 60.0f;
+	bool collided = false;
+	private AudioSource audio;
+	// Use this for initialization
+	void Start () {
 		audio = GetComponent<AudioSource> ();
+
 	}
 	
-	void Update() 
-    {
-		if(collided && !audio.isPlaying)
-            Destroy(gameObject);
+	// Update is called once per frame
+	void Update () {
+		if(collided && !audio.isPlaying) Destroy (gameObject);
 	}
 
-	void OnCollisionEnter(Collision collision) 
-    {
-		audio.Play();
+	void OnCollisionEnter(Collision collision) {
+		audio.Play ();
 		collided = true;
-
+		//stop the snowball in its track
 		Destroy (rigidbody);
 		Destroy (collider);
-        GetComponent<MeshRenderer>().enabled = false;
 	}
 
 }
