@@ -9,11 +9,13 @@ public class PlayerController : MonoBehaviour
         IDLE,
         WALKING,
         RUNNING,
+        JUMPING
     };
     private PlayerState state;
-    private bool isJumping = false;
-    private float hp = 100.0f;
     private Vector3 moveDirection = Vector3.zero;
+    private bool isJumping = false;
+    private bool isGrounded = false;
+    private float hp = 100.0f;
 
     //Game variables
     //public GameObject snowball;
@@ -27,17 +29,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Get the direction the player is moving
-        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        
-        switch (state)
+        //Is player grounded?
+        if (isGrounded)
         {
-            case PlayerState.IDLE:
-                break;
-            case PlayerState.WALKING:
-                break;
-            case PlayerState.RUNNING:
-                break;
+            //Get the direction the player is moving
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            moveDirection.x -= Input.GetAxis("Strafing");
+
+            switch (state)
+            {
+                case PlayerState.IDLE:
+                    break;
+                case PlayerState.WALKING:
+                    
+                    break;
+                case PlayerState.RUNNING:
+                    break;
+                case PlayerState.JUMPING:
+                    break;
+            }
         }
     }
 }
