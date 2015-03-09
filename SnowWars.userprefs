@@ -1,8 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\BulletTest.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/AI Scripts/AIController.cs">
     <Files>
-      <File FileName="Assets\Scripts\BulletTest.cs" Line="13" Column="3" />
+      <File FileName="Assets/Scripts/AI Scripts/AIController.cs" Line="42" Column="37" />
+      <File FileName="Assets/Scripts/Common.cs" Line="7" Column="34" />
+      <File FileName="Assets/Scripts/BulletTest.cs" Line="22" Column="2" />
+      <File FileName="../labs/Lab4/Assets/Scripts/NPCClerk.cs" Line="95" Column="12" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
