@@ -4,6 +4,7 @@ using System.Collections;
 public class Common: MonoBehaviour {
     //Player variables
 	static public int MaxPlayers = 32;
+	static public int AIViewRange = 20;
 	static public GameObject player;
 
     //AI variables
@@ -13,8 +14,8 @@ public class Common: MonoBehaviour {
 	public enum AudioSFX {
 			THROW, SNOWBALL_HIT, FOOTSTEP
 	};
-	static public AudioSource[] sfx;
+	static public AudioClip[] sfx;
 
     //Game variables
-	static public GameObject SnowBall;
+	public GameObject SnowBall;
 }
