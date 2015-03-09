@@ -12,7 +12,7 @@ public class Rotator : MonoBehaviour {
 	void Start()
 	{
 		buffBounceSpeed = 2f;
-		buffBounceHeight = 3f;
+		buffBounceHeight = 2f;
 		originalPos = transform.position;
 		buffText = (Text)(transform.parent.transform.FindChild ("Canvas").FindChild("STEALTH").GetComponent<Text>());
 		buffText.gameObject.SetActive (false);
