@@ -2,20 +2,19 @@
 using System.Collections;
 
 public class Common: MonoBehaviour {
-	public static int MaxPlayers = 32;
-	public GameObject player;
+    //Player variables
+	static public int MaxPlayers = 32;
+	static public GameObject player;
 
+    //AI variables
 	public GameObject[] ai;
 
+    //Sound variables
 	public enum AudioSFX {
 			THROW, SNOWBALL_HIT, FOOTSTEP
 	};
-	private AudioSource[] sfx; 
+	static public AudioSource[] sfx;
 
-	public GameObject SnowBall;
-
-
-
-
-
+    //Game variables
+	static public GameObject SnowBall;
 }
