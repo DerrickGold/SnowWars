@@ -5,6 +5,7 @@ public class Common: MonoBehaviour {
     //Player variables
 	static public int MaxPlayers = 32;
 	static public int AIViewRange = 20;
+	static public float MaxThrowForce = 1200.0f;
 	static public GameObject player;
 
     //AI variables

@@ -9,8 +9,7 @@ public class AIController : MonoBehaviour {
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
 
-	private GameObject Thorax;
-	private GameObject Head;
+	private Transform Thorax, Head;
 	private GameObject SnowBallTemplate;
 	private SphereCollider TriggerCollider;
 
@@ -25,8 +24,14 @@ public class AIController : MonoBehaviour {
 	void Start () {
 		navMesh = GetComponent<NavMeshAgent> ();
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
-		Thorax = GameObject.Find ("Thorax");
-		Head = GameObject.Find ("Head");
+
+		foreach (Transform o in GetComponentsInChildren<Transform> ()){
+			if (o.name == "Head") Head = o;
+			else if (o.name == "Thorax") Thorax = o;
+		}
+		//Thorax = this.GetComponentsInChildren<GameObject> ();
+			//GameObject.Find ("Thorax");
+		//Head = GameObject.Find ("Head");
 
 		TriggerCollider = GetComponent<SphereCollider> ();
 		TriggerCollider.radius = Common.AIViewRange;
@@ -40,11 +45,9 @@ public class AIController : MonoBehaviour {
 	void Update () {
 
 		targetInSight = isTargetInView ();
-
 		if (targetInRange) {
-			Head.transform.LookAt (currentTarget);
+			Head.transform.LookAt(currentTarget);
 		}
-
 
 		switch(state) {
 		case State.WALKING:
@@ -57,10 +60,17 @@ public class AIController : MonoBehaviour {
 		case State.ATTACKING:
 			navMesh.destination = currentTarget.position;
 			if (!stateCoroutine) {
-				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, Thorax.transform.position, Head.transform.rotation) as Rigidbody;
-				instantiatedProjectile.AddForce (transform.forward * 1200.0f);
+
+				//Quaternion startRotate = new Quaternion(Head.transform.rotation.x, 0, 0, 0);
+				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
+				                                               Thorax.position, Head.rotation) as Rigidbody;
+
+
+				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce);
+				instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * 1000.0f);
 			
-				StartCoroutine(defaultStateTimer(1, 5, State.WALKING));
+				state = State.WALKING;
+				//StartCoroutine(defaultStateTimer(1, 2, State.WALKING));
 			}
 			break;
 
@@ -76,16 +86,19 @@ public class AIController : MonoBehaviour {
 
 
 	void OnTriggerEnter(Collider collision) {
-		//If another npc or character is in range, switch the target
+	//void OnCollisionEnter(Collision collision) {
+	//If another npc or character is in range, switch the target
 		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
 		if (collision.gameObject.tag == "Player") {
 			//state = State.ATTACKING;
 			targetInRange = true;
+			print ("target in range");
 		}
 
 	}
 
 	void OnTriggerExit(Collider collision) {
+	//void OnCollisionExit(Collision collision) {
 		if (collision.gameObject.tag == "Player") {
 			//state = State.WALKING;
 			targetInRange = false;
