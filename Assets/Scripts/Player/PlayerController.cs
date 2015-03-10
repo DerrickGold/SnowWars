@@ -47,10 +47,7 @@ public class PlayerController : MonoBehaviour
         //Only allow movement and jumps while isGrounded 
         if (isGrounded)
         {
-            moveDirection = new Vector3((Input.GetMouseButton(1) ? Input.GetAxis("Horizontal") : 0), 0, Input.GetAxis("Vertical"));
-
-            //Strafing move
-            moveDirection.x -= Input.GetAxis("Strafing");
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
             //If moving forward and to the side at the same time, compensate for distance 
             if (Input.GetMouseButton(1) && (Input.GetAxis("Horizontal") != 0) && (Input.GetAxis("Vertical") != 0))
@@ -84,7 +81,7 @@ public class PlayerController : MonoBehaviour
         isJumping = isGrounded ? false : isJumping;
 
         //Keep the player on the ground when they are not jumping
-        GroundPlayer();
+        //GroundPlayer();
     }
 
     /*
