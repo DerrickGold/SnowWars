@@ -5,3 +5,14 @@ obj/*
 
 
 *.orig
+SnowWars.userprefs
+SnowWars.sln
+SnowWars-csharp.sln
+Assembly-UnityScript.unityproj
+Assembly-UnityScript-vs.unityproj
+Assembly-UnityScript-firstpass.unityproj
+Assembly-UnityScript-firstpass-vs.unityproj
+Assembly-CSharp.csproj
+Assembly-CSharp-vs.csproj
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp-Editor-vs.csproj
