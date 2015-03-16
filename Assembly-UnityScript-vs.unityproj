@@ -68,9 +68,16 @@
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlowBasic.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicOpaque.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\Flag.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailParallax.shader" />
+     <None Include="Assets\_DLNK\Winter Assets\DemoScene\1.3\WinterAssetsDemo1.2\BeastSettings.xml" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\Basic Refraction.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
+     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\BumpDetail.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlow.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\RadialBlur.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfFieldDX11.shader" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailSSSOC.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLTransparent.shader" />
@@ -83,18 +90,26 @@
      <None Include="Assets\DynamicElements_Effects\readme.txt" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicParallax.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxRimOclussion.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlobalFog.shader" />
+     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\StandarTopBottoMob.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxOclussion.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpedOclussion.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTopBottom.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetail.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\PrepareSunShaftsBlur.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailRelief.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\LightingEmissiveRim.shader" />
+     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\StandarMob.shader" />
+     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SimpleClear.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBL.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParticleRefraction.shader" />
      <None Include="Assets\TerrainToolkit\Read me.txt" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\MixedLightingRim.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailReflection.shader" />
      <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTranslucent.shader" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>/Users/Derrick/Documents/University/CMPT330/SnowWars/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>

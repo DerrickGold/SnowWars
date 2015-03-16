@@ -1,9 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/AI Scripts/AIController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/CharacterBase.cs">
     <Files>
-      <File FileName="Assets/Scripts/AI Scripts/AIController.cs" Line="66" Column="73" />
-      <File FileName="Assets/Scripts/Common.cs" Line="8" Column="35" />
+      <File FileName="Assets/Scripts/CharacterBase.cs" Line="44" Column="33" />
+      <File FileName="Assets/Scripts/AI Scripts/AIController.cs" Line="4" Column="42" />
+      <File FileName="Assets/Scripts/Common.cs" Line="14" Column="42" />
       <File FileName="Assets/Scripts/BulletTest.cs" Line="1" Column="1" />
       <File FileName="../labs/Lab4/Assets/Scripts/NPCClerk.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Player/PlayerController.cs" Line="1" Column="1" />

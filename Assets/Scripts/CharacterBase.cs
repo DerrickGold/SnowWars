@@ -41,7 +41,8 @@ public class CharacterBase {
 
 	//returns true or false if an effect is active
 	public bool isEffectActive(BuffFlag effect) {
-		return ActiveBuffs & effect;
+		//what a hack to return a bool
+		return (ActiveBuffs & (int)effect) > 0;
 	}
 
 	//set a time for a given effect
@@ -72,11 +73,15 @@ public class CharacterBase {
 	}
 	
 	//processess a throw from the player
-	public int subtractAmmo() {
+	public void subtractAmmo() {
 		//infinite ammo, doesn't subtract from health
 		if (isEffectActive(BuffFlag.INF_AMMO)) return;
 		//subtract one hit point for every throw
-		Health -= (Common.AmmoSubtractAmmount + isEffectActive(BuffFlag.SUPER_SNOWBALL) * (Common.SuperSnowSubtract - 1));
+		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
+			Health -= (Common.AmmoSubtractAmmount + Common.SuperSnowSubtract);
+		} else {
+			Health -= Common.AmmoSubtractAmmount;
+		}	           
 	}
 
 	//check if player should get boosted speed
@@ -87,7 +92,10 @@ public class CharacterBase {
 
 
 	public int getSnowBallDamage() {
-		return Common.BaseSnowBallDamage + (isEffectActive (BuffFlag.SUPER_SNOWBALL) * Common.SuperSnowBallBoost);
+		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
+			return Common.BaseSnowBallDamage + Common.SuperSnowBallBoost;
+		}
+		return Common.BaseSnowBallDamage;
 	}
 
 
