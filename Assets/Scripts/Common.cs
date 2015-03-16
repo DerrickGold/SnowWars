@@ -13,9 +13,9 @@ public class Common: MonoBehaviour {
 
     //Sound variables
 	public enum AudioSFX {
-			THROW, SNOWBALL_HIT, FOOTSTEP
+			SNOWBALL_THROW = 0, SNOWBALL_HIT = 1, FOOTSTEP = 2
 	};
-	static public AudioClip[] sfx;
+	public AudioSource[] sfx;
 
     //Game variables
 	public GameObject SnowBall;

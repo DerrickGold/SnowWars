@@ -4,10 +4,18 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     //Player variables
+    private enum PlayerState
+    {
+        IDLE,
+        WALKING,
+        RUNNING
+    };
+
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController controller;
+    private PlayerState playerState = PlayerState.IDLE;
+    public Animation throwingAnimation;
 
-    private bool isWalking = false;
     private bool isJumping = false;
     private bool isGrounded = false;
 
@@ -18,10 +26,11 @@ public class PlayerController : MonoBehaviour
     private float jumpSpeed = 10.0f;
     private float gravity = 30.0f;
 
-    private Common globalScript;
-
     //Game variables
-    //public GameObject snowball;
+    private Common globalScript;
+    private AudioSource audio;
+    public Transform snowballSpawnLocation;
+
 
     void Start()
     {
@@ -29,22 +38,93 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
+
     void Update()
     {
-        Movement();
+        //Is the player moving?
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            //Is the player walking or running?
+            if (Input.GetKey(KeyCode.LeftShift))
+                playerState = PlayerState.RUNNING;
+            else
+                playerState = PlayerState.WALKING;
+        }
+        else
+            playerState = PlayerState.IDLE;
+
+        switch (playerState)
+        {
+            case PlayerState.IDLE:
+                Movement(0.0f);
+                break;
+
+            case PlayerState.WALKING:
+                Movement(walkSpeed);
+                break;
+
+            case PlayerState.RUNNING:
+                Movement(runSpeed);
+                break;
+        }
+
+        if (Input.GetButtonDown("Fire1") && hp > 0)
+            throwingAnimation.Play("throwingAnimation");
     }
+
+
+    /*
+     * Description: Call this function to apply gravity to the player
+     */
+    void ApplyGravity()
+    {
+        moveDirection.y -= gravity * Time.deltaTime;
+        
+        //Make sure the player isn't falling faster than gravity should allow
+        if (moveDirection.y < -70)
+            moveDirection.y = -70;
+    }
+
+
+    /*
+     * Description: Call this function keep track of player jumping
+     */
+    void Jumping()
+    {
+        //Check to see if the player can jump again
+        if (isGrounded)
+            isJumping = false;
+
+        //Deal with jumping
+        if (Input.GetButton("Jump") && !isJumping)
+        {
+            isJumping = true;
+            moveDirection.y = jumpSpeed;
+        }
+    }
+
+
+    /*
+     * Description: Deals with letting the player throw snowballs
+     */
+    public void Throwing()
+    {
+        Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
+        snowBall.AddForce(Camera.main.transform.forward * 1200.0f);
+        globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
+        hp -= 1;
+        print("Player HP: " + hp);
+    }
+
 
     /*
      * Description: Deals with the movement of the player
+     * Syntax: Movement(float);
+     * Values:
+     *       : speed = The max speed the player can move at
      */
-    void Movement()
+    void Movement(float speed)
     {
-        //Hold "Run" to stop running
-        isWalking = true;
-        if (Input.GetKey(KeyCode.LeftShift))
-            isWalking = !isWalking;
-
-        //Only allow movement and jumps while isGrounded 
         if (isGrounded)
         {
             moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -53,35 +133,15 @@ public class PlayerController : MonoBehaviour
             if (Input.GetMouseButton(1) && (Input.GetAxis("Horizontal") != 0) && (Input.GetAxis("Vertical") != 0))
                 moveDirection *= 0.7f;
 
-            //Use run or walkspeed 
-            moveDirection *= isWalking ? walkSpeed : runSpeed;
-
+            moveDirection *= speed;
             moveDirection = transform.TransformDirection(moveDirection);
         }
 
-        //Jump
-        if (Input.GetButton("Jump") && !isJumping)
-        {
-            isJumping = true;
-            moveDirection.y = jumpSpeed;
-        }
+        Jumping();
+        ApplyGravity();
 
-        //Apply gravity
-        moveDirection.y -= gravity * Time.deltaTime;
-
-        //Make sure the player doesn't fall faster than gravity
-        if (moveDirection.y < -70)
-            moveDirection.y = -70;
-
-        //Move Charactercontroller and check if isGrounded
-        if (controller != null)
-            isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
-
-        //Check if the player has landed after jumping
-        isJumping = isGrounded ? false : isJumping;
-
-        //Keep the player on the ground when they are not jumping
-        //GroundPlayer();
+        //Move the player and check if the player is grounded
+        isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
     }
 
     /*
@@ -89,7 +149,6 @@ public class PlayerController : MonoBehaviour
      */
     void GroundPlayer()
     {
-        //Make sure the player is not jumping
         if (!isJumping)
         {
             RaycastHit hit;
