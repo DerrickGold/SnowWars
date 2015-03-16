@@ -11,7 +11,7 @@ using System.Collections;
  */
 
 
-public class CharacterBase {
+public class CharacterBase: MonoBehaviour {
 	public enum BuffFlag {
 		MAX_HEALTH_BOOST = 1<<1, 
 		INF_AMMO = 1<<2,

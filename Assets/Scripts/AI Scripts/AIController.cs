@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AIController : MonoBehaviour {
+public class AIController :CharacterBase {
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK };
 	public State state = State.WALKING;
 
@@ -13,13 +13,16 @@ public class AIController : MonoBehaviour {
 	private GameObject SnowBallTemplate;
 	private SphereCollider TriggerCollider;
 
+	private float MovementSpeed;
+
 	//keep track of whether the target is visible to the AI or not
 	bool targetInSight = false;
 	bool targetInRange = false;
 
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
-	
+
+
 	// Use this for initialization
 	void Start () {
 		navMesh = GetComponent<NavMeshAgent> ();
@@ -36,13 +39,23 @@ public class AIController : MonoBehaviour {
 		TriggerCollider = GetComponent<SphereCollider> ();
 		TriggerCollider.radius = Common.AIViewRange;
 
+		MovementSpeed = navMesh.speed;
+
 	}
 
 
 
+	void UpdateBuffs() {
+		updateBuffTimers ();
+		navMesh.speed = MovementSpeed + getSpeedBoost ();
+
+
+	}
+
 
 	// Update is called once per frame
 	void Update () {
+
 
 		targetInSight = isTargetInView ();
 		if (targetInRange) {
@@ -70,7 +83,9 @@ public class AIController : MonoBehaviour {
 				instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * 1000.0f);
 			
 				state = State.WALKING;
-				//StartCoroutine(defaultStateTimer(1, 2, State.WALKING));
+				StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
+				subtractAmmo();
+				print ("Health: " + Health + "/" + getMaxHealth());
 			}
 			break;
 
