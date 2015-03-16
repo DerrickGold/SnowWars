@@ -1,0 +1,154 @@
+fileFormatVersion: 2
+guid: 23644b563a298de4881b4a2816a229a9
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: WinterSoldier
+    100002: //RootNode
+    100004: WinterSoldierHead
+    100006: WinterSoldierHub001
+    100008: WinterSoldierHub002
+    100010: WinterSoldierLArm1
+    100012: WinterSoldierLArm2
+    100014: WinterSoldierLArmCollarbone
+    100016: WinterSoldierLArmPalm
+    100018: WinterSoldierLLeg1
+    100020: WinterSoldierLLeg2
+    100022: WinterSoldierLLegAnkle
+    100024: WinterSoldierLLegPlatform
+    100026: WinterSoldierPalmBone001
+    100028: WinterSoldierPalmBone001 1
+    100030: WinterSoldierPalmBone001Bone001
+    100032: WinterSoldierPalmBone001Bone001 1
+    100034: WinterSoldierPalmBone002
+    100036: WinterSoldierPalmBone002 1
+    100038: WinterSoldierPalmBone002Bone001
+    100040: WinterSoldierPalmBone002Bone001 1
+    100042: WinterSoldierRArm1
+    100044: WinterSoldierRArm2
+    100046: WinterSoldierRArmCollarbone
+    100048: WinterSoldierRArmPalm
+    100050: WinterSoldierRLeg1
+    100052: WinterSoldierRLeg2
+    100054: WinterSoldierRLegAnkle
+    100056: WinterSoldierRLegPlatform
+    100058: WinterSoldierSpine
+    100060: WinterSoldierSpine1
+    100062: WinterSoldierSpine2
+    100064: WinterSoldierSpine3
+    400000: WinterSoldier
+    400002: //RootNode
+    400004: WinterSoldierHead
+    400006: WinterSoldierHub001
+    400008: WinterSoldierHub002
+    400010: WinterSoldierLArm1
+    400012: WinterSoldierLArm2
+    400014: WinterSoldierLArmCollarbone
+    400016: WinterSoldierLArmPalm
+    400018: WinterSoldierLLeg1
+    400020: WinterSoldierLLeg2
+    400022: WinterSoldierLLegAnkle
+    400024: WinterSoldierLLegPlatform
+    400026: WinterSoldierPalmBone001
+    400028: WinterSoldierPalmBone001 1
+    400030: WinterSoldierPalmBone001Bone001
+    400032: WinterSoldierPalmBone001Bone001 1
+    400034: WinterSoldierPalmBone002
+    400036: WinterSoldierPalmBone002 1
+    400038: WinterSoldierPalmBone002Bone001
+    400040: WinterSoldierPalmBone002Bone001 1
+    400042: WinterSoldierRArm1
+    400044: WinterSoldierRArm2
+    400046: WinterSoldierRArmCollarbone
+    400048: WinterSoldierRArmPalm
+    400050: WinterSoldierRLeg1
+    400052: WinterSoldierRLeg2
+    400054: WinterSoldierRLegAnkle
+    400056: WinterSoldierRLegPlatform
+    400058: WinterSoldierSpine
+    400060: WinterSoldierSpine1
+    400062: WinterSoldierSpine2
+    400064: WinterSoldierSpine3
+    7400000: FireLoop
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: FireLoop
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 25
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 1
+  userData: 
