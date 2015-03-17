@@ -13,6 +13,8 @@ public class BuffPickup : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
+
+	/*
 	void Update () {
 		if (buffAquired) {
 			if(Time.time-buffDisplay > 2.5f){
@@ -22,13 +24,16 @@ public class BuffPickup : MonoBehaviour {
 				buffAquired= false;
 			}
 		}
-	}
+	}*/
 
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.gameObject.tag == "PickUp")
 		{
-			other.gameObject.SetActive(false); //deactivate the buff object
+			Rotator buffScript = other.gameObject.GetComponent<Rotator>(); //get the script
+			buffScript.destroy = true;
+			//other.gameObject.SetActive(false); //deactivate the buff object
+			/*
 			Rotator buffScript = other.gameObject.GetComponent<Rotator>(); //get the script
 			Text buff = buffScript.buffText; //get the buff info text
 			buffText[0] = buffScript.buffText; 
@@ -37,7 +42,8 @@ public class BuffPickup : MonoBehaviour {
 			//buffText = {buffScript.buffText, buffScript.buffIcon};
 			buff.gameObject.SetActive(true); //set the buff info text to true
 			buffDisplay = Time.time; 
-			buffAquired = true; //we picked up a buff
+			buffAquired = true; //we picked up a buff 
+			*/
 		}
 
 	}

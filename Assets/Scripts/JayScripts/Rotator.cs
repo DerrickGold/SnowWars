@@ -9,26 +9,37 @@ public class Rotator : MonoBehaviour {
 	private Vector3 originalPos;
 	public float buffBounceSpeed;
 	public float buffBounceHeight;
+	public bool destroy = false;
 	void Start()
 	{
 		buffBounceSpeed = 2f;
 		buffBounceHeight = 2f;
 		originalPos = transform.position;
+		/*
 		buffText = (Text)(transform.parent.transform.FindChild ("Canvas").FindChild("STEALTH").GetComponent<Text>());
 		buffText.gameObject.SetActive (false);
 		buffIcon = (Text)(transform.parent.transform.FindChild ("Canvas").FindChild("ICON").GetComponent<Text>());
-		buffIcon.gameObject.SetActive (false);
+		buffIcon.gameObject.SetActive (false);*/
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+		if (destroy) {
+		
+			gameObject.SetActive(false);
+		}
+
 		float t = Time.time;
-		transform.Rotate (new Vector3(15, 30, 45) * Time.deltaTime);
+		//transform.Rotate (new Vector3(15, 30, 45) * Time.deltaTime);
 		//transform.position += Vector3.up * Time.deltaTime * Mathf.Abs(Mathf.Sin(Time.deltaTime));
 		transform.position = new Vector3 (
 			originalPos.x,
 			originalPos.y + buffBounceHeight * Mathf.Abs (Mathf.Sin (Time.time*buffBounceSpeed)),
 			originalPos.z);
+	}
+
+	void pickupEffect(){
+
 	}
 }
