@@ -56,7 +56,7 @@ public class AIController :CharacterBase {
 	// Update is called once per frame
 	void Update () {
 
-
+		UpdateBuffs ();
 		targetInSight = isTargetInView ();
 		if (targetInRange) {
 			Head.transform.LookAt(currentTarget);
@@ -78,9 +78,16 @@ public class AIController :CharacterBase {
 				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
 				                                               Thorax.position, Head.rotation) as Rigidbody;
 
+				//float targetAngle = Vector3.Distance(currentTarget.position, transform.position) + 10.0f;
+
+
+				//instantiatedProjectile.transform.localRotation = Quaternion.AngleAxis(45.0f, Vector3.l;eft);
+				Quaternion derp = Quaternion.identity;
+				derp.eulerAngles = new Vector3(-45, 0, 0);
+				instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
 
 				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce);
-				instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * 1000.0f);
+
 			
 				state = State.WALKING;
 				StartCoroutine(defaultStateTimer(1, 1, State.WALKING));

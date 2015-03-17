@@ -9,6 +9,9 @@ public class Common: MonoBehaviour {
 
 	static public int BaseMaxHealth = 100;
 	static public int MaxHealthBoost = 20;
+
+	static public int BaseMaxStamina = 100;
+
 	//how much health to take away for every throw
 	static public int AmmoSubtractAmmount = 1;
 	static public int SuperSnowSubtract = 5;
