@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         {
             //Is the player walking or running?
             if (Input.GetKey(KeyCode.LeftShift)){
-				stamina -= 0.01f;
+
                 playerState = PlayerState.RUNNING;
 			}
             else
