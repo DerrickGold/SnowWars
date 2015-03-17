@@ -80,7 +80,7 @@ public class AIController :CharacterBase {
 
 
 				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce);
-				instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * 1000.0f);
+				//instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * 1000.0f);
 			
 				state = State.WALKING;
 				StartCoroutine(defaultStateTimer(1, 1, State.WALKING));

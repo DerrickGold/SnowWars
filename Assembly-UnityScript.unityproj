@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_2;UNITY_4_6;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_6_1;UNITY_4_6;UNITY_STANDALONE_OSX;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_GAMECENTER;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_OSX</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,81 +39,71 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>E:/Programs/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>E:/Programs/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\DynamicElements_Effects\scripts\ParticleScale.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\PrefabGenerator.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\Raycast.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\activateWithDelay.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\destroyThisTimed.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\moveThis.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\moveThisAdvanced.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\rampDownParticle.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\rotateThis.js" />
-     <Compile Include="Assets\DynamicElements_Effects\scripts\scaleThisTimed.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\ParticleScale.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\PrefabGenerator.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\Raycast.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\activateWithDelay.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\destroyThisTimed.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\moveThis.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\moveThisAdvanced.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\rampDownParticle.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\rotateThis.js" />
+     <Compile Include="Assets\GameObjects\Effects\scripts\scaleThisTimed.js" />
      <Compile Include="Assets\Scripts\CharacterMotor.js" />
      <Compile Include="Assets\Scripts\FPSInputController.js" />
      <Compile Include="Assets\Scripts\PlatformInputController.js" />
+     <Compile Include="Assets\Scripts\Player\MouseOrbit.js" />
      <Compile Include="Assets\Scripts\ThirdPersonCamera.js" />
      <Compile Include="Assets\Scripts\ThirdPersonController.js" />
-     <Compile Include="Assets\TerrainToolkit\TerrainToolkitEnums.js" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicGlow.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpIBLOCC.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailOpaque.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlowBasic.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicOpaque.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\Flag.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SunShaftsComposite.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailParallax.shader" />
-     <None Include="Assets\_DLNK\Winter Assets\DemoScene\1.3\WinterAssetsDemo1.2\BeastSettings.xml" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\Basic Refraction.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\BumpDetail.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlow.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\RadialBlur.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfFieldDX11.shader" />
+     <Compile Include="Assets\Terrain Assets\TerrainToolkit\TerrainToolkitEnums.js" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicGlow.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpIBLOCC.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailOpaque.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlowBasic.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicOpaque.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\Flag.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailParallax.shader" />
+     <None Include="Assets\Assets\Winter Assets\Winter Assets\DemoScene\1.3\WinterAssetsDemo1.2\BeastSettings.xml" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\Basic Refraction.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\BumpDetail.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlow.shader" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailSSSOC.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLTransparent.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\SSSFake.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicRelief.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailTopBottom.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLRefract.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxReflection.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicRim.shader" />
-     <None Include="Assets\DynamicElements_Effects\readme.txt" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicParallax.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxRimOclussion.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlobalFog.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\StandarTopBottoMob.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxOclussion.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpedOclussion.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTopBottom.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetail.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\PrepareSunShaftsBlur.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailRelief.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\LightingEmissiveRim.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Mobile\StandarMob.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SimpleClear.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBL.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\ParticleRefraction.shader" />
-     <None Include="Assets\TerrainToolkit\Read me.txt" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\MixedLightingRim.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailReflection.shader" />
-     <None Include="Assets\_DLNK\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTranslucent.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailSSSOC.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLTransparent.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\SSSFake.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicRelief.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailTopBottom.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLRefract.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxReflection.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicRim.shader" />
+     <None Include="Assets\GameObjects\Effects\readme.txt" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicParallax.shader" />
+     <None Include="Assets\Documents\ainotes.txt" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxRimOclussion.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\StandarTopBottoMob.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxOclussion.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpedOclussion.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTopBottom.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetail.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailRelief.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\LightingEmissiveRim.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\StandarMob.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBL.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParticleRefraction.shader" />
+     <None Include="Assets\Terrain Assets\TerrainToolkit\Read me.txt" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\MixedLightingRim.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailReflection.shader" />
+     <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTranslucent.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>E:/Programs/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
+ <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{6BAA6B65-5AF3-5C4A-E283-9101BE0C4EEB}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
