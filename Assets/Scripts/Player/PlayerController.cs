@@ -47,17 +47,18 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Is the player moving?
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
             //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift)){
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
 
                 playerState = PlayerState.RUNNING;
-			}
+            }
             else
                 playerState = PlayerState.WALKING;
         }
-        else
+        else if (!isJumping)
             playerState = PlayerState.IDLE;
 
         switch (playerState)
@@ -155,6 +156,7 @@ public class PlayerController : MonoBehaviour
 
         Jumping();
         ApplyGravity();
+        GroundPlayer();
 
         //Move the player and check if the player is grounded
         isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
@@ -169,14 +171,15 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit hit;
             Vector3 slopeAdjust = Vector3.zero;
+            Debug.DrawRay(transform.position, -Vector3.up);
             if (Physics.Raycast(transform.position, -Vector3.up, out hit))
             {
                 //Make sure not to drop the player if they fall from too high a place
-                if (hit.distance < 2.0)
-                {
-                    slopeAdjust = new Vector3(slopeAdjust.x, hit.distance - controller.height / 2, slopeAdjust.z);
-                    controller.Move(MoveTo(new Vector3(transform.position.x, transform.position.y - slopeAdjust.y, transform.position.z)));
-                }
+                //if (hit.distance < 2.0)
+                //{
+                slopeAdjust = new Vector3(0, hit.distance, 0);
+                controller.Move(MoveTo(transform.position - slopeAdjust));
+                //}
             }
         }
     }
