@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,11 +16,14 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
+	public Slider healthBar;
+	public Slider staminaBar;
 
     private bool isJumping = false;
     private bool isGrounded = false;
 
     private float hp = 100.0f;
+	private float stamina = 100.0f;
 
     private float walkSpeed = 10.0f;
     private float runSpeed = 20.0f;
@@ -36,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
+		healthBar.value = hp;
     }
 
 
@@ -45,8 +50,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift)){
+				stamina -= 0.01f;
                 playerState = PlayerState.RUNNING;
+			}
             else
                 playerState = PlayerState.WALKING;
         }
@@ -57,16 +64,24 @@ public class PlayerController : MonoBehaviour
         {
             case PlayerState.IDLE:
                 Movement(0.0f);
+				if(stamina < 100.0f)
+					stamina += 0.1f;
                 break;
 
             case PlayerState.WALKING:
                 Movement(walkSpeed);
+				if(stamina < 100.0f)
+					stamina += 0.1f;
                 break;
 
             case PlayerState.RUNNING:
                 Movement(runSpeed);
+				stamina -= 0.2f;
+				if (stamina == 0)
+					playerState = PlayerState.WALKING;
                 break;
         }
+		staminaBar.value = stamina;
 
         if (Input.GetButtonDown("Fire1") && hp > 0)
             throwingAnimation.Play("throwingAnimation");
@@ -113,6 +128,7 @@ public class PlayerController : MonoBehaviour
         snowBall.AddForce(Camera.main.transform.forward * 1200.0f);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
         hp -= 1;
+		healthBar.value = hp;
         print("Player HP: " + hp);
     }
 
