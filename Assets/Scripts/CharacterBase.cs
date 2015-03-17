@@ -74,7 +74,7 @@ public class CharacterBase: MonoBehaviour {
 
 		return Common.BaseMaxHealth;
 	}
-
+	
 	public int getMaxStamina() {
 		return Common.BaseMaxStamina;
 	}
@@ -84,6 +84,10 @@ public class CharacterBase: MonoBehaviour {
 			return Common.BaseMaxStamina;
 		return Stamina;
 	}
+
+
+
+
 
 	
 	//processess a throw from the player
