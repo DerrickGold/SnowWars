@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public Animation throwingAnimation;
 	public Slider healthBar;
 	public Slider staminaBar;
+    public GameObject bodyTop, bodyMiddle, bodyBottom;
 
     private bool isJumping = false;
     private bool isGrounded = false;
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private float walkSpeed = 10.0f;
     private float runSpeed = 20.0f;
     private float jumpSpeed = 10.0f;
+    private float throwingSpeed = 2000.0f;
     private float gravity = 30.0f;
 
     //Game variables
@@ -50,7 +52,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
             //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
             {
 
                 playerState = PlayerState.RUNNING;
@@ -84,8 +86,13 @@ public class PlayerController : MonoBehaviour
         }
 		staminaBar.value = stamina;
 
+        //Is the player throwing a snowball?
         if (Input.GetButtonDown("Fire1") && hp > 0)
             throwingAnimation.Play("throwingAnimation");
+
+        //Check to see if the player is dead
+        if (hp <= 0)
+            Death();
     }
 
 
@@ -126,9 +133,10 @@ public class PlayerController : MonoBehaviour
     public void Throwing()
     {
         Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
-        snowBall.AddForce(Camera.main.transform.forward * 1200.0f);
+        snowBall.AddForce((Camera.main.transform.forward * throwingSpeed));
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
-        hp -= 1;
+
+        hp -= 10;
 		healthBar.value = hp;
         print("Player HP: " + hp);
     }
@@ -163,7 +171,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /*
-     * Description: Keeps the player on the ground when walking down hills (Prevents bouncing)
+     * Description: Keeps the player on the ground when walking down hills (Prevents bouncing when walking down hills)
      */
     void GroundPlayer()
     {
@@ -171,22 +179,39 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit hit;
             Vector3 slopeAdjust = Vector3.zero;
-            Debug.DrawRay(transform.position, -Vector3.up);
             if (Physics.Raycast(transform.position, -Vector3.up, out hit))
             {
-                //Make sure not to drop the player if they fall from too high a place
-                //if (hit.distance < 2.0)
-                //{
                 slopeAdjust = new Vector3(0, hit.distance, 0);
-                controller.Move(MoveTo(transform.position - slopeAdjust));
-                //}
+                controller.Move((transform.position - slopeAdjust) - transform.position);
             }
         }
     }
 
-    Vector3 MoveTo(Vector3 newPos)
+    void Death()
     {
-        Vector3 moveVector = newPos - transform.position;
-        return moveVector;
+        //Add physics to the players body
+        bodyBottom.AddComponent<SphereCollider>();
+        Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
+        bottomRigidbody.drag = 2;
+
+        bodyMiddle.AddComponent<SphereCollider>();
+        Rigidbody middleRigidbody = bodyMiddle.AddComponent<Rigidbody>();
+        middleRigidbody.drag = 2;
+        bodyMiddle.transform.position += Vector3.up * 0.50f;
+
+        bodyTop.AddComponent<SphereCollider>();
+        Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
+        topRigidbody.drag = 2;
+        bodyTop.transform.position += Vector3.up * 0.75f;
+
+        //Enable ddeath camera
+        Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
+        Screen.lockCursor = false;
+
+        //Disable player controls
+        Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
+        gameObject.GetComponent<MouseLook>().enabled = false;
+        gameObject.GetComponent<CharacterController>().enabled = false;
+        gameObject.GetComponent<PlayerController>().enabled = false;
     }
 }
