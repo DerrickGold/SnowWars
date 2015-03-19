@@ -41,6 +41,12 @@ public class AIController :CharacterBase {
 
 		MovementSpeed = navMesh.speed;
 
+		foreach (Transform o in Common.player.GetComponentsInChildren<Transform>()) {
+			if (o.tag == "Player"){
+				Head = o;
+				break;
+			}
+		}
 	}
 
 
@@ -51,6 +57,24 @@ public class AIController :CharacterBase {
 
 
 	}
+
+
+	float getTargetAngle() {
+		float x = Mathf.Abs(currentTarget.position.x - transform.position.x);
+		float y = Mathf.Abs (currentTarget.position.y - transform.position.y);
+
+		float v = Common.MaxThrowForce;
+
+		float numerator = Mathf.Pow (v, 2) + Mathf.Sqrt (Mathf.Pow (v, 4) 
+						- Mathf.Pow (x, 2) + (-2.0f * y * Mathf.Pow (v, 2)));
+
+
+		float angle = Mathf.Abs (Mathf.Rad2Deg * Mathf.Atan (numerator / x));
+
+	
+		return angle;
+	}
+
 
 
 	// Update is called once per frame
@@ -74,17 +98,17 @@ public class AIController :CharacterBase {
 			navMesh.destination = currentTarget.position;
 			if (!stateCoroutine) {
 
-				//Quaternion startRotate = new Quaternion(Head.transform.rotation.x, 0, 0, 0);
 				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
 				                                               Thorax.position, Head.rotation) as Rigidbody;
 
-				//float targetAngle = Vector3.Distance(currentTarget.position, transform.position) + 10.0f;
 
 
-				//instantiatedProjectile.transform.localRotation = Quaternion.AngleAxis(45.0f, Vector3.l;eft);
+				float targetAngle = getTargetAngle();
+				print (targetAngle);
+
 				Quaternion derp = Quaternion.identity;
-				derp.eulerAngles = new Vector3(-45, 0, 0);
-				instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
+				derp.eulerAngles = new Vector3(-targetAngle, instantiatedProjectile.transform.eulerAngles.y, instantiatedProjectile.transform.eulerAngles.z);
+				instantiatedProjectile.transform.eulerAngles = derp.eulerAngles;
 
 				instantiatedProjectile.AddForce ((instantiatedProjectile.transform.forward)
 				                                 * Common.MaxThrowForce, ForceMode.Impulse);
