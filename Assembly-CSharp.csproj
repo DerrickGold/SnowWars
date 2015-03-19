@@ -47,13 +47,14 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AI Scripts\AIController.cs" />
-     <Compile Include="Assets\Scripts\Autodestruct.cs" />
      <Compile Include="Assets\Scripts\BulletTest.cs" />
      <Compile Include="Assets\Scripts\CSCharacterMotor.cs" />
      <Compile Include="Assets\Scripts\CSFPSInputController.cs" />
      <Compile Include="Assets\Scripts\CharacterBase.cs" />
      <Compile Include="Assets\Scripts\Common.cs" />
+     <Compile Include="Assets\Scripts\JayScripts\Autodestruct.cs" />
      <Compile Include="Assets\Scripts\JayScripts\BuffPickup.cs" />
+     <Compile Include="Assets\Scripts\JayScripts\PointLightGlow.cs" />
      <Compile Include="Assets\Scripts\JayScripts\Rotator.cs" />
      <Compile Include="Assets\Scripts\Menu Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\MouseLook.cs" />
