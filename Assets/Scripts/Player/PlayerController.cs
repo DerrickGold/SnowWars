@@ -75,16 +75,19 @@ public class PlayerController : MonoBehaviour
                 Movement(walkSpeed);
 				if(stamina < 100.0f)
 					stamina += 0.1f;
+				if(hp < 100.0f)
+					hp += 0.05f;
                 break;
 
             case PlayerState.RUNNING:
                 Movement(runSpeed);
 				stamina -= 0.2f;
-				if (stamina == 0)
-					playerState = PlayerState.WALKING;
+				if(hp < 100.0f)
+					hp += 0.1f;
                 break;
         }
 		staminaBar.value = stamina;
+		healthBar.value = hp;
 
         //Is the player throwing a snowball?
         if (Input.GetButtonDown("Fire1") && hp > 0)
