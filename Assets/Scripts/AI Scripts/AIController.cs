@@ -41,12 +41,7 @@ public class AIController :CharacterBase {
 
 		MovementSpeed = navMesh.speed;
 
-		foreach (Transform o in Common.player.GetComponentsInChildren<Transform>()) {
-			if (o.tag == "Player"){
-				Head = o;
-				break;
-			}
-		}
+        currentTarget = Common.player.transform.Find("Snowman/Head");
 	}
 
 
@@ -59,27 +54,22 @@ public class AIController :CharacterBase {
 	}
 
 
+    /***************************************************************************
+     * Description: Calculates the vertical angle between the AI and its target
+     ***************************************************************************/
 	float getTargetAngle() {
-		float x = Mathf.Abs(currentTarget.position.x - transform.position.x);
-		float y = Mathf.Abs (currentTarget.position.y - transform.position.y);
-
-		float v = Common.MaxThrowForce;
+        float x = Mathf.Abs(currentTarget.position.x - transform.position.x);//Mathf.Sqrt(Mathf.Pow(currentTarget.position.x - transform.position.x, 2.0f) + Mathf.Pow(currentTarget.position.z - transform.position.z, 2.0f));
+        float y = Mathf.Abs(currentTarget.position.y - transform.position.y);
+        float v = Common.MaxThrowForce;
 
 		float numerator = Mathf.Pow (v, 2) + Mathf.Sqrt (Mathf.Pow (v, 4) 
 						- Mathf.Pow (x, 2) + (-2.0f * y * Mathf.Pow (v, 2)));
 
-
-		float angle = Mathf.Abs (Mathf.Rad2Deg * Mathf.Atan (numerator / x));
-
-	
+		float angle = Mathf.Rad2Deg * Mathf.Atan (numerator / x);
 		return angle;
 	}
 
-
-
-	// Update is called once per frame
 	void Update () {
-
 		UpdateBuffs ();
 		targetInSight = isTargetInView ();
 		if (targetInRange) {
@@ -97,7 +87,6 @@ public class AIController :CharacterBase {
 		case State.ATTACKING:
 			navMesh.destination = currentTarget.position;
 			if (!stateCoroutine) {
-
 				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
 				                                               Thorax.position, Head.rotation) as Rigidbody;
 
@@ -107,16 +96,16 @@ public class AIController :CharacterBase {
 				print (targetAngle);
 
 				Quaternion derp = Quaternion.identity;
-				derp.eulerAngles = new Vector3(-targetAngle, instantiatedProjectile.transform.eulerAngles.y, instantiatedProjectile.transform.eulerAngles.z);
-				instantiatedProjectile.transform.eulerAngles = derp.eulerAngles;
+				derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
+				instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
 
-				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce);
+				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
 
 			
 				state = State.WALKING;
 				StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 				subtractAmmo();
-				print ("Health: " + Health + "/" + getMaxHealth());
+				//print ("Health: " + Health + "/" + getMaxHealth());
 			}
 			break;
 
@@ -183,10 +172,7 @@ public class AIController :CharacterBase {
 	 * 
 	 * 
 	 * Returns nothing.
-	 * 
-	 * 
 	 */
-	
 	IEnumerator defaultStateTimer(float minTime, float maxTime, State next) {
 		stateCoroutine = true;
 		float curTime = 0;

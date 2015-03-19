@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : CharacterBase
 {
     //Player variables
     private enum PlayerState
@@ -23,9 +23,6 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isGrounded = false;
 
-    private float hp = 100.0f;
-	private float stamina = 100.0f;
-
     private float walkSpeed = 10.0f;
     private float runSpeed = 20.0f;
     private float jumpSpeed = 10.0f;
@@ -41,9 +38,10 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Common.player = gameObject;
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
-		healthBar.value = hp;
+		healthBar.value = Health;
     }
 
 
@@ -53,7 +51,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
             //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+            if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0)
             {
 
                 playerState = PlayerState.RUNNING;
@@ -68,32 +66,35 @@ public class PlayerController : MonoBehaviour
         {
             case PlayerState.IDLE:
                 Movement(0.0f);
-				if(stamina < 100.0f)
-					stamina += 0.1f;
+				if(getStamina() < 100.0f)
+					Stamina += 0.1f;
                 break;
 
             case PlayerState.WALKING:
                 Movement(walkSpeed);
-				if(stamina < 100.0f)
-					stamina += 0.1f;
+                if (getStamina() < 100.0f)
+					Stamina += 0.1f;
                 break;
 
             case PlayerState.RUNNING:
                 Movement(runSpeed);
-				stamina -= 0.2f;
-				if (stamina == 0)
+				Stamina -= 0.2f;
+                if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
                 break;
         }
-		staminaBar.value = stamina;
 
         //Is the player throwing a snowball?
-        if (Input.GetButtonDown("Fire1") && hp > 0)
+        if (Input.GetButtonDown("Fire1") && Health > 0)
             throwingAnimation.Play("throwingAnimation");
 
         //Check to see if the player is dead
-        if (hp <= 0)
+        if (Health <= 0)
             Death();
+
+        //Update UI
+        staminaBar.value = Stamina;
+        healthBar.value = Health;
     }
 
 
@@ -128,19 +129,19 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    /*
+    /***************************************************************************
      * Description: Deals with letting the player throw snowballs
-     */
+     ***************************************************************************/
     public void Throwing()
     {
+        //Create a new snowball
         Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
         snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
 
-        hp -= 5;
-		healthBar.value = hp;
-        print("Player HP: " + hp);
+        //Subtract health from the player
+        subtractAmmo();
     }
 
 
@@ -195,16 +196,16 @@ public class PlayerController : MonoBehaviour
         //Add physics to the players body
         bodyBottom.AddComponent<SphereCollider>();
         Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
-        //bottomRigidbody.drag = 2;
+        bottomRigidbody.drag = 2;
 
         bodyMiddle.AddComponent<SphereCollider>();
         Rigidbody middleRigidbody = bodyMiddle.AddComponent<Rigidbody>();
-        //middleRigidbody.drag = 2;
+        middleRigidbody.drag = 2;
         //bodyMiddle.transform.position += Vector3.up * 0.50f;
 
         bodyTop.AddComponent<SphereCollider>();
         Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
-        //topRigidbody.drag = 2;
+        topRigidbody.drag = 2;
         //bodyTop.transform.position += Vector3.up * 0.75f;
 
         //Enable death camera
