@@ -23,8 +23,8 @@ public class CharacterBase: MonoBehaviour {
 
 
 
-	public int Health = Common.BaseMaxHealth;
-	public int Stamina = Common.BaseMaxStamina;
+	public float Health = Common.BaseMaxHealth;
+	public float Stamina = Common.BaseMaxStamina;
 
 	public int ActiveBuffs;
 	public float[] BuffTimers = new float[BuffCount];
@@ -79,7 +79,7 @@ public class CharacterBase: MonoBehaviour {
 		return Common.BaseMaxStamina;
 	}
 
-	public int getStamina() {
+	public float getStamina() {
 		if (isEffectActive (BuffFlag.INF_STAMINA))
 			return Common.BaseMaxStamina;
 		return Stamina;
