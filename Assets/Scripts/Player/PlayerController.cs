@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
 
-        hp -= 100;
+        hp -= 5;
 		healthBar.value = hp;
         print("Player HP: " + hp);
     }
