@@ -110,8 +110,7 @@ public class AIController :CharacterBase {
 				derp.eulerAngles = new Vector3(-targetAngle, instantiatedProjectile.transform.eulerAngles.y, instantiatedProjectile.transform.eulerAngles.z);
 				instantiatedProjectile.transform.eulerAngles = derp.eulerAngles;
 
-				instantiatedProjectile.AddForce ((instantiatedProjectile.transform.forward)
-				                                 * Common.MaxThrowForce, ForceMode.Impulse);
+				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce);
 
 			
 				state = State.WALKING;

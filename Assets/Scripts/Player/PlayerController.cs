@@ -29,13 +29,14 @@ public class PlayerController : MonoBehaviour
     private float walkSpeed = 10.0f;
     private float runSpeed = 20.0f;
     private float jumpSpeed = 10.0f;
-    private float throwingSpeed = 2000.0f;
+    private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
 
     //Game variables
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
+    public GameObject deathExplosionEffect;
 
 
     void Start()
@@ -75,19 +76,16 @@ public class PlayerController : MonoBehaviour
                 Movement(walkSpeed);
 				if(stamina < 100.0f)
 					stamina += 0.1f;
-				if(hp < 100.0f)
-					hp += 0.05f;
                 break;
 
             case PlayerState.RUNNING:
                 Movement(runSpeed);
 				stamina -= 0.2f;
-				if(hp < 100.0f)
-					hp += 0.1f;
+				if (stamina == 0)
+					playerState = PlayerState.WALKING;
                 break;
         }
 		staminaBar.value = stamina;
-		healthBar.value = hp;
 
         //Is the player throwing a snowball?
         if (Input.GetButtonDown("Fire1") && hp > 0)
@@ -136,10 +134,11 @@ public class PlayerController : MonoBehaviour
     public void Throwing()
     {
         Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
-        snowBall.AddForce((Camera.main.transform.forward * throwingSpeed));
+        snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
+        snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
 
-        hp -= 10;
+        hp -= 100;
 		healthBar.value = hp;
         print("Player HP: " + hp);
     }
@@ -192,23 +191,24 @@ public class PlayerController : MonoBehaviour
 
     void Death()
     {
+        Instantiate(deathExplosionEffect, transform.position, transform.rotation);
         //Add physics to the players body
         bodyBottom.AddComponent<SphereCollider>();
         Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
-        bottomRigidbody.drag = 2;
+        //bottomRigidbody.drag = 2;
 
         bodyMiddle.AddComponent<SphereCollider>();
         Rigidbody middleRigidbody = bodyMiddle.AddComponent<Rigidbody>();
-        middleRigidbody.drag = 2;
-        bodyMiddle.transform.position += Vector3.up * 0.50f;
+        //middleRigidbody.drag = 2;
+        //bodyMiddle.transform.position += Vector3.up * 0.50f;
 
         bodyTop.AddComponent<SphereCollider>();
         Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
-        topRigidbody.drag = 2;
-        bodyTop.transform.position += Vector3.up * 0.75f;
+        //topRigidbody.drag = 2;
+        //bodyTop.transform.position += Vector3.up * 0.75f;
 
-        //Enable ddeath camera
-        Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
+        //Enable death camera
+        //Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
         Screen.lockCursor = false;
 
         //Disable player controls
