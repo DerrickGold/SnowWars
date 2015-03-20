@@ -57,6 +57,7 @@ public class AIController :CharacterBase {
     /***************************************************************************
      * Description: Calculates the vertical angle between the AI and its target
      ***************************************************************************/
+    /*
 	float getTargetAngle() {
         float x = Mathf.Abs(currentTarget.position.x - transform.position.x);//Mathf.Sqrt(Mathf.Pow(currentTarget.position.x - transform.position.x, 2.0f) + Mathf.Pow(currentTarget.position.z - transform.position.z, 2.0f));
         float y = Mathf.Abs(currentTarget.position.y - transform.position.y);
@@ -67,7 +68,20 @@ public class AIController :CharacterBase {
 
 		float angle = Mathf.Rad2Deg * Mathf.Atan (numerator / x);
 		return angle;
-	}
+	}*/
+
+    float getTargetAngle()
+    {
+        float range = Mathf.Sqrt(Mathf.Pow(transform.position.x - currentTarget.position.x, 2) + Mathf.Pow(transform.position.z - currentTarget.position.z, 2));
+        float offsetHeight = currentTarget.position.y - transform.position.y;
+        float gravity = -Physics.gravity.y;
+
+        float verticalSpeed = Mathf.Sqrt(2 * gravity * currentTarget.position.y);
+        float travelTime = Mathf.Sqrt(2 * (currentTarget.position.y - offsetHeight) / gravity) + Mathf.Sqrt(2 * currentTarget.position.y / gravity);
+        float horizontalSpeed = range / travelTime;
+        float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
+        return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
+    }
 
 	void Update () {
 		UpdateBuffs ();
