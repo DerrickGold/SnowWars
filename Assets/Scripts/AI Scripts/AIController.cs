@@ -79,9 +79,14 @@ public class AIController :CharacterBase {
         float verticalSpeed = Mathf.Sqrt(2 * gravity * currentTarget.position.y);
         float travelTime = Mathf.Sqrt(2 * (currentTarget.position.y - offsetHeight) / gravity) + Mathf.Sqrt(2 * currentTarget.position.y / gravity);
         float horizontalSpeed = range / travelTime;
-        float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
-        return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
-    }
+        //float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
+
+        //return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
+    
+		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
+	}
+
+
 
 	void Update () {
 		UpdateBuffs ();

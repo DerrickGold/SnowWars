@@ -4,7 +4,8 @@ using System.Collections;
 public class Common: MonoBehaviour {
     //Player variables
 	static public int MaxPlayers = 32;
-	static public int AIViewRange = 20;
+	static public int AIViewRange = 50;
+	static public float AIAimAdjustFactor = 5.0f;
 	static public float MaxThrowForce = 20;
 
 	static public int BaseMaxHealth = 100;
