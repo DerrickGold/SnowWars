@@ -5,7 +5,7 @@ public class Common: MonoBehaviour {
     //Player variables
 	static public int MaxPlayers = 32;
 	static public int AIViewRange = 50;
-	static public float AIAimAdjustFactor = 5.0f;
+	static public float AIAimAdjustFactor = 1.0f;
 	static public float MaxThrowForce = 20;
 
 	static public int BaseMaxHealth = 100;
@@ -22,6 +22,8 @@ public class Common: MonoBehaviour {
 
 	static public int BaseSnowBallDamage = 15;
 	static public int SuperSnowBallBoost = 15;
+
+	static public float RespawnTime = 10.0f; //in seconds
 
 	static public GameObject player;
 

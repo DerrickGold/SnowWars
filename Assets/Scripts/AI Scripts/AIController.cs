@@ -2,16 +2,18 @@
 using System.Collections;
 
 public class AIController :CharacterBase {
-	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK };
+	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN};
 	public State state = State.WALKING;
 
 	//get location of current target to chase and kill
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
 
-	private Transform Thorax, Head;
+	private GameObject Base, Thorax, Head;
 	private GameObject SnowBallTemplate;
 	private SphereCollider TriggerCollider;
+	public GameObject deathExplosionEffect;
+	public HitBox HitCollider;
 
 	private float MovementSpeed;
 
@@ -22,33 +24,67 @@ public class AIController :CharacterBase {
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
 
+	private Vector3[] oldPartPositions = new Vector3[3];
+
 
 	// Use this for initialization
 	void Start () {
 		navMesh = GetComponent<NavMeshAgent> ();
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
+		initSnowMan ();
 
+
+
+	}
+
+	void initSnowMan() {
 		foreach (Transform o in GetComponentsInChildren<Transform> ()){
-			if (o.name == "Head") Head = o;
-			else if (o.name == "Thorax") Thorax = o;
+			if (o.name == "Head") Head = o.gameObject;
+			else if (o.name == "Thorax") Thorax = o.gameObject;
+			else if (o.name == "Base") Base = o.gameObject;
 		}
 		//Thorax = this.GetComponentsInChildren<GameObject> ();
-			//GameObject.Find ("Thorax");
+		//GameObject.Find ("Thorax");
 		//Head = GameObject.Find ("Head");
-
+		
 		TriggerCollider = GetComponent<SphereCollider> ();
 		TriggerCollider.radius = Common.AIViewRange;
-
+		
+		
 		MovementSpeed = navMesh.speed;
+		
+		currentTarget = Common.player.transform.Find("Snowman/Head");
+		
+		oldPartPositions [0] = Base.transform.localPosition;
+		oldPartPositions [1] = Thorax.transform.localPosition;
+		oldPartPositions [2] = Head.transform.localPosition;
 
-        currentTarget = Common.player.transform.Find("Snowman/Head");
+	}
+
+	void destroySnowman() {
+		Destroy (Base);
+		Destroy (Head);
+		Destroy (Thorax);
 	}
 
 
-
 	void UpdateBuffs() {
+		if (state == State.DEAD || state == State.RESPAWN)
+						return;
+
 		updateBuffTimers ();
 		navMesh.speed = MovementSpeed + getSpeedBoost ();
+
+		if (Health > 0.0f) {
+			if(HitCollider.isHit) {
+				//todo: replace -1 with snowballs attached damage
+				Health = getHealth () - 25;
+				HitCollider.reset();
+			}
+		} else {
+			state = State.DEAD;
+		}
+
 
 
 	}
@@ -77,7 +113,7 @@ public class AIController :CharacterBase {
         float gravity = -Physics.gravity.y;
 
         float verticalSpeed = Mathf.Sqrt(2 * gravity * currentTarget.position.y);
-        float travelTime = Mathf.Sqrt(2 * (currentTarget.position.y - offsetHeight) / gravity) + Mathf.Sqrt(2 * currentTarget.position.y / gravity);
+        float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
         float horizontalSpeed = range / travelTime;
         //float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
 
@@ -86,17 +122,85 @@ public class AIController :CharacterBase {
 		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
+	void attack() {
+		navMesh.destination = currentTarget.position;
+		if (!stateCoroutine) {
+			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
+			                                               Thorax.transform.position, Head.transform.rotation) as Rigidbody;
+			
+			
+			
+			float targetAngle = getTargetAngle();
+			print (targetAngle);
+			
+			Quaternion derp = Quaternion.identity;
+			derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
+			instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
+			
+			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
+			
+			
+			state = State.WALKING;
+			StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
+			subtractAmmo();
+			//print ("Health: " + Health + "/" + getMaxHealth());
+		}
+	}
 
+	void toggleCollider(GameObject part, bool flag) {
+		SphereCollider temp = part.GetComponent<SphereCollider> ();
+		temp.enabled = flag;
+	}
+	
+
+	void deathAnim() {
+		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+		//Add physics to the players body
+		//Base.AddComponent<SphereCollider>();
+		toggleCollider (Base, true);
+		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
+		bottomRigidbody.drag = 2;
+
+		toggleCollider (Thorax, true);
+		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
+		middleRigidbody.drag = 2;
+		//bodyMiddle.transform.position += Vector3.up * 0.50f;
+		toggleCollider (Head, true);
+		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
+		topRigidbody.drag = 2;
+	}
+
+
+	void respawn () {
+		Destroy (Base.rigidbody);
+		Destroy (Thorax.rigidbody);
+		Destroy (Head.rigidbody);
+		toggleCollider (Base, false);
+		toggleCollider (Thorax, false);
+		toggleCollider (Head, false);
+
+
+		Base.transform.localPosition = oldPartPositions [0];
+		Thorax.transform.localPosition = oldPartPositions [1];
+		Head.transform.localPosition = oldPartPositions [2];
+
+		//reset stats
+		Health = getMaxHealth ();
+		Stamina = getMaxStamina ();
+		resetBuffs ();
+		initSnowMan ();
+	}
 
 	void Update () {
-		UpdateBuffs ();
-		targetInSight = isTargetInView ();
-		if (targetInRange) {
-			Head.transform.LookAt(currentTarget);
-		}
+
 
 		switch(state) {
 		case State.WALKING:
+			UpdateBuffs ();
+			targetInSight = isTargetInView ();
+			if (targetInRange) {
+				Head.transform.LookAt(currentTarget);
+			}
 			//keep tracking targets position
 			navMesh.destination = currentTarget.position;
 			if (targetInSight) state = State.ATTACKING;
@@ -104,36 +208,33 @@ public class AIController :CharacterBase {
 			break;
 
 		case State.ATTACKING:
-			navMesh.destination = currentTarget.position;
-			if (!stateCoroutine) {
-				Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
-				                                               Thorax.position, Head.rotation) as Rigidbody;
-
-
-
-				float targetAngle = getTargetAngle();
-				print (targetAngle);
-
-				Quaternion derp = Quaternion.identity;
-				derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
-				instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
-
-				instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
-
-			
-				state = State.WALKING;
-				StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
-				subtractAmmo();
-				//print ("Health: " + Health + "/" + getMaxHealth());
+			UpdateBuffs ();
+			targetInSight = isTargetInView ();
+			if (targetInRange) {
+				Head.transform.LookAt(currentTarget);
 			}
+			attack();
 			break;
 
 		case State.DEAD:
+			if (!stateCoroutine) {
+				deathAnim();
+				StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
+			}
 			break;
 
 		case State.ITEMTRACK:
 			break;
 
+
+
+		case State.RESPAWN:
+			respawn ();
+			state = State.WALKING;
+
+
+
+			break;
 		}
 	}
 

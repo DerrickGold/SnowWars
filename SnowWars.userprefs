@@ -1,6 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/AI Scripts/AIController.cs">
+    <Files>
+      <File FileName="Assets/Scripts/AI Scripts/AIController.cs" Line="109" Column="3" />
+      <File FileName="Assets/Scripts/Misc/Common.cs" Line="26" Column="33" />
+      <File FileName="Assets/Scripts/Misc/CharacterBase.cs" Line="72" Column="22" />
+      <File FileName="Assets/Scripts/AI Scripts/HitBox.cs" Line="19" Column="9" />
+      <File FileName="Assets/Scripts/Player/PlayerController.cs" Line="36" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -17,7 +17,8 @@ public class CharacterBase: MonoBehaviour {
 		INF_AMMO = 1<<2,
 		SPEED_BOOST = 1<<3,
 		SUPER_SNOWBALL = 1<<4,
-		INF_STAMINA = 1<<5
+		INF_STAMINA = 1<<5,
+		INF_HEALTH = 1<<6
 	};
 	public static int BuffCount = 10;
 
@@ -65,14 +66,28 @@ public class CharacterBase: MonoBehaviour {
 	
 	}
 
+	public void resetBuffs() {
+		ActiveBuffs = 0;
+		for(int i = 0; i < BuffCount; i++) {
+			BuffTimers[i] = 0;
+		}
+
+	}
 
 
 	//Get the players max health
-	public int getMaxHealth() {
+	public float getMaxHealth() {
 		if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) 
 			return Common.BaseMaxHealth + Common.MaxHealthBoost;
 
 		return Common.BaseMaxHealth;
+	}
+
+	public float getHealth() {
+		if(isEffectActive (BuffFlag.INF_HEALTH))
+			return getMaxHealth();
+
+		return Health;
 	}
 	
 	public int getMaxStamina() {
