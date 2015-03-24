@@ -46,15 +46,15 @@ public class AIController :CharacterBase {
 		//Thorax = this.GetComponentsInChildren<GameObject> ();
 		//GameObject.Find ("Thorax");
 		//Head = GameObject.Find ("Head");
-		
+
 		TriggerCollider = GetComponent<SphereCollider> ();
 		TriggerCollider.radius = Common.AIViewRange;
-		
-		
+
+
 		MovementSpeed = navMesh.speed;
-		
+
 		currentTarget = Common.player.transform.Find("Snowman/Head");
-		
+
 		oldPartPositions [0] = Base.transform.localPosition;
 		oldPartPositions [1] = Thorax.transform.localPosition;
 		oldPartPositions [2] = Head.transform.localPosition;
@@ -78,7 +78,7 @@ public class AIController :CharacterBase {
 		if (Health > 0.0f) {
 			if(HitCollider.isHit) {
 				//todo: replace -1 with snowballs attached damage
-				Health = getHealth () - 25;
+				Health = getHealth () - HitCollider.Damage;
 				HitCollider.reset();
 			}
 		} else {
@@ -99,7 +99,7 @@ public class AIController :CharacterBase {
         float y = Mathf.Abs(currentTarget.position.y - transform.position.y);
         float v = Common.MaxThrowForce;
 
-		float numerator = Mathf.Pow (v, 2) + Mathf.Sqrt (Mathf.Pow (v, 4) 
+		float numerator = Mathf.Pow (v, 2) + Mathf.Sqrt (Mathf.Pow (v, 4)
 						- Mathf.Pow (x, 2) + (-2.0f * y * Mathf.Pow (v, 2)));
 
 		float angle = Mathf.Rad2Deg * Mathf.Atan (numerator / x);
@@ -118,28 +118,31 @@ public class AIController :CharacterBase {
         //float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
 
         //return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
-    
+
 		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
 	void attack() {
 		navMesh.destination = currentTarget.position;
 		if (!stateCoroutine) {
-			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
+			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
 			                                               Thorax.transform.position, Head.transform.rotation) as Rigidbody;
-			
-			
-			
+
+
+
+			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
+			snowBall.damage = getSnowBallDamage();
+
 			float targetAngle = getTargetAngle();
 			print (targetAngle);
-			
+
 			Quaternion derp = Quaternion.identity;
 			derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
 			instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
-			
+
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
-			
-			
+
+
 			state = State.WALKING;
 			StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 			subtractAmmo();
@@ -151,7 +154,7 @@ public class AIController :CharacterBase {
 		SphereCollider temp = part.GetComponent<SphereCollider> ();
 		temp.enabled = flag;
 	}
-	
+
 
 	void deathAnim() {
 		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
@@ -271,33 +274,33 @@ public class AIController :CharacterBase {
 
 
 	/*	defaultStateTimer
-	 * 
+	 *
 	 * calling:
 	 * 	if(!stateCoroutine) StartCoroutine(defaultStateTimer(minTime, maxTime, nextState));
 	 * 	This ensures the coroutine is only called once the state begins.
-	 * 
+	 *
 	 * A generic co-routine for changing the state machine's
-	 * state after a specific amount of time. This time is 
+	 * state after a specific amount of time. This time is
 	 * randomly picked from the range between a minimum
 	 * and maximum time.
-	 * 
-	 * 	minTime: minimum number of seconds to stay in 
+	 *
+	 * 	minTime: minimum number of seconds to stay in
 	 * 			the current state.
-	 * 
+	 *
 	 * 	maxTime: maximum number of seconds to stay in
 	 * 			the current state.
-	 * 
-	 * 	next: next state to switch to after the timer 
+	 *
+	 * 	next: next state to switch to after the timer
 	 * 		has finished.
-	 * 
-	 * 
+	 *
+	 *
 	 * Returns nothing.
 	 */
 	IEnumerator defaultStateTimer(float minTime, float maxTime, State next) {
 		stateCoroutine = true;
 		float curTime = 0;
 		float endTime = (Random.value * (maxTime - minTime)) + minTime;
-		
+
 		while(curTime < endTime) {
 			if(!pauseTimer) curTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();

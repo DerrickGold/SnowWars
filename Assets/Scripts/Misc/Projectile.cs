@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour 
+public class Projectile : MonoBehaviour
 {
 	float speed = 60.0f;
 	bool collided = false;
 	private AudioSource audio;
+	public float damage = Common.BaseSnowBallDamage;
 
-	void Start() 
+	void Start()
     {
 		audio = GetComponent<AudioSource>();
 	}
-	
-	void Update() 
+
+	void Update()
     {
         //Destroy the gameobject if it hit the ground and the hit sound is finished playing
         if (collided && !audio.isPlaying)
