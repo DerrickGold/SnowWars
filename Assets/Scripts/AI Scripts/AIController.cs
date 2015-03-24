@@ -132,7 +132,6 @@ public class AIController :CharacterBase {
 			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
 			snowBall.damage = getSnowBallDamage();
 
-			float targetAngle = getTargetAngle();
 			Quaternion derp = Quaternion.identity;
 			derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
 			instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
