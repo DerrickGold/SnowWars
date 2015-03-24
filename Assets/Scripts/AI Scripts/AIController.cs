@@ -128,10 +128,7 @@ public class AIController :CharacterBase {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody, 
 			                                               Thorax.transform.position, Head.transform.rotation) as Rigidbody;
 			
-			
-			
 			float targetAngle = getTargetAngle();
-			print (targetAngle);
 			
 			Quaternion derp = Quaternion.identity;
 			derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
@@ -143,7 +140,6 @@ public class AIController :CharacterBase {
 			state = State.WALKING;
 			StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 			subtractAmmo();
-			//print ("Health: " + Health + "/" + getMaxHealth());
 		}
 	}
 
@@ -247,7 +243,6 @@ public class AIController :CharacterBase {
 		if (collision.gameObject.tag == "Player") {
 			//state = State.ATTACKING;
 			targetInRange = true;
-			print ("target in range");
 		}
 
 	}

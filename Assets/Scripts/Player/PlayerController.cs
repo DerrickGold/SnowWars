@@ -101,8 +101,7 @@ public class PlayerController : CharacterBase
             Death();
 
         //Check to see if the player is moving to regain HP
-        print(Vector3.Distance(transform.position, lastRegenLocation));
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 10)
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 10 && Health < 100)
         {
             lastRegenLocation = transform.position;
             Health += 2;
@@ -233,5 +232,10 @@ public class PlayerController : CharacterBase
         gameObject.GetComponent<MouseLook>().enabled = false;
         gameObject.GetComponent<CharacterController>().enabled = false;
         gameObject.GetComponent<PlayerController>().enabled = false;
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        print("Hit");
     }
 }
