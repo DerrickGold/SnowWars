@@ -16,9 +16,9 @@ public class PlayerController : CharacterBase
     private CharacterController controller;
     private PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
-	private Slider healthBar;
-	private Slider staminaBar;
-    public GameObject bodyTop, bodyMiddle, bodyBottom;
+
+	public Slider healthBar;
+	public Slider staminaBar;
 
     private bool isJumping = false;
     private bool isGrounded = false;
@@ -34,7 +34,7 @@ public class PlayerController : CharacterBase
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
-    public GameObject deathExplosionEffect;
+   // public GameObject deathExplosionEffect;
     private Vector3 lastRegenLocation;
 
 
@@ -42,11 +42,13 @@ public class PlayerController : CharacterBase
     {
         healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
         staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
+		baseInit ();
         Common.player = gameObject;
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
+
     }
 
 
@@ -152,7 +154,7 @@ public class PlayerController : CharacterBase
     public void Throwing()
     {
         //Create a new snowball
-        Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
+		Rigidbody snowBall = Instantiate(SnowBallTemplate.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
         snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
@@ -209,7 +211,7 @@ public class PlayerController : CharacterBase
 
     void Death()
     {
-        Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+        /*Instantiate(deathExplosionEffect, transform.position, transform.rotation);
         //Add physics to the players body
         bodyBottom.AddComponent<SphereCollider>();
         Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
@@ -223,7 +225,8 @@ public class PlayerController : CharacterBase
         bodyTop.AddComponent<SphereCollider>();
         Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
         topRigidbody.drag = 2;
-        //bodyTop.transform.position += Vector3.up * 0.75f;
+        //bodyTop.transform.position += Vector3.up * 0.75f;*/
+		DieAnim ();
 
         //Enable death camera
         Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;

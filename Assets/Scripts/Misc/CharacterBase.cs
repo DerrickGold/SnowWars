@@ -31,6 +31,69 @@ public class CharacterBase: MonoBehaviour {
 	public float[] BuffTimers = new float[BuffCount];
 
 
+	public GameObject Base, Thorax, Head;
+	public GameObject SnowBallTemplate;
+	public HitBox HitCollider;
+	public GameObject deathExplosionEffect;
+
+	//rebuild the snowman after explosive death
+	public Vector3[] oldPartPositions = new Vector3[3];
+
+
+	public void baseInit() {
+		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
+
+
+		foreach (Transform o in GetComponentsInChildren<Transform> ()){
+			if (o.name == "Head") Head = o.gameObject;
+			else if (o.name == "Thorax") Thorax = o.gameObject;
+			else if (o.name == "Base") Base = o.gameObject;
+		}
+
+		oldPartPositions [0] = Base.transform.localPosition;
+		oldPartPositions [1] = Thorax.transform.localPosition;
+		oldPartPositions [2] = Head.transform.localPosition;
+
+	}
+
+	public void toggleCollider(GameObject part, bool flag) {
+		SphereCollider temp = part.GetComponent<SphereCollider> ();
+		temp.enabled = flag;
+	}
+
+	public void Rebuild() {
+		Destroy (Base.rigidbody);
+		Destroy (Thorax.rigidbody);
+		Destroy (Head.rigidbody);
+		toggleCollider (Base, false);
+		toggleCollider (Thorax, false);
+		toggleCollider (Head, false);
+		
+
+		Base.transform.localPosition = oldPartPositions [0];
+		Thorax.transform.localPosition = oldPartPositions [1];
+		Head.transform.localPosition = oldPartPositions [2];
+
+	}
+
+
+	public void DieAnim() {
+		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+		//Add physics to the players body
+		//Base.AddComponent<SphereCollider>();
+		toggleCollider (Base, true);
+		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
+		bottomRigidbody.drag = 2;
+		
+		toggleCollider (Thorax, true);
+		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
+		middleRigidbody.drag = 2;
+		//bodyMiddle.transform.position += Vector3.up * 0.50f;
+		toggleCollider (Head, true);
+		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
+		topRigidbody.drag = 2;
+	}
+
 	//Set an effect to activate on a character
 	public void activateBuff(BuffFlag effect) {
 		ActiveBuffs |= (int)effect;
