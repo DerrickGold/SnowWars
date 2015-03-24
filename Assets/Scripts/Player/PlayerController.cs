@@ -224,7 +224,7 @@ public class PlayerController : CharacterBase
         //bodyTop.transform.position += Vector3.up * 0.75f;
 
         //Enable death camera
-        //Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
+        Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
         Screen.lockCursor = false;
 
         //Disable player controls
@@ -236,6 +236,6 @@ public class PlayerController : CharacterBase
 
     void OnCollisionEnter(Collision col)
     {
-        print("Hit");
+        Health -= col.gameObject.GetComponent<Projectile>().damage;
     }
 }

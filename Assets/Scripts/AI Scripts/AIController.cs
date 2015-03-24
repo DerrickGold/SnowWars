@@ -26,16 +26,13 @@ public class AIController :CharacterBase {
 
 	private Vector3[] oldPartPositions = new Vector3[3];
 
-
 	// Use this for initialization
 	void Start () {
 		navMesh = GetComponent<NavMeshAgent> ();
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 		initSnowMan ();
-
-
-
 	}
+
 
 	void initSnowMan() {
 		foreach (Transform o in GetComponentsInChildren<Transform> ()){
@@ -61,6 +58,7 @@ public class AIController :CharacterBase {
 
 	}
 
+
 	void destroySnowman() {
 		Destroy (Base);
 		Destroy (Head);
@@ -81,30 +79,10 @@ public class AIController :CharacterBase {
 				Health = getHealth () - HitCollider.Damage;
 				HitCollider.reset();
 			}
-		} else {
+		} else
 			state = State.DEAD;
-		}
-
-
-
 	}
 
-
-    /***************************************************************************
-     * Description: Calculates the vertical angle between the AI and its target
-     ***************************************************************************/
-    /*
-	float getTargetAngle() {
-        float x = Mathf.Abs(currentTarget.position.x - transform.position.x);//Mathf.Sqrt(Mathf.Pow(currentTarget.position.x - transform.position.x, 2.0f) + Mathf.Pow(currentTarget.position.z - transform.position.z, 2.0f));
-        float y = Mathf.Abs(currentTarget.position.y - transform.position.y);
-        float v = Common.MaxThrowForce;
-
-		float numerator = Mathf.Pow (v, 2) + Mathf.Sqrt (Mathf.Pow (v, 4)
-						- Mathf.Pow (x, 2) + (-2.0f * y * Mathf.Pow (v, 2)));
-
-		float angle = Mathf.Rad2Deg * Mathf.Atan (numerator / x);
-		return angle;
-	}*/
 
     float getTargetAngle()
     {
@@ -116,11 +94,11 @@ public class AIController :CharacterBase {
         float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
         float horizontalSpeed = range / travelTime;
         //float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
-
         //return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
 
 		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
+
 
 	void attack() {
 		navMesh.destination = currentTarget.position;
@@ -166,6 +144,8 @@ public class AIController :CharacterBase {
 		toggleCollider (Head, true);
 		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
 		topRigidbody.drag = 2;
+
+        navMesh.enabled = false;
 	}
 
 
@@ -177,7 +157,7 @@ public class AIController :CharacterBase {
 		toggleCollider (Thorax, false);
 		toggleCollider (Head, false);
 
-
+        navMesh.enabled = true;
 		Base.transform.localPosition = oldPartPositions [0];
 		Thorax.transform.localPosition = oldPartPositions [1];
 		Head.transform.localPosition = oldPartPositions [2];
@@ -190,8 +170,6 @@ public class AIController :CharacterBase {
 	}
 
 	void Update () {
-
-
 		switch(state) {
 		case State.WALKING:
 			UpdateBuffs ();
@@ -224,14 +202,9 @@ public class AIController :CharacterBase {
 		case State.ITEMTRACK:
 			break;
 
-
-
 		case State.RESPAWN:
 			respawn ();
 			state = State.WALKING;
-
-
-
 			break;
 		}
 	}
