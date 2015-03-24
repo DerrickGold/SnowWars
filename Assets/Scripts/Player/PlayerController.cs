@@ -16,8 +16,8 @@ public class PlayerController : CharacterBase
     private CharacterController controller;
     private PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
-	public Slider healthBar;
-	public Slider staminaBar;
+	private Slider healthBar;
+	private Slider staminaBar;
     public GameObject bodyTop, bodyMiddle, bodyBottom;
 
     private bool isJumping = false;
@@ -40,6 +40,8 @@ public class PlayerController : CharacterBase
 
     void Start()
     {
+        healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
+        staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
         Common.player = gameObject;
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
