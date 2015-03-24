@@ -13,8 +13,8 @@ public class Common: MonoBehaviour {
 
 	static public int BaseMaxStamina = 100;
 
-	//how much health to take away for every throw
-	static public int AmmoSubtractAmmount = 1;
+	//How much health to take away for every throw
+	static public int AmmoSubtractAmmount = 10;
 	static public int SuperSnowSubtract = 5;
 
 	static public float BaseWalkSpeed = 4.0f;
