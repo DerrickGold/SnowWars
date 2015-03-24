@@ -38,22 +38,8 @@ public class MainMenu : MonoBehaviour
 		}
 		else if (clicked == "video")
 		{
-			GUI.TextField(new Rect(500, 380, 300, 50), "Resolution");
-			//1080p
-			if(GUI.Button(new Rect(500, 430, 93, 100), "1080p")) {
-				Screen.SetResolution(1920, 1080, Fullscreen);
-				Debug.Log ("1080p");
-			}
-			//720p
-			if(GUI.Button(new Rect(596, 430, 93, 100), "720p")) {
-				Screen.SetResolution(1280, 720, Fullscreen);
-				Debug.Log ("720p");
-			}
-			//480p
-			if(GUI.Button(new Rect(692, 430, 93, 100), "480p")) {
-				Screen.SetResolution(640, 480, Fullscreen);
-				Debug.Log ("480p");
-			}
+			resolutionBtns();
+			antiAlias();
 			if (GUILayout.Button("Back"))
 			{
 				clicked = "options";
@@ -106,5 +92,44 @@ public class MainMenu : MonoBehaviour
 	{
 		if (Input.GetKey (KeyCode.Escape))
 			clicked = "";
+	}
+
+	private void resolutionBtns(){
+		GUI.TextField(new Rect(300, 50, 100, 50), "Resolution");
+			//1080p
+			if(GUI.Button(new Rect(400, 50, 93,50), "1080p")) {
+				Screen.SetResolution(1920, 1080, Fullscreen);
+				Debug.Log ("1080p");
+			}
+			//720p
+			if(GUI.Button(new Rect(493, 50, 93, 50), "720p")) {
+				Screen.SetResolution(1280, 720, Fullscreen);
+				Debug.Log ("720p");
+			}
+			//480p
+			if(GUI.Button(new Rect(586, 50, 93, 50), "480p")) {
+				Screen.SetResolution(640, 480, Fullscreen);
+				Debug.Log ("480p");
+			}
+	}
+
+	private void antiAlias(){
+		GUI.TextField (new Rect (300, 100, 100, 50), "Anti-Alising");
+		if (GUI.Button (new Rect (400, 100, 69.75f, 50), "2X")) {
+			QualitySettings.antiAliasing = 2;
+			Debug.Log ("2X");
+		}
+		if (GUI.Button (new Rect (469.75f, 100, 69.75f, 50), "4X")) {
+			QualitySettings.antiAliasing = 4;
+			Debug.Log ("4X");
+		}
+		if (GUI.Button (new Rect (539.5f, 100, 69.75f, 50), "8X")) {
+			QualitySettings.antiAliasing = 8;
+			Debug.Log ("8X");
+		}
+		if (GUI.Button (new Rect (609.25f, 100, 69.75f, 50), "Off")) {
+			QualitySettings.antiAliasing = 0;
+			Debug.Log ("Off");
+		}
 	}
 }
