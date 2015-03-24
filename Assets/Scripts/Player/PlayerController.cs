@@ -22,6 +22,7 @@ public class PlayerController : CharacterBase
 
     private bool isJumping = false;
     private bool isGrounded = false;
+    private bool runOnCooldown = false;
 
     private float walkSpeed = 10.0f;
     private float runSpeed = 20.0f;
@@ -34,6 +35,7 @@ public class PlayerController : CharacterBase
     private AudioSource audio;
     public Transform snowballSpawnLocation;
     public GameObject deathExplosionEffect;
+    private Vector3 lastRegenLocation;
 
 
     void Start()
@@ -42,6 +44,7 @@ public class PlayerController : CharacterBase
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
+        lastRegenLocation = transform.position;
     }
 
 
@@ -51,16 +54,21 @@ public class PlayerController : CharacterBase
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
             //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0)
-            {
-
+            if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0 && runOnCooldown == false)
                 playerState = PlayerState.RUNNING;
-            }
             else
                 playerState = PlayerState.WALKING;
         }
+        //Is the player idling?
         else if (!isJumping)
             playerState = PlayerState.IDLE;
+
+        //Check to see if the players stamina has bottomed out
+        if (Stamina <= 0)
+            runOnCooldown = true;
+        //Check to see if the player can run again after cooldown is up
+        if (runOnCooldown == true && Stamina >= 100)
+            runOnCooldown = false;
 
         switch (playerState)
         {
@@ -91,6 +99,14 @@ public class PlayerController : CharacterBase
         //Check to see if the player is dead
         if (Health <= 0)
             Death();
+
+        //Check to see if the player is moving to regain HP
+        print(Vector3.Distance(transform.position, lastRegenLocation));
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 10)
+        {
+            lastRegenLocation = transform.position;
+            Health += 2;
+        }
 
         //Update UI
         staminaBar.value = Stamina;

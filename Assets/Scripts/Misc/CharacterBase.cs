@@ -100,11 +100,6 @@ public class CharacterBase: MonoBehaviour {
 		return Stamina;
 	}
 
-
-
-
-
-	
 	//processess a throw from the player
 	public void subtractAmmo() {
 		//infinite ammo, doesn't subtract from health
