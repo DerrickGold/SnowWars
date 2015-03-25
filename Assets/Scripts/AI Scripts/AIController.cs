@@ -7,7 +7,6 @@ public class AIController : CharacterBase {
 	public State state = State.WALKING;
 
 	public Transform currentTarget;
-    private Transform lastTargetAttacked;
 	private NavMeshAgent navMesh;
     private SphereCollider triggerCollider;
     public Animation throwingAnimation;
@@ -164,7 +163,7 @@ public class AIController : CharacterBase {
                 else
                 {
                     beingSafe = true;
-                    Vector3 moveDiriection = Vector3.Normalize((lastTargetAttacked.position - transform.position) * -1);
+                    Vector3 moveDiriection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
                     navMesh.destination = transform.position + moveDiriection;
                 }
 			    break;
@@ -176,7 +175,6 @@ public class AIController : CharacterBase {
 				    Head.transform.LookAt(currentTarget);
 			    }
                 throwingAnimation.Play("AIThrowingAnimation");
-                lastTargetAttacked = currentTarget;
 			    break;
 
 		    case State.DEAD:
@@ -245,7 +243,6 @@ public class AIController : CharacterBase {
 		if (!targetInRange) return false;
 		return Physics.Raycast (Head.transform.position, Head.transform.forward, Common.AIViewRange);
 	}
-
 
 
 	/*	defaultStateTimer
