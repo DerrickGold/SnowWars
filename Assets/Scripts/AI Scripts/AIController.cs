@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AIController : CharacterBase {
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
@@ -12,6 +13,7 @@ public class AIController : CharacterBase {
     public Animation throwingAnimation;
     private Common globalScript;
     public Transform snowballSpawnLocation;
+    private List<GameObject> allEnemies = new List<GameObject>();
 
 	private float MovementSpeed;
 
@@ -31,6 +33,8 @@ public class AIController : CharacterBase {
     void Start() {
         initSnowMan();
         lastRegenLocation = transform.position;
+        spawnPosition = transform.position;
+        PickRandomEnemy();
     }
 
 
@@ -38,8 +42,25 @@ public class AIController : CharacterBase {
 		triggerCollider = GetComponent<SphereCollider> ();
 		triggerCollider.radius = Common.AIViewRange;
 		MovementSpeed = navMesh.speed;
-        currentTarget = globalScript.player.transform.Find("Snowman/Head");
+        //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
+
+    void PickRandomEnemy()
+    {
+        //Get a list of all enemys in the game
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (g.GetComponent<AIController>().Health > 0)
+                allEnemies.Add(g);
+        }
+        //if (globalScript.player.GetComponent<PlayerController>().Health > 0)
+            //allEnemies.Add(globalScript.player);
+
+        //Pick a random enemy to attack
+        do
+            currentTarget = allEnemies[Random.Range(0, allEnemies.Count)].transform;
+        while (currentTarget == transform);
+    }
 
 	
 	void UpdateBuffs() {
@@ -90,7 +111,8 @@ public class AIController : CharacterBase {
 
 			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
 			snowBall.damage = getSnowBallDamage();
-            print(getTargetAngle());
+            snowBall.origin = transform;
+            snowBall.originHP = Health;
             instantiatedProjectile.transform.eulerAngles += new Vector3(-getTargetAngle(), 0, 0);
 
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
@@ -117,6 +139,7 @@ public class AIController : CharacterBase {
 		Stamina = getMaxStamina ();
 		resetBuffs ();
 		initSnowMan ();
+        transform.position = spawnPosition;
 	}
 
 	void Update () {
@@ -178,6 +201,20 @@ public class AIController : CharacterBase {
             lastRegenLocation = transform.position;
             Health += 2.5f;
         }
+
+        //Check to see if the AI's current target is dead
+        if (currentTarget.gameObject.name == "AI")
+        {
+            if (currentTarget.gameObject.GetComponent<AIController>().Health <= 0)
+                PickRandomEnemy();
+        }
+        else if (currentTarget.gameObject.name == "Player")
+        {
+            if (currentTarget.gameObject.GetComponent<PlayerController>().Health <= 0)
+                PickRandomEnemy();
+        }
+        else
+            PickRandomEnemy();
 	}
 
 
@@ -185,14 +222,20 @@ public class AIController : CharacterBase {
 	void OnTriggerEnter(Collider collision) {
 	    //If another npc or character is in range, switch the target
 		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
-		if (collision.gameObject.tag == "Player")
-			targetInRange = true;
+        if (currentTarget != null)
+        {
+            if (collision.gameObject == currentTarget.gameObject)
+                targetInRange = true;
+        }
 
 	}
 
 	void OnTriggerExit(Collider collision) {
-		if (collision.gameObject.tag == "Player")
-			targetInRange = false;
+        if (currentTarget != null)
+        {
+            if (collision.gameObject == currentTarget.gameObject)
+                targetInRange = false;
+        }
 	}
 
 
@@ -243,7 +286,8 @@ public class AIController : CharacterBase {
 
     void OnCollisionEnter(Collision col)
     {
-        print("Hit");
-        Health -= col.gameObject.GetComponent<Projectile>().damage;
+        //If a snowball hit the AI
+        if (col.gameObject.name == "Snowball(Clone)")
+            Health -= col.gameObject.GetComponent<Projectile>().damage;
     }
 }

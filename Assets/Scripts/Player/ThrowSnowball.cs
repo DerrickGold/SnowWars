@@ -6,21 +6,17 @@ public class ThrowSnowball : MonoBehaviour
     private PlayerController playerController;
     private AIController aiController;
 
-    void Start()
-    {
-        if (gameObject.transform.root.name == "Player")
-            playerController = gameObject.transform.root.GetComponent<PlayerController>();
-        else if (gameObject.transform.root.name == "AI")
-            aiController = gameObject.transform.root.GetComponent<AIController>();
-    }
-
 	void PlayerThrow()
     {
+        if (playerController == null)
+            playerController = gameObject.transform.root.GetComponent<PlayerController>();
         playerController.Throwing();
 	}
 
     void AIThrow()
     {
+        if (aiController == null)
+            aiController = gameObject.transform.root.GetComponent<AIController>();
         aiController.Throwing();
     }
 }

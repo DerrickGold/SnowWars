@@ -33,6 +33,7 @@ public class CharacterBase: MonoBehaviour {
 	public GameObject SnowBallTemplate;
 	public HitBox HitCollider;
 	public GameObject deathExplosionEffect;
+    public Vector3 spawnPosition;
 
 	//rebuild the snowman after explosive death
 	public Vector3[] oldPartPositions = new Vector3[3];
@@ -65,7 +66,6 @@ public class CharacterBase: MonoBehaviour {
 		//toggleCollider (Thorax, false);
 		//toggleCollider (Head, false);
 		
-
 		Base.transform.localPosition = oldPartPositions [0];
         Base.transform.eulerAngles = new Vector3(0, 0, 0);
         Thorax.transform.localPosition = oldPartPositions[1];

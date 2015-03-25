@@ -49,11 +49,13 @@ public class PlayerController : CharacterBase
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
+        spawnPosition = transform.position;
     }
 
 
     void Update()
     {
+        Health = 100;
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
@@ -97,8 +99,8 @@ public class PlayerController : CharacterBase
         }
 
         //Is the player throwing a snowball?
-        if (Input.GetButtonDown("Fire1") && Health > 0)
-            throwingAnimation.Play("PlayerThrowingAnimation");
+        //if (Input.GetButtonDown("Fire1") && Health > 0)
+        throwingAnimation.Play("PlayerThrowingAnimation");
 
         //Check to see if the player is dead
         if (Health <= 0)
@@ -158,6 +160,7 @@ public class PlayerController : CharacterBase
         snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
+        snowBall.gameObject.GetComponent<Projectile>().origin = transform;
 
         //Subtract health from the player
         subtractAmmo();
@@ -226,6 +229,8 @@ public class PlayerController : CharacterBase
 
     void OnCollisionEnter(Collision col)
     {
-        Health -= col.gameObject.GetComponent<Projectile>().damage;
+        //If a snowball hit the AI
+        if (col.gameObject.name == "Snowball(Clone)")
+            Health -= col.gameObject.GetComponent<Projectile>().damage;
     }
 }

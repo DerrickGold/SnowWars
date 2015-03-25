@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\JayScripts\BuffPickup.cs" />
      <Compile Include="Assets\Scripts\JayScripts\PointLightGlow.cs" />
      <Compile Include="Assets\Scripts\JayScripts\Rotator.cs" />
+     <Compile Include="Assets\Scripts\JustForFun.cs" />
      <Compile Include="Assets\Scripts\Menu Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\Misc\BulletTest.cs" />
      <Compile Include="Assets\Scripts\Misc\CharacterBase.cs" />
