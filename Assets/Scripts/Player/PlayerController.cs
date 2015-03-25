@@ -99,8 +99,8 @@ public class PlayerController : CharacterBase
         }
 
         //Is the player throwing a snowball?
-        //if (Input.GetButtonDown("Fire1") && Health > 0)
-        throwingAnimation.Play("PlayerThrowingAnimation");
+        if (Input.GetButtonDown("Fire1") && Health > 0)
+            throwingAnimation.Play("PlayerThrowingAnimation");
 
         //Check to see if the player is dead
         if (Health <= 0)

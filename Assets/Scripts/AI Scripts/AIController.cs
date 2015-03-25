@@ -151,7 +151,7 @@ public class AIController : CharacterBase {
 				    Head.transform.LookAt(currentTarget);
 
                 //Be offensive if health isn't too low
-                if (Health > 30 && !beingSafe)
+                if (Health > 1 && !beingSafe)
                 {
                     navMesh.destination = currentTarget.position;
                     //Throw a snowball at its target if it's in range
