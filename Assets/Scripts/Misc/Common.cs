@@ -14,7 +14,7 @@ public class Common: MonoBehaviour {
 	static public int BaseMaxStamina = 100;
 
 	//How much health to take away for every throw
-	static public int AmmoSubtractAmmount = 10;
+	static public int AmmoSubtractAmmount = 5;
 	static public int SuperSnowSubtract = 5;
 
 	static public float BaseWalkSpeed = 4.0f;
@@ -25,7 +25,7 @@ public class Common: MonoBehaviour {
 
 	static public float RespawnTime = 10.0f; //in seconds
 
-	static public GameObject player;
+    public GameObject player;
 
     //AI variables
 	public GameObject[] ai;

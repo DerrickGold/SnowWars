@@ -22,14 +22,12 @@ public class CharacterBase: MonoBehaviour {
 	};
 	public static int BuffCount = 10;
 
-
-
 	public float Health = Common.BaseMaxHealth;
 	public float Stamina = Common.BaseMaxStamina;
+    public Vector3 lastRegenLocation;
 
 	public int ActiveBuffs;
 	public float[] BuffTimers = new float[BuffCount];
-
 
 	public GameObject Base, Thorax, Head;
 	public GameObject SnowBallTemplate;
@@ -69,8 +67,11 @@ public class CharacterBase: MonoBehaviour {
 		
 
 		Base.transform.localPosition = oldPartPositions [0];
-		Thorax.transform.localPosition = oldPartPositions [1];
-		Head.transform.localPosition = oldPartPositions [2];
+        Base.transform.eulerAngles = new Vector3(0, 0, 0);
+        Thorax.transform.localPosition = oldPartPositions[1];
+        Thorax.transform.eulerAngles = new Vector3(0, 0, 0);
+        Head.transform.localPosition = oldPartPositions[2];
+        Head.transform.eulerAngles = new Vector3(0, 0, 0);
 
 	}
 

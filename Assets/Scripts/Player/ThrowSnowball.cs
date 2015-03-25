@@ -4,10 +4,14 @@ using System.Collections;
 public class ThrowSnowball : MonoBehaviour
 {
     private PlayerController playerController;
+    private AIController aiController;
 
     void Start()
     {
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        if (gameObject.transform.root.name == "Player")
+            playerController = gameObject.transform.root.GetComponent<PlayerController>();
+        else if (gameObject.transform.root.name == "AI")
+            aiController = gameObject.transform.root.GetComponent<AIController>();
     }
 
 	void PlayerThrow()
@@ -17,6 +21,6 @@ public class ThrowSnowball : MonoBehaviour
 
     void AIThrow()
     {
-
+        aiController.Throwing();
     }
 }

@@ -24,8 +24,8 @@ public class PlayerController : CharacterBase
     private bool isGrounded = false;
     private bool runOnCooldown = false;
 
-    private float walkSpeed = 10.0f;
-    private float runSpeed = 20.0f;
+    private float walkSpeed = 5.0f;
+    private float runSpeed = 7.0f;
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
@@ -34,11 +34,9 @@ public class PlayerController : CharacterBase
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
-   // public GameObject deathExplosionEffect;
-    private Vector3 lastRegenLocation;
 
 
-    void Start()
+    void Awake()
     {
         healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
         staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
@@ -46,8 +44,8 @@ public class PlayerController : CharacterBase
         //Initializes the head, thorax and body
 		baseInit ();
 
-        Common.player = gameObject;
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
+        globalScript.player = gameObject;
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
@@ -100,17 +98,17 @@ public class PlayerController : CharacterBase
 
         //Is the player throwing a snowball?
         if (Input.GetButtonDown("Fire1") && Health > 0)
-            throwingAnimation.Play("throwingAnimation");
+            throwingAnimation.Play("PlayerThrowingAnimation");
 
         //Check to see if the player is dead
         if (Health <= 0)
             Death();
 
         //Check to see if the player is moving to regain HP
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 10 && Health < 100)
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
         {
             lastRegenLocation = transform.position;
-            Health += 2;
+            Health += 2.5f;
         }
 
         //Update UI

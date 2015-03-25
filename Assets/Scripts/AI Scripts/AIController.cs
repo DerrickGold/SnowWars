@@ -2,38 +2,43 @@
 using System.Collections;
 
 public class AIController : CharacterBase {
-	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN};
+	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
 	public State state = State.WALKING;
 
-	//get location of current target to chase and kill
 	public Transform currentTarget;
+    private Transform lastTargetAttacked;
 	private NavMeshAgent navMesh;
-	
-	private SphereCollider TriggerCollider;
+    private SphereCollider triggerCollider;
+    public Animation throwingAnimation;
+    private Common globalScript;
+    public Transform snowballSpawnLocation;
 
 	private float MovementSpeed;
 
-	//keep track of whether the target is visible to the AI or not
 	bool targetInSight = false;
 	bool targetInRange = false;
+    private bool beingSafe = false;
 
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
 
-	// Use this for initialization
-	void Start () {
-		baseInit ();
-		navMesh = GetComponent<NavMeshAgent> ();
-
-		initSnowMan ();
+	void Awake () {
+        baseInit();
+        globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
+        navMesh = GetComponent<NavMeshAgent>();
 	}
+
+    void Start() {
+        initSnowMan();
+        lastRegenLocation = transform.position;
+    }
 
 
 	void initSnowMan() {
-		TriggerCollider = GetComponent<SphereCollider> ();
-		TriggerCollider.radius = Common.AIViewRange;
+		triggerCollider = GetComponent<SphereCollider> ();
+		triggerCollider.radius = Common.AIViewRange;
 		MovementSpeed = navMesh.speed;
-		currentTarget = Common.player.transform.Find("Snowman/Head");
+        currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
 
 	
@@ -59,49 +64,53 @@ public class AIController : CharacterBase {
         float range = Mathf.Sqrt(Mathf.Pow(transform.position.x - currentTarget.position.x, 2) + Mathf.Pow(transform.position.z - currentTarget.position.z, 2));
         float offsetHeight = currentTarget.position.y - transform.position.y;
         float gravity = -Physics.gravity.y;
+        float height = (currentTarget.position.y > transform.position.y) ? currentTarget.position.y : transform.position.y;
 
-        float verticalSpeed = Mathf.Sqrt(2 * gravity * currentTarget.position.y);
-        float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
+        float verticalSpeed = Mathf.Sqrt(2 * gravity * height);
+        float travelTime = Mathf.Sqrt(2 * (height - offsetHeight) / gravity) + Mathf.Sqrt(2 * height / gravity);
+        //float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
         float horizontalSpeed = range / travelTime;
+        float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
 
-		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
+        return -Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI;
+
+		//return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
-
-    void Throwing()
+    /***************************************************************************
+     * Description: Deals with letting the AI throw snowballs
+     ***************************************************************************/
+    public void Throwing()
     {
-		navMesh.destination = currentTarget.position;
+        if (navMesh.enabled == true)
+		    navMesh.destination = currentTarget.position;
 		if (!stateCoroutine) {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
-			                                               Thorax.transform.position, Head.transform.rotation) as Rigidbody;
+			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
 
-			float targetAngle = getTargetAngle();
 			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
 			snowBall.damage = getSnowBallDamage();
-
-			Quaternion derp = Quaternion.identity;
-			derp.eulerAngles = new Vector3(-targetAngle, 0, 0);
-			instantiatedProjectile.transform.eulerAngles += derp.eulerAngles;
+            print(getTargetAngle());
+            instantiatedProjectile.transform.eulerAngles += new Vector3(-getTargetAngle(), 0, 0);
 
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
 
 
 			state = State.WALKING;
-			StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
+			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 			subtractAmmo();
 		}
 	}
 
 
-	void deathAnim() {
-
+	void DeathAnim() {
 		DieAnim ();
         navMesh.enabled = false;
 	}
 
 
-	void respawn () {
-		Rebuild ();
+	void Respawn () {
+		Rebuild();
 		//reset stats
 		navMesh.enabled = true;
 		Health = getMaxHealth ();
@@ -112,42 +121,63 @@ public class AIController : CharacterBase {
 
 	void Update () {
 		switch(state) {
-		case State.WALKING:
-			UpdateBuffs ();
-			targetInSight = isTargetInView ();
-			if (targetInRange) {
-				Head.transform.LookAt(currentTarget);
-			}
-			//keep tracking targets position
-			navMesh.destination = currentTarget.position;
-			if (targetInSight) state = State.ATTACKING;
+		    case State.WALKING:
+			    UpdateBuffs ();
+			    targetInSight = isTargetInView ();
+			    if (targetInRange)
+				    Head.transform.LookAt(currentTarget);
 
-			break;
+                //Be offensive if health isn't too low
+                if (Health > 30 && !beingSafe)
+                {
+                    navMesh.destination = currentTarget.position;
+                    //Throw a snowball at its target if it's in range
+                    if (targetInSight)
+                        state = State.ATTACKING;
+                }
+                else if (Health > 50 && beingSafe)
+                    beingSafe = !beingSafe;
+                //Be defensive if health has dropped to critical levels
+                else
+                {
+                    beingSafe = true;
+                    Vector3 moveDiriection = Vector3.Normalize((lastTargetAttacked.position - transform.position) * -1);
+                    navMesh.destination = transform.position + moveDiriection;
+                }
+			    break;
 
-		case State.ATTACKING:
-			UpdateBuffs ();
-			targetInSight = isTargetInView ();
-			if (targetInRange) {
-				Head.transform.LookAt(currentTarget);
-			}
-            Throwing();
-			break;
+		    case State.ATTACKING:
+			    UpdateBuffs ();
+			    targetInSight = isTargetInView ();
+			    if (targetInRange) {
+				    Head.transform.LookAt(currentTarget);
+			    }
+                throwingAnimation.Play("AIThrowingAnimation");
+                lastTargetAttacked = currentTarget;
+			    break;
 
-		case State.DEAD:
-			if (!stateCoroutine) {
-				deathAnim();
-				StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
-			}
-			break;
+		    case State.DEAD:
+			    if (!stateCoroutine) {
+				    DeathAnim();
+				    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
+			    }
+			    break;
 
-		case State.ITEMTRACK:
-			break;
+		    case State.ITEMTRACK:
+			    break;
 
-		case State.RESPAWN:
-			respawn ();
-			state = State.WALKING;
-			break;
+		    case State.RESPAWN:
+			    Respawn();
+			    state = State.WALKING;
+			    break;
 		}
+
+        //Check to see if the player is moving to regain HP
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
+        {
+            lastRegenLocation = transform.position;
+            Health += 2.5f;
+        }
 	}
 
 
@@ -155,18 +185,14 @@ public class AIController : CharacterBase {
 	void OnTriggerEnter(Collider collision) {
 	    //If another npc or character is in range, switch the target
 		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
-		if (collision.gameObject.tag == "Player") {
-			//state = State.ATTACKING;
+		if (collision.gameObject.tag == "Player")
 			targetInRange = true;
-		}
 
 	}
 
 	void OnTriggerExit(Collider collision) {
-		if (collision.gameObject.tag == "Player") {
-			//state = State.WALKING;
+		if (collision.gameObject.tag == "Player")
 			targetInRange = false;
-		}
 	}
 
 
@@ -217,6 +243,7 @@ public class AIController : CharacterBase {
 
     void OnCollisionEnter(Collision col)
     {
+        print("Hit");
         Health -= col.gameObject.GetComponent<Projectile>().damage;
     }
 }
