@@ -6,17 +6,6 @@ public class HitBox : MonoBehaviour {
 	public bool isHit;
 	public float Damage = 0.0f;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-
 	public void reset() {
 		isHit = false;
 		Damage = 0.0f;
@@ -29,8 +18,6 @@ public class HitBox : MonoBehaviour {
 
 			Projectile snowBall = collision.gameObject.GetComponent<Projectile>();
 			Damage = snowBall.damage;
-
 		}
 	}
-
 }

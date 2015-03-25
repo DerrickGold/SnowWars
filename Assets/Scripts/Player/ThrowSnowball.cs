@@ -10,8 +10,13 @@ public class ThrowSnowball : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
-	void Throw()
+	void PlayerThrow()
     {
         playerController.Throwing();
 	}
+
+    void AIThrow()
+    {
+
+    }
 }

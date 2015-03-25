@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AIController :CharacterBase {
+public class AIController : CharacterBase {
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN};
 	public State state = State.WALKING;
 
@@ -19,8 +19,6 @@ public class AIController :CharacterBase {
 
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
-
-
 
 	// Use this for initialization
 	void Start () {
@@ -48,7 +46,6 @@ public class AIController :CharacterBase {
 
 		if (Health > 0.0f) {
 			if(HitCollider.isHit) {
-				//todo: replace -1 with snowballs attached damage
 				Health = getHealth () - HitCollider.Damage;
 				HitCollider.reset();
 			}
@@ -66,14 +63,13 @@ public class AIController :CharacterBase {
         float verticalSpeed = Mathf.Sqrt(2 * gravity * currentTarget.position.y);
         float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
         float horizontalSpeed = range / travelTime;
-        //float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
-        //return (-Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI);
 
 		return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
 
-	void attack() {
+    void Throwing()
+    {
 		navMesh.destination = currentTarget.position;
 		if (!stateCoroutine) {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
@@ -95,8 +91,6 @@ public class AIController :CharacterBase {
 			subtractAmmo();
 		}
 	}
-
-
 
 
 	void deathAnim() {
@@ -136,7 +130,7 @@ public class AIController :CharacterBase {
 			if (targetInRange) {
 				Head.transform.LookAt(currentTarget);
 			}
-			attack();
+            Throwing();
 			break;
 
 		case State.DEAD:
@@ -159,8 +153,7 @@ public class AIController :CharacterBase {
 
 
 	void OnTriggerEnter(Collider collision) {
-	//void OnCollisionEnter(Collision collision) {
-	//If another npc or character is in range, switch the target
+	    //If another npc or character is in range, switch the target
 		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
 		if (collision.gameObject.tag == "Player") {
 			//state = State.ATTACKING;
@@ -170,7 +163,6 @@ public class AIController :CharacterBase {
 	}
 
 	void OnTriggerExit(Collider collision) {
-	//void OnCollisionExit(Collision collision) {
 		if (collision.gameObject.tag == "Player") {
 			//state = State.WALKING;
 			targetInRange = false;
@@ -223,6 +215,8 @@ public class AIController :CharacterBase {
 		state = next;
 	}
 
-
-
+    void OnCollisionEnter(Collision col)
+    {
+        Health -= col.gameObject.GetComponent<Projectile>().damage;
+    }
 }

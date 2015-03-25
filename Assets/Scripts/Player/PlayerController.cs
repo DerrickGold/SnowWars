@@ -42,13 +42,15 @@ public class PlayerController : CharacterBase
     {
         healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
         staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
+
+        //Initializes the head, thorax and body
 		baseInit ();
+
         Common.player = gameObject;
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
-
     }
 
 
@@ -211,21 +213,6 @@ public class PlayerController : CharacterBase
 
     void Death()
     {
-        /*Instantiate(deathExplosionEffect, transform.position, transform.rotation);
-        //Add physics to the players body
-        bodyBottom.AddComponent<SphereCollider>();
-        Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
-        bottomRigidbody.drag = 2;
-
-        bodyMiddle.AddComponent<SphereCollider>();
-        Rigidbody middleRigidbody = bodyMiddle.AddComponent<Rigidbody>();
-        middleRigidbody.drag = 2;
-        //bodyMiddle.transform.position += Vector3.up * 0.50f;
-
-        bodyTop.AddComponent<SphereCollider>();
-        Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
-        topRigidbody.drag = 2;
-        //bodyTop.transform.position += Vector3.up * 0.75f;*/
 		DieAnim ();
 
         //Enable death camera

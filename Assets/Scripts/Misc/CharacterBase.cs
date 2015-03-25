@@ -43,7 +43,6 @@ public class CharacterBase: MonoBehaviour {
 	public void baseInit() {
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 
-
 		foreach (Transform o in GetComponentsInChildren<Transform> ()){
 			if (o.name == "Head") Head = o.gameObject;
 			else if (o.name == "Thorax") Thorax = o.gameObject;
@@ -53,7 +52,6 @@ public class CharacterBase: MonoBehaviour {
 		oldPartPositions [0] = Base.transform.localPosition;
 		oldPartPositions [1] = Thorax.transform.localPosition;
 		oldPartPositions [2] = Head.transform.localPosition;
-
 	}
 
 	public void toggleCollider(GameObject part, bool flag) {
@@ -65,9 +63,9 @@ public class CharacterBase: MonoBehaviour {
 		Destroy (Base.rigidbody);
 		Destroy (Thorax.rigidbody);
 		Destroy (Head.rigidbody);
-		toggleCollider (Base, false);
-		toggleCollider (Thorax, false);
-		toggleCollider (Head, false);
+		//toggleCollider (Base, false);
+		//toggleCollider (Thorax, false);
+		//toggleCollider (Head, false);
 		
 
 		Base.transform.localPosition = oldPartPositions [0];
@@ -81,15 +79,15 @@ public class CharacterBase: MonoBehaviour {
 		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
 		//Add physics to the players body
 		//Base.AddComponent<SphereCollider>();
-		toggleCollider (Base, true);
+		//toggleCollider (Base, true);
 		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
 		bottomRigidbody.drag = 2;
 		
-		toggleCollider (Thorax, true);
+		//toggleCollider (Thorax, true);
 		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
 		middleRigidbody.drag = 2;
 		//bodyMiddle.transform.position += Vector3.up * 0.50f;
-		toggleCollider (Head, true);
+		//toggleCollider (Head, true);
 		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
 		topRigidbody.drag = 2;
 	}
