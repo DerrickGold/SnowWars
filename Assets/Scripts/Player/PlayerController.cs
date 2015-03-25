@@ -5,16 +5,18 @@ using UnityEngine.UI;
 public class PlayerController : CharacterBase
 {
     //Player variables
-    private enum PlayerState
+    public enum PlayerState
     {
         IDLE,
         WALKING,
-        RUNNING
+        RUNNING,
+		DEAD,
+		RESPAWN
     };
 
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController controller;
-    private PlayerState playerState = PlayerState.IDLE;
+    public PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
 
 	public Slider healthBar;
@@ -50,12 +52,27 @@ public class PlayerController : CharacterBase
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
+
+		//activateBuff (BuffFlag.INF_HEALTH);
     }
 
+	void Respawn () {
+		Rebuild();
+		//reset stats
+		Health = getMaxHealth ();
+		Stamina = getMaxStamina ();
+		resetBuffs ();
+		transform.position = spawnPosition;
 
-    void Update()
+
+
+	}
+
+	void Update()
     {
-        Health = 100;
+
+		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
+		updateBuffTimers ();
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
@@ -96,26 +113,28 @@ public class PlayerController : CharacterBase
                 if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
                 break;
+			case PlayerState.DEAD:
+				break;
         }
 
         //Is the player throwing a snowball?
-        if (Input.GetButtonDown("Fire1") && Health > 0)
+        if (Input.GetButtonDown("Fire1") && getHealth () > 0)
             throwingAnimation.Play("PlayerThrowingAnimation");
 
         //Check to see if the player is dead
-        if (Health <= 0)
+        if (getHealth () <= 0)
             Death();
 
         //Check to see if the player is moving to regain HP
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth () < 100)
         {
             lastRegenLocation = transform.position;
             Health += 2.5f;
         }
 
         //Update UI
-        staminaBar.value = Stamina;
-        healthBar.value = Health;
+        staminaBar.value = getStamina ();
+        healthBar.value = getHealth ();
     }
 
 
@@ -225,12 +244,14 @@ public class PlayerController : CharacterBase
         gameObject.GetComponent<MouseLook>().enabled = false;
         gameObject.GetComponent<CharacterController>().enabled = false;
         gameObject.GetComponent<PlayerController>().enabled = false;
+
+		playerState = PlayerState.DEAD;
     }
 
     void OnCollisionEnter(Collision col)
     {
         //If a snowball hit the AI
         if (col.gameObject.name == "Snowball(Clone)")
-            Health -= col.gameObject.GetComponent<Projectile>().damage;
+            Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }
 }

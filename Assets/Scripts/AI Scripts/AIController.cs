@@ -49,11 +49,12 @@ public class AIController : CharacterBase {
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            if (g.GetComponent<AIController>().Health > 0)
-                allEnemies.Add(g);
+			State aiState = g.GetComponent<AIController>().state;
+            if ( aiState != State.DEAD && aiState != State.RESPAWN) allEnemies.Add(g);
         }
-        //if (globalScript.player.GetComponent<PlayerController>().Health > 0)
-            //allEnemies.Add(globalScript.player);
+
+		PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController> ().playerState;
+        if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
 
         //Pick a random enemy to attack
         do
@@ -119,7 +120,7 @@ public class AIController : CharacterBase {
 
 			state = State.WALKING;
 			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
-			subtractAmmo();
+			//subtractAmmo();
 		}
 	}
 
@@ -139,6 +140,7 @@ public class AIController : CharacterBase {
 		resetBuffs ();
 		initSnowMan ();
         transform.position = spawnPosition;
+		PickRandomEnemy ();
 	}
 
 	void Update () {
@@ -146,11 +148,13 @@ public class AIController : CharacterBase {
 		    case State.WALKING:
 			    UpdateBuffs ();
 			    targetInSight = isTargetInView ();
-			    if (targetInRange)
+			    if (targetInRange){
 				    Head.transform.LookAt(currentTarget);
-
+					Thorax.transform.LookAt(currentTarget);
+				}
+				
                 //Be offensive if health isn't too low
-                if (Health > 1 && !beingSafe)
+                if (Health > 30 && !beingSafe)
                 {
                     navMesh.destination = currentTarget.position;
                     //Throw a snowball at its target if it's in range

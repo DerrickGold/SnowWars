@@ -23,7 +23,7 @@ public class Common: MonoBehaviour {
 	static public int BaseSnowBallDamage = 50;
 	static public int SuperSnowBallBoost = 15;
 
-	static public float RespawnTime = 1.0f; //in seconds
+	static public float RespawnTime = 3.0f; //in seconds
 
     public GameObject player;
 

@@ -119,11 +119,16 @@ public class CharacterBase: MonoBehaviour {
 	//update all effect timers for a player/ai
 	public void updateBuffTimers() {
 		for (int i = 0; i < BuffCount; i++) { 
-			BuffFlag curEffect = (BuffFlag)(1<<i);
-
+			BuffFlag curEffect = (BuffFlag)(1<<(i + 1));
 			if (!isEffectActive (curEffect)) continue;
-			BuffTimers[i] -= Time.deltaTime;
-			clearBuff (curEffect);
+
+			int timer = (int)curEffect % BuffCount;
+			BuffTimers[timer] -= Time.deltaTime;
+
+			if (BuffTimers[timer] <= 0.0f) {
+				clearBuff (curEffect);
+				BuffTimers[timer] = 0.0f;
+			}
 		}
 	
 	}
@@ -165,7 +170,7 @@ public class CharacterBase: MonoBehaviour {
 	//processess a throw from the player
 	public void subtractAmmo() {
 		//infinite ammo, doesn't subtract from health
-		if (isEffectActive(BuffFlag.INF_AMMO)) return;
+		if (isEffectActive(BuffFlag.INF_AMMO) || isEffectActive(BuffFlag.INF_HEALTH)) return;
 		//subtract one hit point for every throw
 		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
 			Health -= (Common.AmmoSubtractAmmount + Common.SuperSnowSubtract);
