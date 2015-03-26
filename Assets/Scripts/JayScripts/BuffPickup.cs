@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Jaymeson Wickens
+ * 
+ * Description:
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -7,26 +13,31 @@ public class BuffPickup : MonoBehaviour {
 	private float buffDisplay;
 	private bool buffAquired;
 	private Text[] buffText = new Text[2];
-	// Use this for initialization
+
+    /****************************************************************************************************
+     * Description: Used to initialize required variables.                                              *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Start () {
 		buffAquired = false;
 	}
-	
-	// Update is called once per frame
 
-	/*
-	void Update () {
-		if (buffAquired) {
-			if(Time.time-buffDisplay > 2.5f){
-				//print (Time.time + " " + buffDisplay);
-				buffText[0].gameObject.SetActive(false);
-				buffText[1].gameObject.SetActive(true);
-				buffAquired= false;
-			}
-		}
-	}*/
+    /****************************************************************************************************
+     * Description: PLEASE CHECK IF UPDATE IS REQUIRED. IF NOT, PLEASE REMOVE.                          *
+     * Syntax: ---
+    /*
+    void Update () {
+        if (buffAquired) {
+            if(Time.time-buffDisplay > 2.5f){
+                //print (Time.time + " " + buffDisplay);
+                buffText[0].gameObject.SetActive(false);
+                buffText[1].gameObject.SetActive(true);
+                buffAquired= false;
+            }
+        }
+    }*/
 
-	void OnTriggerEnter(Collider other) 
+    void OnTriggerEnter(Collider other) 
 	{
 		if (other.gameObject.tag == "PickUp")
 		{

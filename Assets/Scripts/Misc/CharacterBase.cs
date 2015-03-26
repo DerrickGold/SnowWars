@@ -1,15 +1,14 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Derrick Gold
+ * Secondary Contributors: Curtis Murray
+ * 
+ * Description: Anything that is common between the player and the AI is put into here. Both the
+ *              player and the AI inherit this script. Things such as hitpoints, buffs, ammo, body
+ *              parts, stamina, etc are all placed in this script.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
-
-/*
- * The base of all players and AI 
- * 
- * Handles hitpoints, buffs, ammo, etc
- * 
- * 
- * Created by Derrick!
- */
-
 
 public class CharacterBase: MonoBehaviour {
 	public enum BuffFlag {
@@ -35,11 +34,11 @@ public class CharacterBase: MonoBehaviour {
 	public GameObject deathExplosionEffect;
     public Vector3 spawnPosition;
 
-	//rebuild the snowman after explosive death
 	public Vector3[] oldPartPositions = new Vector3[3];
 
 
-	public void baseInit() {
+    public void baseInitialization()
+    {
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 
 		foreach (Transform o in GetComponentsInChildren<Transform> ()){
@@ -58,10 +57,11 @@ public class CharacterBase: MonoBehaviour {
 		temp.enabled = flag;
 	}
 
-	public void Rebuild() {
+	public void rebuild() {
 		Destroy (Base.rigidbody);
 		Destroy (Thorax.rigidbody);
 		Destroy (Head.rigidbody);
+
 		//toggleCollider (Base, false);
 		//toggleCollider (Thorax, false);
 		//toggleCollider (Head, false);
@@ -76,7 +76,7 @@ public class CharacterBase: MonoBehaviour {
 	}
 
 
-	public void DieAnim() {
+	public void dieAnimation() {
 		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
 		//Add physics to the players body
 		//Base.AddComponent<SphereCollider>();

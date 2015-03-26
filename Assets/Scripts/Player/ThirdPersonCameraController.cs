@@ -121,7 +121,7 @@ public class ThirdPersonCameraController : MonoBehaviour
             Vector3 position = target.transform.position - (rotation * Vector3.forward * desiredDistance + vTargetOffset);
          
             // Check for collision using the true target's desired registration point as set by user using height
-            RaycastHit collisionHit;
+            /*RaycastHit collisionHit;
             Vector3 trueTargetPosition = new Vector3 (target.transform.position.x, target.transform.position.y + targetHeight, target.transform.position.z);
          
             // If there was a collision, correct the camera position and calculate the corrected distance
@@ -137,7 +137,7 @@ public class ThirdPersonCameraController : MonoBehaviour
             }
          
             // For smoothing, lerp distance only if either distance wasn't corrected, or correctedDistance is more than currentDistance
-            currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp (currentDistance, correctedDistance, Time.deltaTime * zoomDampening) : correctedDistance;
+            currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp (currentDistance, correctedDistance, Time.deltaTime * zoomDampening) : correctedDistance;*/
          
             // Keep within limits
             currentDistance = Mathf.Clamp (currentDistance, minDistance, maxDistance);

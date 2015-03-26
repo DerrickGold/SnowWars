@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Curtis Murray
+ * Secondary Contributors: Derrick Gold
+ * 
+ * Description: This script is placed on the player. This is the driving force behind the player.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -10,13 +17,12 @@ public class PlayerController : CharacterBase
         IDLE,
         WALKING,
         RUNNING,
-		DEAD,
-		RESPAWN
+        DEAD,
+        RESPAWN
     };
-
+    public PlayerState playerState = PlayerState.IDLE;
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController controller;
-    public PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
 
 	public Slider healthBar;
@@ -37,42 +43,43 @@ public class PlayerController : CharacterBase
     private AudioSource audio;
     public Transform snowballSpawnLocation;
 
-
+    /****************************************************************************************************
+     * Description: Called before Start(). Initializes values that are quickly required by other        *
+     *              gameobjects such as the AI.                                                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void Awake()
     {
+        //Grab required variables
+        globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
         staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
+        controller = GetComponent<CharacterController>();
 
         //Initializes the head, thorax and body
-		baseInit ();
+		baseInitialization();
 
-        globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
+        //Let the global script know that this gameobject is the player
         globalScript.player = gameObject;
-        controller = GetComponent<CharacterController>();
+
+        //Set required variables
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		//activateBuff (BuffFlag.INF_HEALTH);
+		activateBuff(BuffFlag.INF_HEALTH);
     }
 
-	void Respawn () {
-		Rebuild();
-		//reset stats
-		Health = getMaxHealth ();
-		Stamina = getMaxStamina ();
-		resetBuffs ();
-		transform.position = spawnPosition;
-
-
-
-	}
-
-	void Update()
+    /****************************************************************************************************
+     * Description: The HUB of the entire player. Controls and regulates almost everything.             *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Update()
     {
-
+        //Keep track of player buffs
 		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
-		updateBuffTimers ();
+		updateBuffTimers();
+
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
@@ -96,19 +103,19 @@ public class PlayerController : CharacterBase
         switch (playerState)
         {
             case PlayerState.IDLE:
-                Movement(0.0f);
+                movement(0.0f);
 				if(getStamina() < 100.0f)
 					Stamina += 0.1f;
                 break;
 
             case PlayerState.WALKING:
-                Movement(walkSpeed);
+                movement(walkSpeed);
                 if (getStamina() < 100.0f)
 					Stamina += 0.1f;
                 break;
 
             case PlayerState.RUNNING:
-                Movement(runSpeed);
+                movement(runSpeed);
 				Stamina -= 0.2f;
                 if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
@@ -123,7 +130,7 @@ public class PlayerController : CharacterBase
 
         //Check to see if the player is dead
         if (getHealth () <= 0)
-            Death();
+            death();
 
         //Check to see if the player is moving to regain HP
         if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth () < 100)
@@ -132,16 +139,30 @@ public class PlayerController : CharacterBase
             Health += 2.5f;
         }
 
-        //Update UI
+        //Update the UI
         staminaBar.value = getStamina ();
         healthBar.value = getHealth ();
     }
 
+    /****************************************************************************************************
+     * Description: This function is called when the player needs to respawn.                           *
+     * Syntax: respawn();                                                                               *
+     ****************************************************************************************************/
+    void respawn()
+    {
+        rebuild();
+        Health = getMaxHealth();
+        Stamina = getMaxStamina();
+        resetBuffs();
+        transform.position = spawnPosition;
+    }
 
-    /*
-     * Description: Call this function to apply gravity to the player
-     */
-    void ApplyGravity()
+    /****************************************************************************************************
+     * Description: This is a helper function used by the function movement(). Calculates the gravity   *
+     *              acted upon on the player.                                                           *
+     * Syntax: applyGravity();                                                                          *
+     ****************************************************************************************************/
+    void applyGravity()
     {
         moveDirection.y -= gravity * Time.deltaTime;
         
@@ -150,29 +171,12 @@ public class PlayerController : CharacterBase
             moveDirection.y = -70;
     }
 
-
-    /*
-     * Description: Call this function keep track of player jumping
-     */
-    void Jumping()
-    {
-        //Check to see if the player can jump again
-        if (isGrounded)
-            isJumping = false;
-
-        //Deal with jumping
-        if (Input.GetButton("Jump") && !isJumping)
-        {
-            isJumping = true;
-            moveDirection.y = jumpSpeed;
-        }
-    }
-
-
-    /***************************************************************************
-     * Description: Deals with letting the player throw snowballs
-     ***************************************************************************/
-    public void Throwing()
+    /****************************************************************************************************
+     * Description: Controls the throwing of snowballs from the player. This function is called from    *
+     *              throwSnowball.cs to help sync the throwing of the snowball with the arm movement.   *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    public void throwing()
     {
         //Create a new snowball
 		Rigidbody snowBall = Instantiate(SnowBallTemplate.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
@@ -181,18 +185,17 @@ public class PlayerController : CharacterBase
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
         snowBall.gameObject.GetComponent<Projectile>().origin = transform;
 
-        //Subtract health from the player
         subtractAmmo();
     }
 
-
-    /*
-     * Description: Deals with the movement of the player
-     * Syntax: Movement(float);
-     * Values:
-     *       : speed = The max speed the player can move at
-     */
-    void Movement(float speed)
+    /****************************************************************************************************
+     * Description: Calculates the movement of the player. Also calls the jumping() and applyGravity()  *
+     *              functions when needed.                                                              *
+     * Syntax: movement(float speed);                                                                   *
+     * Values:                                                                                          *
+     *          speed = The speed at which to move the player                                           *
+     ****************************************************************************************************/
+    void movement(float speed)
     {
         if (isGrounded)
         {
@@ -206,18 +209,35 @@ public class PlayerController : CharacterBase
             moveDirection = transform.TransformDirection(moveDirection);
         }
 
-        Jumping();
-        ApplyGravity();
-        GroundPlayer();
+        jumping();
+        applyGravity();
+        groundPlayer();
 
         //Move the player and check if the player is grounded
         isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
     }
 
-    /*
-     * Description: Keeps the player on the ground when walking down hills (Prevents bouncing when walking down hills)
-     */
-    void GroundPlayer()
+    /****************************************************************************************************
+     * Description: Call this function keep track of player jumping.                                    *
+     * Syntax: jumping();                                                                               *
+     ****************************************************************************************************/
+    void jumping()
+    {
+        if (isGrounded)
+            isJumping = false;
+        if (Input.GetButton("Jump") && !isJumping)
+        {
+            isJumping = true;
+            moveDirection.y = jumpSpeed;
+        }
+    }
+
+    /****************************************************************************************************
+     * Description: Keeps the player on the ground when walking down hills.                             *
+     *              (Prevents bouncing when walking down hills)                                         *
+     * Syntax: groundPlayer();
+     ****************************************************************************************************/
+    void groundPlayer()
     {
         if (!isJumping)
         {
@@ -231,15 +251,18 @@ public class PlayerController : CharacterBase
         }
     }
 
-    void Death()
+    /****************************************************************************************************
+     * Description: Called when the player dies. Disables appropriate components and gives the players  *
+     *              body physics for ragdoll effect.                                                    *
+     * Syntax: death();                                                                                 *
+     ****************************************************************************************************/
+    void death()
     {
-		DieAnim ();
+		dieAnimation();
 
-        //Enable death camera
         Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
         Screen.lockCursor = false;
 
-        //Disable player controls
         Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
         gameObject.GetComponent<MouseLook>().enabled = false;
         gameObject.GetComponent<CharacterController>().enabled = false;
@@ -248,9 +271,12 @@ public class PlayerController : CharacterBase
 		playerState = PlayerState.DEAD;
     }
 
+    /****************************************************************************************************
+     * Description: This is called whenever something collides with the player.                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void OnCollisionEnter(Collision col)
     {
-        //If a snowball hit the AI
         if (col.gameObject.name == "Snowball(Clone)")
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }

@@ -23,28 +23,49 @@ public class AIController : CharacterBase {
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
 
+
+    /****************************************************************************************************
+     * Description: This is called before Start(). Helps to initialize important variables that are     *
+     *              quickly needed.                                                                     *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Awake () {
-        baseInit();
+        baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
 	}
 
+
+    /****************************************************************************************************
+     * Description: This is called after Awake(). Variables initialized here are in this call function  *
+     *              to give other gameobjects time to initialize their own variables in Awake().        *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void Start() {
-        initSnowMan();
+        initializeSnowMan();
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
-        PickRandomEnemy();
+        pickRandomEnemy();
     }
 
 
-	void initSnowMan() {
+    /****************************************************************************************************
+     * Description: This is a helper function. Called to initialize the AI.                             *
+     * Syntax: initializeSnowMan();                                                                     *
+     ****************************************************************************************************/
+    void initializeSnowMan() {
 		triggerCollider = GetComponent<SphereCollider> ();
 		triggerCollider.radius = Common.AIViewRange;
 		MovementSpeed = navMesh.speed;
         //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
 
-    void PickRandomEnemy()
+
+    /****************************************************************************************************
+     * Description: This is a helper function. Called when the AI needs to pick a random enemy.         *
+     * Syntax: pickRandomEnemy();                                                                       *
+     ****************************************************************************************************/
+    void pickRandomEnemy()
     {
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
@@ -62,24 +83,32 @@ public class AIController : CharacterBase {
         while (currentTarget == transform);
     }
 
-	
-	void UpdateBuffs() {
-		if (state == State.DEAD || state == State.RESPAWN)
-						return;
 
-		updateBuffTimers ();
-		navMesh.speed = MovementSpeed + getSpeedBoost ();
+    /****************************************************************************************************
+     * Description: PLEASE ADD A DESCRIPTION HERE ABOUT WHAT THIS FUNCTION DOES. TRY TO KEEP FORMATTING *
+     * Syntax: updateBuggs();                                                                           *
+     ****************************************************************************************************/
+    void updateBuffs() {
+        if (state == State.DEAD || state == State.RESPAWN) return;
 
-		if (Health > 0.0f) {
-			if(HitCollider.isHit) {
-				Health = getHealth () - HitCollider.Damage;
-				HitCollider.reset();
-			}
-		} else
-			state = State.DEAD;
-	}
+        updateBuffTimers ();
+        navMesh.speed = MovementSpeed + getSpeedBoost ();
+
+        if (Health > 0.0f) {
+            if(HitCollider.isHit) {
+                Health = getHealth () - HitCollider.Damage;
+                HitCollider.reset();
+            }
+        } else
+            state = State.DEAD;
+    }
 
 
+    /****************************************************************************************************
+     * Description: This is a helper function. Calculates the required angle to throw a snowball to     *
+     *              hit the target the AI is currently targeted onto.                                   *
+     * Syntax: getTargetAngle();                                                                        *
+     ****************************************************************************************************/
     float getTargetAngle()
     {
         float range = Mathf.Sqrt(Mathf.Pow(transform.position.x - currentTarget.position.x, 2) + Mathf.Pow(transform.position.z - currentTarget.position.z, 2));
@@ -98,10 +127,13 @@ public class AIController : CharacterBase {
 		//return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
-    /***************************************************************************
-     * Description: Deals with letting the AI throw snowballs
-     ***************************************************************************/
-    public void Throwing()
+
+    /****************************************************************************************************
+     * Description: Controls the throwing of snowballs from the AI. This function is called from        *
+     *              throwSnowball.cs to help sync the throwing of the snowball with the arm movement    *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    public void throwing()
     {
         if (navMesh.enabled == true)
 		    navMesh.destination = currentTarget.position;
@@ -117,7 +149,6 @@ public class AIController : CharacterBase {
 
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
 
-
 			state = State.WALKING;
 			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 			//subtractAmmo();
@@ -125,28 +156,41 @@ public class AIController : CharacterBase {
 	}
 
 
-	void DeathAnim() {
-		DieAnim ();
+    /****************************************************************************************************
+     * Description: Called when the AI dies. Disables appropriate components and gives the AI's body    *
+     *              physics for ragdoll effect.                                                         *
+     * Syntax: deathAnimation();                                                                        *
+     ****************************************************************************************************/
+	void deathAnimation() {
+		dieAnimation();
         navMesh.enabled = false;
 	}
 
 
-	void Respawn () {
-		Rebuild();
-		//reset stats
+    /****************************************************************************************************
+     * Description: Called when the AI needs to respawn. The AI respawns at it's starting position.     *
+     * Syntax: respawn();                                                                               *
+     ****************************************************************************************************/
+	void respawn() {
+		rebuild();
 		navMesh.enabled = true;
 		Health = getMaxHealth ();
 		Stamina = getMaxStamina ();
 		resetBuffs ();
-		initSnowMan ();
+		initializeSnowMan ();
         transform.position = spawnPosition;
-		PickRandomEnemy ();
+		pickRandomEnemy ();
 	}
 
+
+    /****************************************************************************************************
+     * Description: This is the HUB of the AI. Controls and regulates almost everything.                *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Update () {
 		switch(state) {
 		    case State.WALKING:
-			    UpdateBuffs ();
+			    updateBuffs ();
 			    targetInSight = isTargetInView ();
 			    if (targetInRange){
 				    Head.transform.LookAt(currentTarget);
@@ -173,7 +217,7 @@ public class AIController : CharacterBase {
 			    break;
 
 		    case State.ATTACKING:
-			    UpdateBuffs ();
+			    updateBuffs ();
 			    targetInSight = isTargetInView ();
 			    if (targetInRange) {
 				    Head.transform.LookAt(currentTarget);
@@ -183,7 +227,7 @@ public class AIController : CharacterBase {
 
 		    case State.DEAD:
 			    if (!stateCoroutine) {
-				    DeathAnim();
+				    deathAnimation();
 				    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
 			    }
 			    break;
@@ -192,7 +236,7 @@ public class AIController : CharacterBase {
 			    break;
 
 		    case State.RESPAWN:
-			    Respawn();
+			    respawn();
 			    state = State.WALKING;
 			    break;
 		}
@@ -208,19 +252,22 @@ public class AIController : CharacterBase {
         if (currentTarget.gameObject.name == "AI")
         {
             if (currentTarget.gameObject.GetComponent<AIController>().Health <= 0)
-                PickRandomEnemy();
+                pickRandomEnemy();
         }
         else if (currentTarget.gameObject.name == "Player")
         {
             if (currentTarget.gameObject.GetComponent<PlayerController>().Health <= 0)
-                PickRandomEnemy();
+                pickRandomEnemy();
         }
         else
-            PickRandomEnemy();
+            pickRandomEnemy();
 	}
 
 
-
+    /****************************************************************************************************
+     * Description: Called when something collides with the AI.                                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void OnTriggerEnter(Collider collision) {
 	    //If another npc or character is in range, switch the target
 		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
@@ -232,6 +279,11 @@ public class AIController : CharacterBase {
 
 	}
 
+
+    /****************************************************************************************************
+     * Description: Called when whatever has collidied with the AI leaves the collision area.           *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void OnTriggerExit(Collider collision) {
         if (currentTarget != null)
         {
@@ -241,38 +293,28 @@ public class AIController : CharacterBase {
 	}
 
 
-
-
+    /****************************************************************************************************
+     * Description: Checks to see if the AI is within view of its target.                               *
+     * Syntax: bool value = isTargetInView();                                                           *
+     * Returns: True if the target is in view | False if the target is not in view                      *
+     ****************************************************************************************************/
 	bool isTargetInView() {
 		if (!targetInRange) return false;
 		return Physics.Raycast (Head.transform.position, Head.transform.forward, Common.AIViewRange);
 	}
 
 
-	/*	defaultStateTimer
-	 *
-	 * calling:
-	 * 	if(!stateCoroutine) StartCoroutine(defaultStateTimer(minTime, maxTime, nextState));
-	 * 	This ensures the coroutine is only called once the state begins.
-	 *
-	 * A generic co-routine for changing the state machine's
-	 * state after a specific amount of time. This time is
-	 * randomly picked from the range between a minimum
-	 * and maximum time.
-	 *
-	 * 	minTime: minimum number of seconds to stay in
-	 * 			the current state.
-	 *
-	 * 	maxTime: maximum number of seconds to stay in
-	 * 			the current state.
-	 *
-	 * 	next: next state to switch to after the timer
-	 * 		has finished.
-	 *
-	 *
-	 * Returns nothing.
-	 */
-	IEnumerator defaultStateTimer(float minTime, float maxTime, State next) {
+    /****************************************************************************************************
+     * Description: A generic co-routine for changing the state machine's state after a specific amount *
+     *              of time. This time is randomly picked from the range between a minimum and maximum  *
+     *              time.                                                                               *
+     * Syntax: StartCoroutine(defaultStateTimer(float minTime, float maxTime, State next));             *
+     * Values:                                                                                          *
+     *          minTime = Minimum number of seconds to stay in the current state                        *
+     *          maxTime = Maximum number of seconds to stay in the current state                        *
+     *          next = Next state to switch to after the timer has finished                             *
+     ****************************************************************************************************/
+    IEnumerator defaultStateTimer(float minTime, float maxTime, State next) {
 		stateCoroutine = true;
 		float curTime = 0;
 		float endTime = (Random.value * (maxTime - minTime)) + minTime;
@@ -285,6 +327,11 @@ public class AIController : CharacterBase {
 		state = next;
 	}
 
+
+    /****************************************************************************************************
+     * Description: Called when something collides with the AI.                                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void OnCollisionEnter(Collision col)
     {
         //If a snowball hit the AI

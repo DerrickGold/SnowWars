@@ -38,4 +38,5 @@ public class Common: MonoBehaviour {
 
     //Game variables
 	public GameObject SnowBall;
+    public GameObject DeathExplosion;
 }

@@ -30,7 +30,7 @@ public class Rotator : MonoBehaviour {
 			gameObject.SetActive(false);
 		}
 
-		float t = Time.time;
+		//float t = Time.time;
 		//transform.Rotate (new Vector3(15, 30, 45) * Time.deltaTime);
 		//transform.position += Vector3.up * Time.deltaTime * Mathf.Abs(Mathf.Sin(Time.deltaTime));
 		transform.position = new Vector3 (
