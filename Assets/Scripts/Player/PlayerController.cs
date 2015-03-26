@@ -5,27 +5,29 @@ using UnityEngine.UI;
 public class PlayerController : CharacterBase
 {
     //Player variables
-    private enum PlayerState
+    public enum PlayerState
     {
         IDLE,
         WALKING,
-        RUNNING
+        RUNNING,
+		DEAD,
+		RESPAWN
     };
 
     private Vector3 moveDirection = Vector3.zero;
     private CharacterController controller;
-    private PlayerState playerState = PlayerState.IDLE;
+    public PlayerState playerState = PlayerState.IDLE;
     public Animation throwingAnimation;
+
 	public Slider healthBar;
 	public Slider staminaBar;
-    public GameObject bodyTop, bodyMiddle, bodyBottom;
 
     private bool isJumping = false;
     private bool isGrounded = false;
     private bool runOnCooldown = false;
 
-    private float walkSpeed = 10.0f;
-    private float runSpeed = 20.0f;
+    private float walkSpeed = 5.0f;
+    private float runSpeed = 7.0f;
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
@@ -34,22 +36,43 @@ public class PlayerController : CharacterBase
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
-    public GameObject deathExplosionEffect;
-    private Vector3 lastRegenLocation;
 
 
-    void Start()
+    void Awake()
     {
-        Common.player = gameObject;
+        healthBar = GameObject.Find("HUD/Health").GetComponent<Slider>();
+        staminaBar = GameObject.Find("HUD/Stamina").GetComponent<Slider>();
+
+        //Initializes the head, thorax and body
+		baseInit ();
+
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
+        globalScript.player = gameObject;
         controller = GetComponent<CharacterController>();
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
+        spawnPosition = transform.position;
+
+		//activateBuff (BuffFlag.INF_HEALTH);
     }
 
+	void Respawn () {
+		Rebuild();
+		//reset stats
+		Health = getMaxHealth ();
+		Stamina = getMaxStamina ();
+		resetBuffs ();
+		transform.position = spawnPosition;
 
-    void Update()
+
+
+	}
+
+	void Update()
     {
+
+		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
+		updateBuffTimers ();
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
         {
@@ -90,26 +113,28 @@ public class PlayerController : CharacterBase
                 if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
                 break;
+			case PlayerState.DEAD:
+				break;
         }
 
         //Is the player throwing a snowball?
-        if (Input.GetButtonDown("Fire1") && Health > 0)
-            throwingAnimation.Play("throwingAnimation");
+        if (Input.GetButtonDown("Fire1") && getHealth () > 0)
+            throwingAnimation.Play("PlayerThrowingAnimation");
 
         //Check to see if the player is dead
-        if (Health <= 0)
+        if (getHealth () <= 0)
             Death();
 
         //Check to see if the player is moving to regain HP
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 10 && Health < 100)
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth () < 100)
         {
             lastRegenLocation = transform.position;
-            Health += 2;
+            Health += 2.5f;
         }
 
         //Update UI
-        staminaBar.value = Stamina;
-        healthBar.value = Health;
+        staminaBar.value = getStamina ();
+        healthBar.value = getHealth ();
     }
 
 
@@ -150,10 +175,11 @@ public class PlayerController : CharacterBase
     public void Throwing()
     {
         //Create a new snowball
-        Rigidbody snowBall = Instantiate(globalScript.SnowBall.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
+		Rigidbody snowBall = Instantiate(SnowBallTemplate.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
         snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();
+        snowBall.gameObject.GetComponent<Projectile>().origin = transform;
 
         //Subtract health from the player
         subtractAmmo();
@@ -207,21 +233,7 @@ public class PlayerController : CharacterBase
 
     void Death()
     {
-        Instantiate(deathExplosionEffect, transform.position, transform.rotation);
-        //Add physics to the players body
-        bodyBottom.AddComponent<SphereCollider>();
-        Rigidbody bottomRigidbody = bodyBottom.AddComponent<Rigidbody>();
-        bottomRigidbody.drag = 2;
-
-        bodyMiddle.AddComponent<SphereCollider>();
-        Rigidbody middleRigidbody = bodyMiddle.AddComponent<Rigidbody>();
-        middleRigidbody.drag = 2;
-        //bodyMiddle.transform.position += Vector3.up * 0.50f;
-
-        bodyTop.AddComponent<SphereCollider>();
-        Rigidbody topRigidbody = bodyTop.AddComponent<Rigidbody>();
-        topRigidbody.drag = 2;
-        //bodyTop.transform.position += Vector3.up * 0.75f;
+		DieAnim ();
 
         //Enable death camera
         Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
@@ -232,10 +244,14 @@ public class PlayerController : CharacterBase
         gameObject.GetComponent<MouseLook>().enabled = false;
         gameObject.GetComponent<CharacterController>().enabled = false;
         gameObject.GetComponent<PlayerController>().enabled = false;
+
+		playerState = PlayerState.DEAD;
     }
 
     void OnCollisionEnter(Collision col)
     {
-        Health -= col.gameObject.GetComponent<Projectile>().damage;
+        //If a snowball hit the AI
+        if (col.gameObject.name == "Snowball(Clone)")
+            Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }
 }

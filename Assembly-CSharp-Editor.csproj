@@ -46,7 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Terrain Assets\TerrainToolkit\Editor\TerrainToolkitEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\GerstnerDisplaceEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\PlanarReflectionEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\SpecularLightingEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\WaterBaseEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\WaterEditorUtility.cs" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicGlow.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpIBLOCC.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailOpaque.shader" />

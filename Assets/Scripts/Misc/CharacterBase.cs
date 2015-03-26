@@ -22,14 +22,76 @@ public class CharacterBase: MonoBehaviour {
 	};
 	public static int BuffCount = 10;
 
-
-
 	public float Health = Common.BaseMaxHealth;
 	public float Stamina = Common.BaseMaxStamina;
+    public Vector3 lastRegenLocation;
 
 	public int ActiveBuffs;
 	public float[] BuffTimers = new float[BuffCount];
 
+	public GameObject Base, Thorax, Head;
+	public GameObject SnowBallTemplate;
+	public HitBox HitCollider;
+	public GameObject deathExplosionEffect;
+    public Vector3 spawnPosition;
+
+	//rebuild the snowman after explosive death
+	public Vector3[] oldPartPositions = new Vector3[3];
+
+
+	public void baseInit() {
+		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
+
+		foreach (Transform o in GetComponentsInChildren<Transform> ()){
+			if (o.name == "Head") Head = o.gameObject;
+			else if (o.name == "Thorax") Thorax = o.gameObject;
+			else if (o.name == "Base") Base = o.gameObject;
+		}
+
+		oldPartPositions [0] = Base.transform.localPosition;
+		oldPartPositions [1] = Thorax.transform.localPosition;
+		oldPartPositions [2] = Head.transform.localPosition;
+	}
+
+	public void toggleCollider(GameObject part, bool flag) {
+		SphereCollider temp = part.GetComponent<SphereCollider> ();
+		temp.enabled = flag;
+	}
+
+	public void Rebuild() {
+		Destroy (Base.rigidbody);
+		Destroy (Thorax.rigidbody);
+		Destroy (Head.rigidbody);
+		//toggleCollider (Base, false);
+		//toggleCollider (Thorax, false);
+		//toggleCollider (Head, false);
+		
+		Base.transform.localPosition = oldPartPositions [0];
+        Base.transform.eulerAngles = new Vector3(0, 0, 0);
+        Thorax.transform.localPosition = oldPartPositions[1];
+        Thorax.transform.eulerAngles = new Vector3(0, 0, 0);
+        Head.transform.localPosition = oldPartPositions[2];
+        Head.transform.eulerAngles = new Vector3(0, 0, 0);
+
+	}
+
+
+	public void DieAnim() {
+		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+		//Add physics to the players body
+		//Base.AddComponent<SphereCollider>();
+		//toggleCollider (Base, true);
+		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
+		bottomRigidbody.drag = 2;
+		
+		//toggleCollider (Thorax, true);
+		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
+		middleRigidbody.drag = 2;
+		//bodyMiddle.transform.position += Vector3.up * 0.50f;
+		//toggleCollider (Head, true);
+		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
+		topRigidbody.drag = 2;
+	}
 
 	//Set an effect to activate on a character
 	public void activateBuff(BuffFlag effect) {
@@ -57,11 +119,16 @@ public class CharacterBase: MonoBehaviour {
 	//update all effect timers for a player/ai
 	public void updateBuffTimers() {
 		for (int i = 0; i < BuffCount; i++) { 
-			BuffFlag curEffect = (BuffFlag)(1<<i);
-
+			BuffFlag curEffect = (BuffFlag)(1<<(i + 1));
 			if (!isEffectActive (curEffect)) continue;
-			BuffTimers[i] -= Time.deltaTime;
-			clearBuff (curEffect);
+
+			int timer = (int)curEffect % BuffCount;
+			BuffTimers[timer] -= Time.deltaTime;
+
+			if (BuffTimers[timer] <= 0.0f) {
+				clearBuff (curEffect);
+				BuffTimers[timer] = 0.0f;
+			}
 		}
 	
 	}
@@ -103,7 +170,7 @@ public class CharacterBase: MonoBehaviour {
 	//processess a throw from the player
 	public void subtractAmmo() {
 		//infinite ammo, doesn't subtract from health
-		if (isEffectActive(BuffFlag.INF_AMMO)) return;
+		if (isEffectActive(BuffFlag.INF_AMMO) || isEffectActive(BuffFlag.INF_HEALTH)) return;
 		//subtract one hit point for every throw
 		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
 			Health -= (Common.AmmoSubtractAmmount + Common.SuperSnowSubtract);

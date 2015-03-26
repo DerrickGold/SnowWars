@@ -52,15 +52,13 @@
      <Compile Include="Assets\Scripts\JayScripts\BuffPickup.cs" />
      <Compile Include="Assets\Scripts\JayScripts\PointLightGlow.cs" />
      <Compile Include="Assets\Scripts\JayScripts\Rotator.cs" />
+     <Compile Include="Assets\Scripts\JustForFun.cs" />
      <Compile Include="Assets\Scripts\Menu Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\Misc\BulletTest.cs" />
-     <Compile Include="Assets\Scripts\Misc\CSCharacterMotor.cs" />
-     <Compile Include="Assets\Scripts\Misc\CSFPSInputController.cs" />
      <Compile Include="Assets\Scripts\Misc\CharacterBase.cs" />
      <Compile Include="Assets\Scripts\Misc\Common.cs" />
      <Compile Include="Assets\Scripts\Misc\MouseLook.cs" />
      <Compile Include="Assets\Scripts\Misc\Projectile.cs" />
-     <Compile Include="Assets\Scripts\Misc\TerrainFootprints.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Player\Radar.cs" />
      <Compile Include="Assets\Scripts\Player\ThirdPersonCameraController.cs" />

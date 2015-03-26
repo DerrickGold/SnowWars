@@ -7,6 +7,8 @@ public class Projectile : MonoBehaviour
 	bool collided = false;
 	private AudioSource audio;
 	public float damage = Common.BaseSnowBallDamage;
+    public Transform origin;
+    public float originHP;
 
 	void Start()
     {

@@ -14,18 +14,18 @@ public class Common: MonoBehaviour {
 	static public int BaseMaxStamina = 100;
 
 	//How much health to take away for every throw
-	static public int AmmoSubtractAmmount = 10;
+	static public int AmmoSubtractAmmount = 5;
 	static public int SuperSnowSubtract = 5;
 
 	static public float BaseWalkSpeed = 4.0f;
 	static public float SpeedBoost = 1.0f;
 
-	static public int BaseSnowBallDamage = 15;
+	static public int BaseSnowBallDamage = 50;
 	static public int SuperSnowBallBoost = 15;
 
-	static public float RespawnTime = 10.0f; //in seconds
+	static public float RespawnTime = 3.0f; //in seconds
 
-	static public GameObject player;
+    public GameObject player;
 
     //AI variables
 	public GameObject[] ai;
