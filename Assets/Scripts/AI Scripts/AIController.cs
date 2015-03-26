@@ -8,8 +8,12 @@ public class AIController :CharacterBase {
 	//get location of current target to chase and kill
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
-	
+
+	private GameObject Base, Thorax, Head;
+	private GameObject SnowBallTemplate;
 	private SphereCollider TriggerCollider;
+	public GameObject deathExplosionEffect;
+	public HitBox HitCollider;
 
 	private float MovementSpeed;
 
@@ -20,25 +24,48 @@ public class AIController :CharacterBase {
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
 
-
+	private Vector3[] oldPartPositions = new Vector3[3];
 
 	// Use this for initialization
 	void Start () {
-		baseInit ();
 		navMesh = GetComponent<NavMeshAgent> ();
-
+		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 		initSnowMan ();
 	}
 
 
 	void initSnowMan() {
+		foreach (Transform o in GetComponentsInChildren<Transform> ()){
+			if (o.name == "Head") Head = o.gameObject;
+			else if (o.name == "Thorax") Thorax = o.gameObject;
+			else if (o.name == "Base") Base = o.gameObject;
+		}
+		//Thorax = this.GetComponentsInChildren<GameObject> ();
+		//GameObject.Find ("Thorax");
+		//Head = GameObject.Find ("Head");
+
 		TriggerCollider = GetComponent<SphereCollider> ();
 		TriggerCollider.radius = Common.AIViewRange;
+
+
 		MovementSpeed = navMesh.speed;
+
 		currentTarget = Common.player.transform.Find("Snowman/Head");
+
+		oldPartPositions [0] = Base.transform.localPosition;
+		oldPartPositions [1] = Thorax.transform.localPosition;
+		oldPartPositions [2] = Head.transform.localPosition;
+
 	}
 
-	
+
+	void destroySnowman() {
+		Destroy (Base);
+		Destroy (Head);
+		Destroy (Thorax);
+	}
+
+
 	void UpdateBuffs() {
 		if (state == State.DEAD || state == State.RESPAWN)
 						return;
@@ -96,20 +123,46 @@ public class AIController :CharacterBase {
 		}
 	}
 
-
+	void toggleCollider(GameObject part, bool flag) {
+		SphereCollider temp = part.GetComponent<SphereCollider> ();
+		temp.enabled = flag;
+	}
 
 
 	void deathAnim() {
+		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+		//Add physics to the players body
+		//Base.AddComponent<SphereCollider>();
+		toggleCollider (Base, true);
+		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
+		bottomRigidbody.drag = 2;
 
-		DieAnim ();
+		toggleCollider (Thorax, true);
+		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
+		middleRigidbody.drag = 2;
+		//bodyMiddle.transform.position += Vector3.up * 0.50f;
+		toggleCollider (Head, true);
+		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
+		topRigidbody.drag = 2;
+
         navMesh.enabled = false;
 	}
 
 
 	void respawn () {
-		Rebuild ();
+		Destroy (Base.rigidbody);
+		Destroy (Thorax.rigidbody);
+		Destroy (Head.rigidbody);
+		toggleCollider (Base, false);
+		toggleCollider (Thorax, false);
+		toggleCollider (Head, false);
+
+        navMesh.enabled = true;
+		Base.transform.localPosition = oldPartPositions [0];
+		Thorax.transform.localPosition = oldPartPositions [1];
+		Head.transform.localPosition = oldPartPositions [2];
+
 		//reset stats
-		navMesh.enabled = true;
 		Health = getMaxHealth ();
 		Stamina = getMaxStamina ();
 		resetBuffs ();
