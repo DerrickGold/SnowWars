@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Derrick Gold
+ * Secondary Contributors: Curtis Murray
+ * 
+ * Description: CHECK TO SEE IF WE CAN MERGE THIS SCRIPT WITH CHARACTERBASE.CS. IF NOT, GIVE THIS
+ *              SCRIPT A MEANINGFUL DESCRIPTION.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 
 public class Common: MonoBehaviour {

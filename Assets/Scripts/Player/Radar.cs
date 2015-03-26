@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Shaun Yonkers (VERIFY LAST NAME SPELLING)
+ * 
+ * Description: This script is the driving force of the players radar. Tracks the player and all AI
+ *              movement and displays it in an easy to read radar at the top-right corner of the
+ *              screen.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 
 public class Radar : MonoBehaviour
@@ -36,7 +44,10 @@ public class Radar : MonoBehaviour
 	private Texture2D  radarBlip1Texture;
 	private Texture2D  radarBlip2Texture;
 	
-	// Initialize the radar
+    /****************************************************************************************************
+     * Description: Used to initialize the radar.                                                       *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Start ()
 	{
 		// Determine the size of the radar
@@ -68,12 +79,16 @@ public class Radar : MonoBehaviour
 		centerObject = gos[0];
 	}
 	
-	// Update is called once per frame
+	
+    /****************************************************************************************************
+     * Description: Used to update and draw the radar.                                                  *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void OnGUI ()
 	{
 		GameObject[] gos;
 		
-		// Draw th radar background
+		// Draw the radar background
 		if (radarType != RadarTypes.Transparent)
 		{
 			Rect radarRect = new Rect(radarCenter.x - radarWidth / 2, radarCenter.y - radarHeight / 2, radarWidth, radarHeight);
@@ -110,7 +125,15 @@ public class Radar : MonoBehaviour
 		}
 	}
 	
+
 	// Draw a blip for an object
+    /****************************************************************************************************
+     * Description: This is a helper function. Used to draw a dot (blip) for an individual gameobject.  *
+     * Syntax: drawBlip(GameObject go, Texture2D blipTexture);                                          *
+     * Values:                                                                                          *
+     *          go = The gameobject that needs to have a dot (blip) displayed for it                    *
+     *          blipTexture = The texture to use when drawing the dot (blip)                            *
+     ****************************************************************************************************/
 	void drawBlip(GameObject go, Texture2D blipTexture)
 	{
 		if (centerObject)
@@ -138,7 +161,14 @@ public class Radar : MonoBehaviour
 		}
 	}
 	
-	// Create the blip textures
+
+    /****************************************************************************************************
+     * Description: This is a helper function. Used to create a blip texture.                           *
+     * Syntax: CreateBlipTexture(Texture2D texture, Color color);                                       *
+     * Values:                                                                                          *
+     *          texture = The texture to use when creating the blip                                     *
+     *          color = The color of the blip                                                           *
+     ****************************************************************************************************/
 	void CreateBlipTexture(Texture2D tex, Color c)
 	{
 		Color[] cols = {c, c, c, c, c, c, c, c, c};
@@ -146,8 +176,16 @@ public class Radar : MonoBehaviour
 		tex.Apply();
 	}
 	
-	// Create a round bullseye texture
-	void CreateRoundTexture(Texture2D tex, Color a, Color b)
+
+    /****************************************************************************************************
+     * Description: This is a helper function. Used to create a round bullseye texture.                 *
+     * Syntax: CreateRoundTexture(Texture2D texture, Color colorOne, Color colorTwo);                   *
+     * Values:                                                                                          *
+     *          texture = The texture to use when creating the round bullseye                           *
+     *          colorOne = DESCRIBE WHAT THE FIRST COLOR IS USED FOR                                    *
+     *          colorTwo = DESCRIBE WHAT THE SECOND COLOR IS USED FOR                                   *
+     ****************************************************************************************************/
+    void CreateRoundTexture(Texture2D tex, Color a, Color b)
 	{
 		Color c = new Color(0, 0, 0);
 		int size = (int)((radarWidth / 2) / 4);
@@ -176,8 +214,19 @@ public class Radar : MonoBehaviour
 		
 		tex.Apply();
 	}
-	
-	// Draw a filled colored circle onto a texture
+
+
+    /****************************************************************************************************
+     * Description: This is a helper function. Used to draw a filled colored circle into a texture.     *
+     * Syntax: DrawFilledCircle(Texture2D texture, int cx, int cy, int r, Color c);                     *
+     * Values:                                                                                          *
+     *          texture = The texture to use when creating a filled colored circle                      *
+     *          cx = DESCRIBE WHAT CX INT IS USED FOR                                                   *
+     *          cy = DESCRIBE WHAT CY INT IS USED FOR                                                   *
+     *          r = DESCRIBE WHAT R INT IS USED FOR                                                     *
+     *          c = The color that should be applied to the colored circle                              *
+     ****************************************************************************************************/
+    // Draw a filled colored circle onto a texture
 	void DrawFilledCircle(Texture2D tex, int cx, int cy, int r, Color c)
 	{
 		for (int x = -r; x < r ; x++)

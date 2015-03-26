@@ -1,22 +1,16 @@
+/****************************************************************************************************
+ * Primary Contributors: Unity Technologies
+ * Secondary Contributors: Curtis Murray
+ * 
+ * Description: This script rotates the transform based on the mouse delta. Minumum and Maximum
+ *              values can be used to constrain the possible rotation.
+ ****************************************************************************************************/
+
 using UnityEngine;
 using System.Collections;
 
-/// MouseLook rotates the transform based on the mouse delta.
-/// Minimum and Maximum values can be used to constrain the possible rotation
-
-/// To make an FPS style character:
-/// - Create a capsule.
-/// - Add the MouseLook script to the capsule.
-///   -> Set the mouse look to use LookX. (You want to only turn character but not tilt it)
-/// - Add FPSInputController script to the capsule
-///   -> A CharacterMotor and a CharacterController component will be automatically added.
-
-/// - Create a camera. Make the camera a child of the capsule. Reset it's transform.
-/// - Add a MouseLook script to the camera.
-///   -> Set the mouse look to use LookY. (You want the camera to tilt up and down like a head. The character already turns.)
 [AddComponentMenu("Camera-Control/Mouse Look")]
-public class MouseLook : MonoBehaviour
-{
+public class MouseLook : MonoBehaviour {
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 	public RotationAxes axes = RotationAxes.MouseXAndY;
 	public float sensitivityX = 15F;
@@ -32,13 +26,24 @@ public class MouseLook : MonoBehaviour
 
     private bool editMode = false;
 
+
+    /****************************************************************************************************
+     * Description: Used to make sure the rigidbody does not change rotation.                           *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void Start()
     {
-        // Make the rigid body not change rotation
         if (GetComponent<Rigidbody>())
             GetComponent<Rigidbody>().freezeRotation = true;
     }
 
+
+    /****************************************************************************************************
+     * Description: Used to control the camera. Also used to allow the player to enter a debug mode     *
+     *              which unlocks the mouse from the center of the screen. This will be disabled upon   *
+     *              completion of the game.                                                             *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Update ()
 	{
         //Check to see if player wants to go into edit mode

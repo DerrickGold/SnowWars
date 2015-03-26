@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Shaun Yonkers (VERIFY LAST NAME SPELLING)
+ * 
+ * Description: This script is the driving force behind the main menu as well as the in-game menu.
+ *              This allows the player to start and stop games, change options, etc.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour 
@@ -10,17 +17,27 @@ public class MainMenu : MonoBehaviour
 	public bool Fullscreen;
 	public string levelToLoad = "";
 	
-	
 	private string clicked = "";
 	private Rect WindowRect = new Rect((Screen.width/2)-200, Screen.height/2 - 100, 400, 400);
 	private float volume = 1.0f;
-	
-	private void Start()
-	{
 
-	}
+
+    /****************************************************************************************************
+     * Description: Used to check if the player wants to enter the pause menu.                          *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+            clicked = "";
+    }
 	
-	private void OnGUI()
+
+    /****************************************************************************************************
+     * Description: DESCRIBE WHAT UPDATE() IS USED FOR.                                                 *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    private void OnGUI()
 	{
 		if (background != null)
 			GUI.DrawTexture(new Rect(0,0,Screen.width , Screen.height),background);
@@ -47,6 +64,13 @@ public class MainMenu : MonoBehaviour
 		}
 	}
 	
+
+    /****************************************************************************************************
+     * Description: DESCRIBE WHAT THIS FUNCTION DOES.                                                   *
+     * Syntax: optionsFunc(int id);                                                                     *
+     * Values:                                                                                          *
+     *          id = DESCRIBE WHAT id IS                                                                *
+     ****************************************************************************************************/
 	private void optionsFunc(int id)
 	{
 		if (GUILayout.Button("Video"))
@@ -67,13 +91,20 @@ public class MainMenu : MonoBehaviour
 		if (DragWindow)
 			GUI.DragWindow(new Rect (0,0,Screen.width,Screen.height));
 	}
-	
+
+
+    /****************************************************************************************************
+     * Description: DESCRIBE WHAT THIS FUNCTION DOES.                                                   *
+     * Syntax: menuFunc(int id);                                                                     *
+     * Values:                                                                                          *
+     *          id = DESCRIBE WHAT id IS                                                                *
+     ****************************************************************************************************/
 	private void menuFunc(int id)
 	{
-		//buttons 
+		//Buttons 
 		if (GUILayout.Button("Play Game"))
 		{
-			//play game is clicked
+			//Play game is clicked
 			Application.LoadLevel(levelToLoad);
 		}
 		if (GUILayout.Button("Options"))
@@ -87,13 +118,12 @@ public class MainMenu : MonoBehaviour
 		if (DragWindow)
 			GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
 	}
-	
-	private void Update()
-	{
-		if (Input.GetKey (KeyCode.Escape))
-			clicked = "";
-	}
 
+
+    /****************************************************************************************************
+     * Description: DESCRIBE WHAT THIS FUNCTION DOES HERE.                                              *
+     * Syntax: resolutionBtns();                                                                        (
+     ****************************************************************************************************/
 	private void resolutionBtns(){
 		GUI.TextField(new Rect(300, 50, 100, 50), "Resolution");
 			//1080p
@@ -113,6 +143,11 @@ public class MainMenu : MonoBehaviour
 			}
 	}
 
+
+    /****************************************************************************************************
+     * Description: Called when the player changes the value of antiAliasing in the menu.               *
+     * Syntax: antiAlias();                                                                             *
+     ****************************************************************************************************/
 	private void antiAlias(){
 		GUI.TextField (new Rect (300, 100, 100, 50), "Anti-Alising");
 		if (GUI.Button (new Rect (400, 100, 69.75f, 50), "2X")) {

@@ -1,7 +1,8 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Jaymeson Wickens
  * 
- * Description:
+ * Description: This script is attached to any gameobject that is a buff. PLEASE ADD MORE OF A
+ *              DESCRIPTION HERE.
  ****************************************************************************************************/
 
 using UnityEngine;
@@ -14,6 +15,7 @@ public class BuffPickup : MonoBehaviour {
 	private bool buffAquired;
 	private Text[] buffText = new Text[2];
 
+
     /****************************************************************************************************
      * Description: Used to initialize required variables.                                              *
      * Syntax: ---                                                                                      *
@@ -22,9 +24,11 @@ public class BuffPickup : MonoBehaviour {
 		buffAquired = false;
 	}
 
+
     /****************************************************************************************************
      * Description: PLEASE CHECK IF UPDATE IS REQUIRED. IF NOT, PLEASE REMOVE.                          *
      * Syntax: ---
+     ****************************************************************************************************/
     /*
     void Update () {
         if (buffAquired) {
@@ -37,21 +41,26 @@ public class BuffPickup : MonoBehaviour {
         }
     }*/
 
+
+    /****************************************************************************************************
+     * Description: Called when something collides with the buff.                                       *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void OnTriggerEnter(Collider other) 
 	{
 		if (other.gameObject.tag == "PickUp")
 		{
-			Rotator buffScript = other.gameObject.GetComponent<Rotator>(); //get the script
+			Rotator buffScript = other.gameObject.GetComponent<Rotator>();
 			buffScript.destroy = true;
-			//other.gameObject.SetActive(false); //deactivate the buff object
-			/*
-			Rotator buffScript = other.gameObject.GetComponent<Rotator>(); //get the script
-			Text buff = buffScript.buffText; //get the buff info text
+            /*
+			other.gameObject.SetActive(false);
+			Rotator buffScript = other.gameObject.GetComponent<Rotator>();
+			Text buff = buffScript.buffText;
 			buffText[0] = buffScript.buffText; 
-			//buffText[0] = buff;
-			buffText[1] = buffScript.buffIcon; //store the buff icon text
-			//buffText = {buffScript.buffText, buffScript.buffIcon};
-			buff.gameObject.SetActive(true); //set the buff info text to true
+			buffText[0] = buff;
+			buffText[1] = buffScript.buffIcon;
+			buffText = {buffScript.buffText, buffScript.buffIcon};
+			buff.gameObject.SetActive(true);
 			buffDisplay = Time.time; 
 			buffAquired = true; //we picked up a buff 
 			*/

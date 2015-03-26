@@ -43,6 +43,7 @@ public class PlayerController : CharacterBase
     private AudioSource audio;
     public Transform snowballSpawnLocation;
 
+
     /****************************************************************************************************
      * Description: Called before Start(). Initializes values that are quickly required by other        *
      *              gameobjects such as the AI.                                                         *
@@ -69,6 +70,7 @@ public class PlayerController : CharacterBase
 
 		activateBuff(BuffFlag.INF_HEALTH);
     }
+
 
     /****************************************************************************************************
      * Description: The HUB of the entire player. Controls and regulates almost everything.             *
@@ -144,6 +146,7 @@ public class PlayerController : CharacterBase
         healthBar.value = getHealth ();
     }
 
+
     /****************************************************************************************************
      * Description: This function is called when the player needs to respawn.                           *
      * Syntax: respawn();                                                                               *
@@ -156,6 +159,7 @@ public class PlayerController : CharacterBase
         resetBuffs();
         transform.position = spawnPosition;
     }
+
 
     /****************************************************************************************************
      * Description: This is a helper function used by the function movement(). Calculates the gravity   *
@@ -170,6 +174,7 @@ public class PlayerController : CharacterBase
         if (moveDirection.y < -70)
             moveDirection.y = -70;
     }
+
 
     /****************************************************************************************************
      * Description: Controls the throwing of snowballs from the player. This function is called from    *
@@ -187,6 +192,7 @@ public class PlayerController : CharacterBase
 
         subtractAmmo();
     }
+
 
     /****************************************************************************************************
      * Description: Calculates the movement of the player. Also calls the jumping() and applyGravity()  *
@@ -217,6 +223,7 @@ public class PlayerController : CharacterBase
         isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
     }
 
+
     /****************************************************************************************************
      * Description: Call this function keep track of player jumping.                                    *
      * Syntax: jumping();                                                                               *
@@ -231,6 +238,7 @@ public class PlayerController : CharacterBase
             moveDirection.y = jumpSpeed;
         }
     }
+
 
     /****************************************************************************************************
      * Description: Keeps the player on the ground when walking down hills.                             *
@@ -251,6 +259,7 @@ public class PlayerController : CharacterBase
         }
     }
 
+
     /****************************************************************************************************
      * Description: Called when the player dies. Disables appropriate components and gives the players  *
      *              body physics for ragdoll effect.                                                    *
@@ -270,6 +279,7 @@ public class PlayerController : CharacterBase
 
 		playerState = PlayerState.DEAD;
     }
+
 
     /****************************************************************************************************
      * Description: This is called whenever something collides with the player.                         *

@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Derrick Gold
+ * Secondary Contributors: Curtis Murray
+ * 
+ * Description: This script is the driving force behind the AI. This script controls all of the AI
+ *              in its entirety. Keeps track of the AI's variables and tells the AI how to act and
+ *              behave.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -93,14 +102,6 @@ public class AIController : CharacterBase {
 
         updateBuffTimers ();
         navMesh.speed = MovementSpeed + getSpeedBoost ();
-
-        if (Health > 0.0f) {
-            if(HitCollider.isHit) {
-                Health = getHealth () - HitCollider.Damage;
-                HitCollider.reset();
-            }
-        } else
-            state = State.DEAD;
     }
 
 
