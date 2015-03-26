@@ -102,18 +102,21 @@ public class CharacterBase: MonoBehaviour {
 	public void dieAnimation() {
 		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
 		//Add physics to the players body
-		//Base.AddComponent<SphereCollider>();
-		//toggleCollider (Base, true);
-		Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
-		bottomRigidbody.drag = 2;
-		
-		//toggleCollider (Thorax, true);
-		Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
-		middleRigidbody.drag = 2;
-		//bodyMiddle.transform.position += Vector3.up * 0.50f;
-		//toggleCollider (Head, true);
-		Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
-		topRigidbody.drag = 2;
+        if (Base.GetComponent<Rigidbody>() == null)
+        {
+            Rigidbody bottomRigidbody = Base.AddComponent<Rigidbody>();
+            bottomRigidbody.drag = 2;
+        }
+        if (Thorax.GetComponent<Rigidbody>() == null)
+        {
+            Rigidbody middleRigidbody = Thorax.AddComponent<Rigidbody>();
+            middleRigidbody.drag = 2;
+        }
+        if (Head.GetComponent<Rigidbody>() == null)
+        {
+            Rigidbody topRigidbody = Head.AddComponent<Rigidbody>();
+            topRigidbody.drag = 2;
+        }
 	}
 
 

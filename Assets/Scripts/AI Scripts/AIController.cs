@@ -227,9 +227,10 @@ public class AIController : CharacterBase {
 			    break;
 
 		    case State.DEAD:
-			    if (!stateCoroutine) {
-				    deathAnimation();
-				    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
+                if (!stateCoroutine)
+                {
+                    deathAnimation();
+                    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
 			    }
 			    break;
 
@@ -248,6 +249,9 @@ public class AIController : CharacterBase {
             lastRegenLocation = transform.position;
             Health += 2.5f;
         }
+
+        //Check to see if AI is dead
+        if (Health <= 0) state = State.DEAD;
 
         //Check to see if the AI's current target is dead
         if (currentTarget.gameObject.name == "AI")
