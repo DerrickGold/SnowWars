@@ -254,8 +254,11 @@ public class PlayerController : CharacterBase
             Vector3 slopeAdjust = Vector3.zero;
             if (Physics.Raycast(transform.position, -Vector3.up, out hit))
             {
-                slopeAdjust = new Vector3(0, hit.distance, 0);
-                controller.Move((transform.position - slopeAdjust) - transform.position);
+                if (hit.distance <= 2.0f)
+                {
+                    slopeAdjust = new Vector3(0, hit.distance, 0);
+                    controller.Move((transform.position - slopeAdjust) - transform.position);
+                }
             }
         }
     }
