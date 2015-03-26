@@ -33,6 +33,7 @@ public class Common: MonoBehaviour {
 
 	static public float RespawnTime = 3.0f; //in seconds
 
+
     public GameObject player;
 
     //AI variables

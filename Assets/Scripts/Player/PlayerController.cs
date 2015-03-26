@@ -300,6 +300,11 @@ public class PlayerController : CharacterBase
 		if (col.gameObject.tag.Equals ("SPIKES")) { //if player has hit spikes, insta death!
 			Health = getHealth() - getMaxHealth();
 		}
+		if (col.gameObject.tag.Equals ("PickUp")) {
+			int randBuff = Random.Range(1,7);
+			print(randBuff);
+			ActiveBuffs |= (1<<randBuff);
+		}
 
 	}
 }
