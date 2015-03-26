@@ -101,6 +101,9 @@
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\MixedLightingRim.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailReflection.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTranslucent.shader" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>C:/Users/Curtis/Desktop/SnowWars/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

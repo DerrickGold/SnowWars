@@ -38,6 +38,7 @@ public class PlayerController : CharacterBase
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
+    private float slideAt = 0.7f;
 
     //Game variables
     private Common globalScript;
@@ -163,21 +164,6 @@ public class PlayerController : CharacterBase
 
 
     /****************************************************************************************************
-     * Description: This is a helper function used by the function movement(). Calculates the gravity   *
-     *              acted upon on the player.                                                           *
-     * Syntax: applyGravity();                                                                          *
-     ****************************************************************************************************/
-    void applyGravity()
-    {
-        moveDirection.y -= gravity * Time.deltaTime;
-        
-        //Make sure the player isn't falling faster than gravity should allow
-        if (moveDirection.y < -70)
-            moveDirection.y = -70;
-    }
-
-
-    /****************************************************************************************************
      * Description: Controls the throwing of snowballs from the player. This function is called from    *
      *              throwSnowball.cs to help sync the throwing of the snowball with the arm movement.   *
      * Syntax: ---                                                                                      *
@@ -219,6 +205,7 @@ public class PlayerController : CharacterBase
         jumping();
         applyGravity();
         groundPlayer();
+        hillSlide();
 
         //Move the player and check if the player is grounded
         isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
@@ -242,6 +229,21 @@ public class PlayerController : CharacterBase
 
 
     /****************************************************************************************************
+     * Description: This is a helper function used by the function movement(). Calculates the gravity   *
+     *              acted upon on the player.                                                           *
+     * Syntax: applyGravity();                                                                          *
+     ****************************************************************************************************/
+    void applyGravity()
+    {
+        moveDirection.y -= gravity * Time.deltaTime;
+
+        //Make sure the player isn't falling faster than gravity should allow
+        if (moveDirection.y < -70)
+            moveDirection.y = -70;
+    }
+
+
+    /****************************************************************************************************
      * Description: Keeps the player on the ground when walking down hills.                             *
      *              (Prevents bouncing when walking down hills)                                         *
      * Syntax: groundPlayer();
@@ -259,6 +261,23 @@ public class PlayerController : CharacterBase
                     slopeAdjust = new Vector3(0, hit.distance, 0);
                     controller.Move((transform.position - slopeAdjust) - transform.position);
                 }
+            }
+        }
+    }
+
+    void hillSlide()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -transform.up, out hit, 3.0f))
+        {
+            print(hit.distance);
+            if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)
+            {
+                Vector3 hitNormal = hit.normal;
+                moveDirection = new Vector3(hit.normal.x, -hit.normal.y, hit.normal.z);
+                Vector3.OrthoNormalize(ref hitNormal, ref moveDirection);
+                moveDirection *= 5;
+                isGrounded = false;
             }
         }
     }
