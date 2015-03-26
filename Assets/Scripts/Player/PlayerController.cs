@@ -1,6 +1,6 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Curtis Murray
- * Secondary Contributors: Derrick Gold
+ * Secondary Contributors: Derrick Gold, Jaymeson Wickins
  * 
  * Description: This script is placed on the player. This is the driving force behind the player.
  ****************************************************************************************************/
@@ -69,7 +69,7 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		activateBuff(BuffFlag.INF_HEALTH);
+		//activateBuff(BuffFlag.INF_HEALTH);
     }
 
 
@@ -291,7 +291,15 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "Snowball(Clone)")
+        if (col.gameObject.name == "Snowball(Clone)") 
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }
+
+	void OnTriggerEnter (Collider col)
+	{
+		if (col.gameObject.tag.Equals ("SPIKES")) { //if player has hit spikes, insta death!
+			Health = getHealth() - getMaxHealth();
+		}
+
+	}
 }
