@@ -28,6 +28,7 @@ public class PlayerController : CharacterBase
 	public Slider healthBar;
 	public Slider staminaBar;
 
+	private bool isPaused = false;
     private bool isJumping = false;
     private bool isGrounded = false;
     private bool runOnCooldown = false;
