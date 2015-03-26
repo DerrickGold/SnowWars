@@ -1,5 +1,5 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Shaun Yonkers (VERIFY LAST NAME SPELLING)
+ * Primary Contributor: Shaun Yonkers
  * 
  * Description: This script is the driving force of the players radar. Tracks the player and all AI
  *              movement and displays it in an easy to read radar at the top-right corner of the
@@ -19,7 +19,7 @@ public class Radar : MonoBehaviour
 	public Color radarBackgroundB = new Color(0, 255, 255);
 	public Texture2D radarTexture;
 	public float radarSize = 0.10f;  // The amount of the screen the radar will use
-	public float radarZoom = 0.10f;
+	public float radarZoom = 2.0f;
 	
 	// Center Object information
 	public bool   radarCenterActive;
@@ -87,7 +87,7 @@ public class Radar : MonoBehaviour
 	void OnGUI ()
 	{
 		GameObject[] gos;
-		
+
 		// Draw the radar background
 		if (radarType != RadarTypes.Transparent)
 		{
@@ -140,6 +140,7 @@ public class Radar : MonoBehaviour
 		{
 			Vector3 centerPos = centerObject.transform.position;
 			Vector3 extPos = go.transform.position;
+
 			
 			// Get the distance to the object from the centerObject
 			float dist = Vector3.Distance(centerPos, extPos);
@@ -147,11 +148,16 @@ public class Radar : MonoBehaviour
 			// Get the object's offset from the centerObject
 			float bX = centerPos.x - extPos.x;
 			float bY = centerPos.z - extPos.z;
-			
+
+			float deltay = Mathf.Atan2(bX,bY)*Mathf.Rad2Deg - 270 - centerObject.transform.eulerAngles.y;
+
+			bX = dist*Mathf.Cos(deltay * Mathf.Deg2Rad)*-1;
+			bY = dist*Mathf.Sin(deltay * Mathf.Deg2Rad);
+
 			// Scale the objects position to fit within the radar
 			bX = bX * radarZoom;
 			bY = bY * radarZoom;
-			
+
 			// For a round radar, make sure we are within the circle
 			if(dist <= (radarWidth - 2) * 0.5 / radarZoom)
 			{
