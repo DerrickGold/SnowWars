@@ -38,7 +38,7 @@ public class PlayerController : CharacterBase
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
-    private float slideAt = 0.7f;
+    private float slideAt = 0.6f;
 
     //Game variables
     private Common globalScript;
@@ -265,19 +265,28 @@ public class PlayerController : CharacterBase
         }
     }
 
+    /****************************************************************************************************
+     * Description: This is a helper function. Slides the player down a slope that is too steep.        *
+     * Syntax: hillSlide();                                                                             *
+     ****************************************************************************************************/
     void hillSlide()
     {
         RaycastHit hit;
+        //Shoot a raycast down only 3 units
         if (Physics.Raycast(transform.position, -transform.up, out hit, 3.0f))
         {
-            print(hit.distance);
-            if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)
+            //Only slide the player if they are not jumping
+            if (!isJumping)
             {
-                Vector3 hitNormal = hit.normal;
-                moveDirection = new Vector3(hit.normal.x, -hit.normal.y, hit.normal.z);
-                Vector3.OrthoNormalize(ref hitNormal, ref moveDirection);
-                moveDirection *= 5;
-                isGrounded = false;
+                //Check the angle at which the player is currently standing on
+                if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)
+                {
+                    Vector3 hitNormal = hit.normal;
+                    moveDirection = new Vector3(hit.normal.x, -hit.normal.y, hit.normal.z);
+                    Vector3.OrthoNormalize(ref hitNormal, ref moveDirection);
+                    moveDirection *= gravity;
+                    isGrounded = false;
+                }
             }
         }
     }
@@ -310,15 +319,17 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void OnCollisionEnter(Collision col)
     {
+        //Did the player get hit by a snowball?
         if (col.gameObject.name == "Snowball(Clone)") 
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }
 
 	void OnTriggerEnter (Collider col)
 	{
-		if (col.gameObject.tag.Equals ("SPIKES")) { //if player has hit spikes, insta death!
+        //If the player hits spikes, instant death!
+		if (col.gameObject.tag.Equals ("SPIKES"))
 			Health = getHealth() - getMaxHealth();
-		}
+        //Did the player pickup a buff?
 		if (col.gameObject.tag.Equals ("PickUp")) {
 			int randBuff = Random.Range(1,7);
 			print(randBuff);
