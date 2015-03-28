@@ -70,7 +70,18 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		//activateBuff(BuffFlag.INF_HEALTH);
+		activateBuff(BuffFlag.INF_HEALTH);
+    }
+
+
+    /****************************************************************************************************
+     * Description: Used to initialize required variables.                                              *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Start()
+    {
+        //TESTING PURPOSES ONLY.
+        chooseRandomHatColor();
     }
 
 
@@ -140,12 +151,27 @@ public class PlayerController : CharacterBase
         if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth () < 100)
         {
             lastRegenLocation = transform.position;
-            Health += 2.5f;
+            Health += 1.0f;
         }
 
         //Update the UI
         staminaBar.value = getStamina ();
         healthBar.value = getHealth ();
+
+        //Keep parts of the player body in line with the camera
+        bodyRotation();
+    }
+
+
+    /****************************************************************************************************
+     * Description: This is a helper function. This function is called in Update to keep the body and   *
+     *              hat in rotation with the camera. This makes it easier to tell which way the player  *
+     *              is facing.                                                                          *
+     * Syntax: bodyRotation();                                                                          *
+     ****************************************************************************************************/
+    void bodyRotation()
+    {
+        Head.transform.rotation = Camera.main.transform.rotation;
     }
 
 

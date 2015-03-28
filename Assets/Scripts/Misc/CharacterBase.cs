@@ -19,6 +19,8 @@ public class CharacterBase: MonoBehaviour {
 		INF_STAMINA = 1<<5,
 		INF_HEALTH = 1<<6
 	};
+    public Material[] hatColors;
+
 	public static int BuffCount = 10;
 
 	public float Health = Common.BaseMaxHealth;
@@ -28,7 +30,7 @@ public class CharacterBase: MonoBehaviour {
 	public int ActiveBuffs;
 	public float[] BuffTimers = new float[BuffCount];
 
-	public GameObject Base, Thorax, Head;
+	public GameObject Base, Thorax, Head, hatBase, hatTop;
 	public GameObject SnowBallTemplate;
 	public GameObject deathExplosionEffect;
     public Vector3 spawnPosition;
@@ -45,12 +47,28 @@ public class CharacterBase: MonoBehaviour {
     {
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 
-		foreach (Transform o in GetComponentsInChildren<Transform> ()){
-			if (o.name == "Head") Head = o.gameObject;
-			else if (o.name == "Thorax") Thorax = o.gameObject;
-			else if (o.name == "Base") Base = o.gameObject;
+		foreach (Transform child in GetComponentsInChildren<Transform> ()){
+            switch (child.name)
+            {
+                case "Head":
+                    Head = child.gameObject;
+                    break;
+                case "Thorax":
+                    Thorax = child.gameObject;
+                    break;
+                case "Base":
+                    Base = child.gameObject;
+                    break;
+                case "HatBase":
+                    hatBase = child.gameObject;
+                    break;
+                case "HatTop":
+                    hatTop = child.gameObject;
+                    break;
+            }
 		}
 
+        hatBase.GetComponent<MeshRenderer>().material = hatColors[6];
 		oldPartPositions [0] = Base.transform.localPosition;
 		oldPartPositions [1] = Thorax.transform.localPosition;
 		oldPartPositions [2] = Head.transform.localPosition;
@@ -91,7 +109,6 @@ public class CharacterBase: MonoBehaviour {
         Thorax.transform.eulerAngles = new Vector3(0, 0, 0);
         Head.transform.localPosition = oldPartPositions[2];
         Head.transform.eulerAngles = new Vector3(0, 0, 0);
-
 	}
 
 
@@ -121,12 +138,29 @@ public class CharacterBase: MonoBehaviour {
 
 
     /****************************************************************************************************
+     * Description: THIS IS A TESTING FUNCTION ONLY! This function is called when the character wants   *
+     *              a new randomly selected color of hat.                                               *
+     * Syntax: chooseRandomHatColor();                                                                  *
+     ****************************************************************************************************/
+    public void chooseRandomHatColor()
+    {
+        int color = Random.Range(0, 6);
+        hatTop.GetComponent<MeshRenderer>().material = hatColors[color];
+        foreach (Material mat in hatColors)
+        {
+            if (mat.name == "BlackHat")
+                hatBase.GetComponent<MeshRenderer>().material = mat;
+        }
+    }
+
+
+    /****************************************************************************************************
      * Description: Set an effect to activate on a character.                                           *
      * Syntax: activateBuff(BuffFlag effect);                                                           *
      * Values:                                                                                          *
      *          effect = The effect that needs to be activated on the character                         *
      ****************************************************************************************************/
-	public void activateBuff(BuffFlag effect) {
+    public void activateBuff(BuffFlag effect) {
 		ActiveBuffs |= (int)effect;
 		//re-activate timer
 	}
@@ -285,10 +319,4 @@ public class CharacterBase: MonoBehaviour {
 		}
 		return Common.BaseSnowBallDamage;
 	}
-
-
-
-
-
-
 }

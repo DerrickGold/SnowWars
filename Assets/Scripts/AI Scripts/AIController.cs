@@ -55,6 +55,101 @@ public class AIController : CharacterBase {
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
+        chooseRandomHatColor();
+    }
+
+
+    /****************************************************************************************************
+     * Description: This is the HUB of the AI. Controls and regulates almost everything.                *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Update()
+    {
+        switch (state)
+        {
+            case State.WALKING:
+                updateBuffs();
+                targetInSight = isTargetInView();
+
+                //Be offensive if health isn't too low
+                if (Health > 30 && !beingSafe)
+                {
+                    //Look at the target
+                    Head.transform.LookAt(currentTarget);
+                    Thorax.transform.LookAt(currentTarget);
+
+                    //Run towards the target
+                    navMesh.destination = currentTarget.position;
+
+                    //Throw a snowball at its target if it's in range
+                    if (targetInSight)
+                        state = State.ATTACKING;
+                }
+                //Become aggressive when enough HP has regenerated
+                else if (Health > 50 && beingSafe)
+                    beingSafe = !beingSafe;
+                //Be defensive if health has dropped to critical levels
+                else
+                {
+                    beingSafe = true;
+
+                    //Look away from the target
+                    Head.transform.LookAt(2 * transform.position - currentTarget.position);
+                    Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
+
+                    //Run away from the target
+                    Vector3 moveDiriection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
+                    navMesh.destination = transform.position + moveDiriection;
+                }
+                break;
+
+            case State.ATTACKING:
+                updateBuffs();
+                targetInSight = isTargetInView();
+                throwingAnimation.Play("AIThrowingAnimation");
+                break;
+
+            case State.DEAD:
+                if (!stateCoroutine)
+                {
+                    targetInRange = false;
+                    deathAnimation();
+                    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
+                }
+                break;
+
+            case State.ITEMTRACK:
+                break;
+
+            case State.RESPAWN:
+                respawn();
+                state = State.WALKING;
+                break;
+        }
+
+        //Check to see if the player is moving to regain HP
+        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
+        {
+            lastRegenLocation = transform.position;
+            Health += 1.0f;
+        }
+
+        //Check to see if AI is dead
+        if (Health <= 0) state = State.DEAD;
+
+        //Check to see if the AI's current target is dead
+        if (currentTarget.gameObject.tag == "Enemy")
+        {
+            if (currentTarget.gameObject.GetComponent<AIController>().Health <= 0)
+                pickRandomEnemy();
+        }
+        else if (currentTarget.gameObject.tag == "Player")
+        {
+            if (currentTarget.gameObject.GetComponent<PlayerController>().Health <= 0)
+                pickRandomEnemy();
+        }
+        else
+            pickRandomEnemy();
     }
 
 
@@ -76,17 +171,22 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void pickRandomEnemy()
     {
+        //Reset targetInRange
+        targetInRange = false;
+
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
         {
 			State aiState = g.GetComponent<AIController>().state;
-            if ( aiState != State.DEAD && aiState != State.RESPAWN) allEnemies.Add(g);
+            if (aiState != State.DEAD && aiState != State.RESPAWN)
+                allEnemies.Add(g);
         }
 
+        //Add the player to the list of possible targets
 		PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController> ().playerState;
         if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
 
-        //Pick a random enemy to attack
+        //Pick a random enemy to attack from the list of all possible targets
         do
             currentTarget = allEnemies[Random.Range(0, allEnemies.Count)].transform;
         while (currentTarget == transform);
@@ -95,7 +195,7 @@ public class AIController : CharacterBase {
 
     /****************************************************************************************************
      * Description: PLEASE ADD A DESCRIPTION HERE ABOUT WHAT THIS FUNCTION DOES. TRY TO KEEP FORMATTING *
-     * Syntax: updateBuggs();                                                                           *
+     * Syntax: updateBuffs();                                                                           *
      ****************************************************************************************************/
     void updateBuffs() {
         if (state == State.DEAD || state == State.RESPAWN) return;
@@ -136,8 +236,8 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     public void throwing()
     {
-        if (navMesh.enabled == true)
-		    navMesh.destination = currentTarget.position;
+        //if (navMesh.enabled == true)
+		//    navMesh.destination = currentTarget.position;
 		if (!stateCoroutine) {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
 			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
@@ -185,126 +285,11 @@ public class AIController : CharacterBase {
 
 
     /****************************************************************************************************
-     * Description: This is the HUB of the AI. Controls and regulates almost everything.                *
-     * Syntax: ---                                                                                      *
-     ****************************************************************************************************/
-	void Update () {
-		switch(state) {
-		    case State.WALKING:
-			    updateBuffs ();
-			    targetInSight = isTargetInView ();
-			    if (targetInRange){
-				    Head.transform.LookAt(currentTarget);
-					Thorax.transform.LookAt(currentTarget);
-				}
-				
-                //Be offensive if health isn't too low
-                if (Health > 30 && !beingSafe)
-                {
-                    navMesh.destination = currentTarget.position;
-                    //Throw a snowball at its target if it's in range
-                    if (targetInSight)
-                        state = State.ATTACKING;
-                }
-                else if (Health > 50 && beingSafe)
-                    beingSafe = !beingSafe;
-                //Be defensive if health has dropped to critical levels
-                else
-                {
-                    beingSafe = true;
-                    Vector3 moveDiriection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
-                    navMesh.destination = transform.position + moveDiriection;
-                }
-			    break;
-
-		    case State.ATTACKING:
-			    updateBuffs ();
-			    targetInSight = isTargetInView ();
-			    if (targetInRange) {
-				    Head.transform.LookAt(currentTarget);
-			    }
-                throwingAnimation.Play("AIThrowingAnimation");
-			    break;
-
-		    case State.DEAD:
-                if (!stateCoroutine)
-                {
-                    deathAnimation();
-                    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
-			    }
-			    break;
-
-		    case State.ITEMTRACK:
-			    break;
-
-		    case State.RESPAWN:
-			    respawn();
-			    state = State.WALKING;
-			    break;
-		}
-
-        //Check to see if the player is moving to regain HP
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
-        {
-            lastRegenLocation = transform.position;
-            Health += 2.5f;
-        }
-
-        //Check to see if AI is dead
-        if (Health <= 0) state = State.DEAD;
-
-        //Check to see if the AI's current target is dead
-        if (currentTarget.gameObject.name == "AI")
-        {
-            if (currentTarget.gameObject.GetComponent<AIController>().Health <= 0)
-                pickRandomEnemy();
-        }
-        else if (currentTarget.gameObject.name == "Player")
-        {
-            if (currentTarget.gameObject.GetComponent<PlayerController>().Health <= 0)
-                pickRandomEnemy();
-        }
-        else
-            pickRandomEnemy();
-	}
-
-
-    /****************************************************************************************************
-     * Description: Called when something collides with the AI.                                         *
-     * Syntax: ---                                                                                      *
-     ****************************************************************************************************/
-	void OnTriggerEnter(Collider collision) {
-	    //If another npc or character is in range, switch the target
-		//otherwise, if a snowball enters, switch targets to who ever threw the snowball
-        if (currentTarget != null)
-        {
-            if (collision.gameObject == currentTarget.gameObject)
-                targetInRange = true;
-        }
-
-	}
-
-
-    /****************************************************************************************************
-     * Description: Called when whatever has collidied with the AI leaves the collision area.           *
-     * Syntax: ---                                                                                      *
-     ****************************************************************************************************/
-	void OnTriggerExit(Collider collision) {
-        if (currentTarget != null)
-        {
-            if (collision.gameObject == currentTarget.gameObject)
-                targetInRange = false;
-        }
-	}
-
-
-    /****************************************************************************************************
      * Description: Checks to see if the AI is within view of its target.                               *
      * Syntax: bool value = isTargetInView();                                                           *
      * Returns: True if the target is in view | False if the target is not in view                      *
      ****************************************************************************************************/
 	bool isTargetInView() {
-		if (!targetInRange) return false;
 		return Physics.Raycast (Head.transform.position, Head.transform.forward, Common.AIViewRange);
 	}
 
@@ -342,5 +327,36 @@ public class AIController : CharacterBase {
         //If a snowball hit the AI
         if (col.gameObject.name == "Snowball(Clone)")
             Health -= col.gameObject.GetComponent<Projectile>().damage;
+    }
+
+
+    /****************************************************************************************************
+     * Description: Called when something collides with the AI.                                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void OnTriggerEnter(Collider collision)
+    {
+        //If another npc or character is in range, switch the target
+        //otherwise, if a snowball enters, switch targets to who ever threw the snowball
+        if (currentTarget != null)
+        {
+            if (collision.gameObject == currentTarget.gameObject)
+                targetInRange = true;
+        }
+
+    }
+
+
+    /****************************************************************************************************
+     * Description: Called when whatever has collidied with the AI leaves the collision area.           *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void OnTriggerExit(Collider collision)
+    {
+        if (currentTarget != null)
+        {
+            if (collision.gameObject == currentTarget.gameObject)
+                targetInRange = false;
+        }
     }
 }
