@@ -17,6 +17,9 @@ public class Autodestruct : MonoBehaviour {
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
 	void Start () {
+
+		//foreach (GameObject child in gameObject.GetComponentsInChildren<>()
+
 		for (int i =0; i < transform.childCount; i++) {
 			Transform child = transform.GetChild(i);
 			for(int j = 0; j <= transform.childCount; j++){
