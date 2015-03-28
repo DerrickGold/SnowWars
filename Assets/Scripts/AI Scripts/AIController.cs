@@ -82,7 +82,7 @@ public class AIController : CharacterBase {
                     navMesh.destination = currentTarget.position;
 
                     //Throw a snowball at its target if it's in range
-                    if (targetInSight)
+                    if (targetInRange)
                         state = State.ATTACKING;
                 }
                 //Become aggressive when enough HP has regenerated
@@ -190,6 +190,9 @@ public class AIController : CharacterBase {
         do
             currentTarget = allEnemies[Random.Range(0, allEnemies.Count)].transform;
         while (currentTarget == transform);
+
+        //Quickly check to see if the target is in range
+        targetInRange = Vector3.Distance(transform.position, currentTarget.position) <= 40 ? true : false;
     }
 
 
@@ -252,7 +255,7 @@ public class AIController : CharacterBase {
 
 			state = State.WALKING;
 			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
-			//subtractAmmo();
+			subtractAmmo();
 		}
 	}
 
@@ -336,8 +339,6 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void OnTriggerEnter(Collider collision)
     {
-        //If another npc or character is in range, switch the target
-        //otherwise, if a snowball enters, switch targets to who ever threw the snowball
         if (currentTarget != null)
         {
             if (collision.gameObject == currentTarget.gameObject)
