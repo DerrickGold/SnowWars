@@ -18,13 +18,25 @@ public class CharacterBase: MonoBehaviour {
 		SUPER_SNOWBALL = 1<<4,
 		INF_STAMINA = 1<<5,
 		INF_HEALTH = 1<<6
-	};
+    };
+    static public int MAX_HEALTH = 100;
+    static public int MAX_STAMINA = 100;
+    static public int MAX_HEALTH_BOOST = 20;
+    static public float MAX_THROW_FORCE = 20;
+    static public int BASE_SNOWBALL_DAMAGE = 15;
+    static public int SUPER_SNOWBALL_DAMAGE = 15;
+    static public float RESPAWN_TIME = 3.0f; //In seconds
+    static public float WALK_SPEED = 4.0f;
+    static public float SPEED_BOOST = 1.0f;
+    static public int AMMO_SUBTRACT_AMOUNT = 2;
+    static public int SUPER_SNOWBALL_SUBTRACT = 5;
+
     public Material[] hatColors;
 
 	public static int BuffCount = 10;
 
-	public float Health = Common.BaseMaxHealth;
-	public float Stamina = Common.BaseMaxStamina;
+	public float Health = MAX_HEALTH;
+	public float Stamina = MAX_STAMINA;
     public Vector3 lastRegenLocation;
 
 	public int ActiveBuffs;
@@ -242,8 +254,8 @@ public class CharacterBase: MonoBehaviour {
      ****************************************************************************************************/
 	public float getMaxHealth() {
 		if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) 
-			return Common.BaseMaxHealth + Common.MaxHealthBoost;
-		return Common.BaseMaxHealth;
+			return MAX_HEALTH + MAX_HEALTH_BOOST;
+		return MAX_HEALTH;
 	}
 
 
@@ -265,7 +277,7 @@ public class CharacterBase: MonoBehaviour {
      * Returns: float representing the characters max stamina                                           *
      ****************************************************************************************************/
 	public int getMaxStamina() {
-		return Common.BaseMaxStamina;
+		return MAX_STAMINA;
 	}
 
 
@@ -276,7 +288,7 @@ public class CharacterBase: MonoBehaviour {
      ****************************************************************************************************/
 	public float getStamina() {
 		if (isEffectActive (BuffFlag.INF_STAMINA))
-			return Common.BaseMaxStamina;
+			return MAX_STAMINA;
 		return Stamina;
 	}
 
@@ -291,9 +303,9 @@ public class CharacterBase: MonoBehaviour {
 
 		//Subtract one hit point for every throw
 		if (isEffectActive(BuffFlag.SUPER_SNOWBALL))
-			Health -= (Common.AmmoSubtractAmmount + Common.SuperSnowSubtract);
+			Health -= (AMMO_SUBTRACT_AMOUNT + SUPER_SNOWBALL_SUBTRACT);
 		else
-			Health -= Common.AmmoSubtractAmmount;         
+			Health -= AMMO_SUBTRACT_AMOUNT;         
 	}
 
 
@@ -303,7 +315,7 @@ public class CharacterBase: MonoBehaviour {
      * Returns: float representing the new speed to use for the character                               *
      ****************************************************************************************************/
 	public float getSpeedBoost() {
-		if (isEffectActive(BuffFlag.SPEED_BOOST)) return Common.SpeedBoost;
+		if (isEffectActive(BuffFlag.SPEED_BOOST)) return SPEED_BOOST;
 		return 0.0f;
 	}
 
@@ -315,8 +327,8 @@ public class CharacterBase: MonoBehaviour {
      ****************************************************************************************************/
 	public int getSnowBallDamage() {
 		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
-			return Common.BaseSnowBallDamage + Common.SuperSnowBallBoost;
+			return BASE_SNOWBALL_DAMAGE + SUPER_SNOWBALL_DAMAGE;
 		}
-		return Common.BaseSnowBallDamage;
+		return BASE_SNOWBALL_DAMAGE;
 	}
 }

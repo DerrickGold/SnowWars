@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     public Transform origin;
     public float originHP;
     private float speed = 60.0f;
-    public float damage = Common.BaseSnowBallDamage;
+    public float damage = CharacterBase.BASE_SNOWBALL_DAMAGE;
 	bool collided = false;
 
 

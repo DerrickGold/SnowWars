@@ -20,7 +20,7 @@ public class JustForFun : MonoBehaviour
      ****************************************************************************************************/
     void Start()
     {
-        for (float amount = 10f, radius = 10f; amount > 0; amount--)
+        for (float amount = 1f, radius = 10f; amount > 0; amount--)
         {
             float randomX = Random.Range(transform.position.x - radius, transform.position.x + radius);
             float randomZ = Random.Range(transform.position.z - radius, transform.position.z + radius);

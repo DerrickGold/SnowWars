@@ -15,6 +15,9 @@ public class AIController : CharacterBase {
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
 	public State state = State.WALKING;
 
+    static public int VIEW_RANGE = 50;
+    static public float AIM_ADJUST_FACTOR = 1.0f;
+
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
     private SphereCollider triggerCollider;
@@ -31,6 +34,10 @@ public class AIController : CharacterBase {
 
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
+    private bool zigZagWait = false;
+    private int zigZagDirection = 0;
+
+    public GameObject Debug_Cube;
 
 
     /****************************************************************************************************
@@ -56,6 +63,13 @@ public class AIController : CharacterBase {
         spawnPosition = transform.position;
         pickRandomEnemy();
         chooseRandomHatColor();
+
+        //DEBUG_CUBE
+        foreach (GameObject obj in GameObject.FindObjectsOfType(typeof(GameObject)))
+        {
+            if (obj.name == "DEBUG_CUBE")
+                Debug_Cube = obj;
+        }
     }
 
 
@@ -98,8 +112,25 @@ public class AIController : CharacterBase {
                     Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
 
                     //Run away from the target
-                    Vector3 moveDiriection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
-                    navMesh.destination = transform.position + moveDiriection;
+                    Vector3 moveDirection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
+
+                    //Randomly zigzag
+                    if (!zigZagWait)
+                    {
+                        StartCoroutine("WaitSeconds");
+                        zigZagDirection = Random.Range(-1, 2);
+                    }
+                    switch (zigZagDirection)
+                    {
+                        case -1:
+                            moveDirection -= transform.right;
+                            break;
+                        case 1:
+                            moveDirection += transform.right;
+                            break;
+                    }
+                    Debug_Cube.transform.position = transform.position + moveDirection;
+                    navMesh.destination = transform.position + moveDirection;
                 }
                 break;
 
@@ -114,7 +145,7 @@ public class AIController : CharacterBase {
                 {
                     targetInRange = false;
                     deathAnimation();
-                    StartCoroutine(defaultStateTimer(Common.RespawnTime, Common.RespawnTime, State.RESPAWN));
+                    StartCoroutine(defaultStateTimer(RESPAWN_TIME, RESPAWN_TIME, State.RESPAWN));
                 }
                 break;
 
@@ -159,7 +190,7 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void initializeSnowMan() {
 		triggerCollider = GetComponent<SphereCollider> ();
-		triggerCollider.radius = Common.AIViewRange;
+		triggerCollider.radius = VIEW_RANGE;
 		MovementSpeed = navMesh.speed;
         //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
@@ -175,20 +206,26 @@ public class AIController : CharacterBase {
         targetInRange = false;
 
         //Get a list of all enemys in the game
-        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
+        /*foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
         {
 			State aiState = g.GetComponent<AIController>().state;
             if (aiState != State.DEAD && aiState != State.RESPAWN)
                 allEnemies.Add(g);
-        }
+        }*/
 
         //Add the player to the list of possible targets
 		PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController> ().playerState;
         if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
 
-        //Pick a random enemy to attack from the list of all possible targets
+        //Pick a random enemy to attack from the list of all possible targets and target their head
         do
-            currentTarget = allEnemies[Random.Range(0, allEnemies.Count)].transform;
+        {
+            foreach (Transform child in allEnemies[Random.Range(0, allEnemies.Count)].GetComponentsInChildren<Transform>())
+            {
+                if (child.name == "Head")
+                    currentTarget = child;
+            }
+        }
         while (currentTarget == transform);
 
         //Quickly check to see if the target is in range
@@ -251,7 +288,7 @@ public class AIController : CharacterBase {
             snowBall.originHP = Health;
             instantiatedProjectile.transform.eulerAngles += new Vector3(-getTargetAngle(), 0, 0);
 
-			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * Common.MaxThrowForce, ForceMode.Impulse);
+			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * MAX_THROW_FORCE, ForceMode.Impulse);
 
 			state = State.WALKING;
 			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
@@ -293,7 +330,7 @@ public class AIController : CharacterBase {
      * Returns: True if the target is in view | False if the target is not in view                      *
      ****************************************************************************************************/
 	bool isTargetInView() {
-		return Physics.Raycast (Head.transform.position, Head.transform.forward, Common.AIViewRange);
+		return Physics.Raycast (Head.transform.position, Head.transform.forward, VIEW_RANGE);
 	}
 
 
@@ -359,5 +396,13 @@ public class AIController : CharacterBase {
             if (collision.gameObject == currentTarget.gameObject)
                 targetInRange = false;
         }
+    }
+
+
+    IEnumerator WaitSeconds()
+    {
+        zigZagWait = true;
+        yield return new WaitForSeconds(0.5f);
+        zigZagWait = false;
     }
 }

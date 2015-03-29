@@ -231,7 +231,6 @@ public class PlayerController : CharacterBase
         jumping();
         applyGravity();
         groundPlayer();
-        hillSlide();
 
         //Move the player and check if the player is grounded
         isGrounded = ((controller.Move(moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
@@ -246,7 +245,7 @@ public class PlayerController : CharacterBase
     {
         if (isGrounded)
             isJumping = false;
-        if (Input.GetButton("Jump") && !isJumping)
+        if (Input.GetButtonDown("Jump") && !isJumping)
         {
             isJumping = true;
             moveDirection.y = jumpSpeed;
@@ -286,32 +285,6 @@ public class PlayerController : CharacterBase
                 {
                     slopeAdjust = new Vector3(0, hit.distance, 0);
                     controller.Move((transform.position - slopeAdjust) - transform.position);
-                }
-            }
-        }
-    }
-
-    /****************************************************************************************************
-     * Description: This is a helper function. Slides the player down a slope that is too steep.        *
-     * Syntax: hillSlide();                                                                             *
-     ****************************************************************************************************/
-    void hillSlide()
-    {
-        RaycastHit hit;
-        //Shoot a raycast down only 3 units
-        if (Physics.Raycast(transform.position, -transform.up, out hit, 3.0f))
-        {
-            //Only slide the player if they are not jumping
-            if (!isJumping)
-            {
-                //Check the angle at which the player is currently standing on
-                if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)
-                {
-                    Vector3 hitNormal = hit.normal;
-                    moveDirection = new Vector3(hit.normal.x, -hit.normal.y, hit.normal.z);
-                    Vector3.OrthoNormalize(ref hitNormal, ref moveDirection);
-                    moveDirection *= gravity;
-                    isGrounded = false;
                 }
             }
         }
@@ -361,6 +334,27 @@ public class PlayerController : CharacterBase
 			print(randBuff);
 			ActiveBuffs |= (1<<randBuff);
 		}
-
 	}
+
+
+    /****************************************************************************************************
+     * Description: This is called whenever a collider collides with the player. This is only being     *
+     *              used to calculate whether or not to slide the player.                               *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //This is for sliding the player down too steep of slopes
+        if (hit.gameObject.tag == "Level") {
+            if (!isJumping)
+            {
+                if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)
+                {
+                    moveDirection = hit.moveDirection;
+                    moveDirection += hit.normal;
+                    moveDirection *= gravity / 2;
+                }
+            }
+        }
+    }
 }
