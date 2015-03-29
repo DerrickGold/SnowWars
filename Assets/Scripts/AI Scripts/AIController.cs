@@ -15,7 +15,6 @@ public class AIController : CharacterBase {
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
 	public State state = State.WALKING;
 
-    static public int VIEW_RANGE = 50;
     static public float AIM_ADJUST_FACTOR = 1.0f;
     static public float MAX_TARGET_RANGE = 8.0f;
 
@@ -26,6 +25,7 @@ public class AIController : CharacterBase {
     private Common globalScript;
     public Transform snowballSpawnLocation;
     private List<GameObject> allEnemies = new List<GameObject>();
+    public Transform helperGameObject;
 
 	private float MovementSpeed;
 
@@ -37,8 +37,6 @@ public class AIController : CharacterBase {
 	bool pauseTimer = false;
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
-
-    //public GameObject Debug_Cube;
 
 
     /****************************************************************************************************
@@ -65,13 +63,7 @@ public class AIController : CharacterBase {
         pickRandomEnemy();
         chooseRandomHatColor();
 
-        //DEBUG_CUBE
-		/*
-        foreach (GameObject obj in GameObject.FindObjectsOfType(typeof(GameObject)))
-        {
-            if (obj.name == "DEBUG_CUBE")
-                Debug_Cube = obj;
-        }*/
+        //activateBuff(BuffFlag.INF_HEALTH);
     }
 
 
@@ -81,6 +73,10 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void Update()
     {
+        //DEBUGGING ONLY
+        setBuffTimer(BuffFlag.INF_HEALTH, 100.0f);
+        updateBuffTimers();
+
         //If the AI has a target, check if the target is in range
         if (currentTarget)
             targetInRange = Vector3.Distance(transform.position, currentTarget.position) <= MAX_TARGET_RANGE ? true : false;
@@ -88,63 +84,65 @@ public class AIController : CharacterBase {
         switch (state)
         {
             case State.WALKING:
-                updateBuffs();
-                targetInSight = isTargetInView();
-
-                //Be offensive if health isn't too low
-                if (Health > 30 && !beingSafe)
+                if (currentTarget)
                 {
-                    //Start walking to conserve stamina for desperate measures
-                    navMesh.speed = WALK_SPEED;
-                    navMesh.stoppingDistance = 7;
+                    updateBuffs();
+                    targetInSight = isTargetInView();
 
-                    //Look at the target
-                    Head.transform.LookAt(currentTarget);
-                    Thorax.transform.LookAt(currentTarget);
-
-                    //Run towards the target
-                    navMesh.destination = currentTarget.position;
-
-                    //Throw a snowball at its target if it's in range
-                    if (targetInRange)
-                        state = State.ATTACKING;
-                }
-                //Become aggressive when enough HP has regenerated
-                else if (Health > 50 && beingSafe)
-                    beingSafe = !beingSafe;
-                //Be defensive if health has dropped to critical levels
-                else
-                {
-                    //Run as fast as it can to escape danger!
-                    navMesh.speed = RUN_SPEED;
-                    navMesh.stoppingDistance = 0;
-
-                    beingSafe = true;
-
-                    //Look away from the target
-                    Head.transform.LookAt(2 * transform.position - currentTarget.position);
-                    Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
-
-                    //Run away from the target
-                    Vector3 moveDirection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
-
-                    //Randomly zigzag
-                    if (!zigZagWait)
+                    //Be offensive if health isn't too low
+                    if (Health > 30 && !beingSafe)
                     {
-                        StartCoroutine("WaitSeconds");
-                    }
-                    switch (zigZagDirection)
-                    {
-                        case -1:
-                            moveDirection -= transform.right - (transform.forward * 5);
-                            break;
-                        case 1:
-                            moveDirection += transform.right + (transform.forward * 5);
-                            break;
-                    }
+                        //Start walking to conserve stamina for desperate measures
+                        navMesh.speed = WALK_SPEED;
 
-                    //Debug_Cube.transform.position = transform.position + moveDirection;
-                    navMesh.destination = transform.position + moveDirection;
+                        //Make the head and body look towards the target
+                        Head.transform.LookAt(currentTarget);
+                        Thorax.transform.LookAt(currentTarget);
+
+                        //Turn the helper gameobject towards the target (This helps us in getting the AI to circle the target)
+                        helperGameObject.LookAt(currentTarget);
+                        navMesh.destination = currentTarget.position + (helperGameObject.right * 10);
+
+                        //Throw a snowball at its target if it's in range
+                        if (targetInRange)
+                            state = State.ATTACKING;
+                    }
+                    //Become aggressive when enough HP has regenerated
+                    else if (Health > 50 && beingSafe)
+                        beingSafe = !beingSafe;
+                    //Be defensive if health has dropped to critical levels
+                    else
+                    {
+                        //Run as fast as it can to escape danger!
+                        navMesh.speed = RUN_SPEED;
+
+                        beingSafe = true;
+
+                        //Look away from the target
+                        Head.transform.LookAt(2 * transform.position - currentTarget.position);
+                        Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
+
+                        //Run away from the target
+                        Vector3 moveDirection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
+
+                        //Randomly zigzag
+                        if (!zigZagWait)
+                        {
+                            StartCoroutine("WaitSeconds");
+                        }
+                        switch (zigZagDirection)
+                        {
+                            case -1:
+                                moveDirection -= transform.right - (transform.forward * 5);
+                                break;
+                            case 1:
+                                moveDirection += transform.right + (transform.forward * 5);
+                                break;
+                        }
+
+                        //Tell the AI where to go
+                        navMesh.destination = transform.position + moveDirection;
+                    }
                 }
                 break;
 
@@ -183,18 +181,28 @@ public class AIController : CharacterBase {
         if (Health <= 0) state = State.DEAD;
 
         //Check to see if the AI's current target is dead
-        if (currentTarget.gameObject.tag == "Enemy")
+        string curTargetName = currentTarget.gameObject.transform.root.name;
+        if (curTargetName == "AI(Clone)")
         {
-            if (currentTarget.gameObject.GetComponent<AIController>().Health <= 0)
+            if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
+            {
                 pickRandomEnemy();
+                print("Enemy is dead. Choose new target.");
+            }
         }
-        else if (currentTarget.gameObject.tag == "Player")
+        else if (curTargetName == "Player")
         {
-            if (currentTarget.gameObject.GetComponent<PlayerController>().Health <= 0)
+            if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
+            {
                 pickRandomEnemy();
+                print("Player is dead. Choose new target.");
+            }
         }
-        else
+        else if (curTargetName != "AI(Clone)" && curTargetName != "Player")
+        {
             pickRandomEnemy();
+            print("Target is not Enemy and Player. Choose new target.");
+        }
     }
 
 
@@ -204,10 +212,34 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void initializeSnowMan() {
 		triggerCollider = GetComponent<SphereCollider> ();
-		triggerCollider.radius = VIEW_RANGE;
 		MovementSpeed = navMesh.speed;
         //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
+
+
+    /****************************************************************************************************
+     * Description: This is a helper function. Grabs a list of all possible enemies that can be         *
+     *              targeted.                                                                           *
+     * Syntax: getListOfEnemies();                                                                      *
+     ****************************************************************************************************/
+    void getListOfEnemies()
+    {
+        //Get a list of all enemys in the game
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            //Don't add itself!
+            if (g != gameObject)
+            {
+                State aiState = g.GetComponent<AIController>().state;
+                if (aiState != State.DEAD && aiState != State.RESPAWN)
+                    allEnemies.Add(g);
+            }
+        }
+
+        //Add the player to the list of possible targets
+        //PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController>().playerState;
+        //if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
+    }
 
 
     /****************************************************************************************************
@@ -218,29 +250,14 @@ public class AIController : CharacterBase {
     {
         //Reset targetInRange
         targetInRange = false;
-
-        //Get a list of all enemys in the game
-        /*foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
-        {
-			State aiState = g.GetComponent<AIController>().state;
-            if (aiState != State.DEAD && aiState != State.RESPAWN)
-                allEnemies.Add(g);
-        }*/
-
-        //Add the player to the list of possible targets
-		PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController> ().playerState;
-        if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
+        getListOfEnemies();
 
         //Pick a random enemy to attack from the list of all possible targets and target their head
-        do
+        foreach (Transform child in allEnemies[Random.Range(0, allEnemies.Count)].GetComponentsInChildren<Transform>())
         {
-            foreach (Transform child in allEnemies[Random.Range(0, allEnemies.Count)].GetComponentsInChildren<Transform>())
-            {
-                if (child.name == "Head")
-                    currentTarget = child;
-            }
+            if (child.name == "Head")
+                currentTarget = child;
         }
-        while (currentTarget == transform);
     }
 
 
@@ -341,7 +358,7 @@ public class AIController : CharacterBase {
      * Returns: True if the target is in view | False if the target is not in view                      *
      ****************************************************************************************************/
 	bool isTargetInView() {
-		return Physics.Raycast (Head.transform.position, Head.transform.forward, VIEW_RANGE);
+		return Physics.Raycast (Head.transform.position, Head.transform.forward);
 	}
 
 
@@ -370,6 +387,20 @@ public class AIController : CharacterBase {
 
 
     /****************************************************************************************************
+     * Description: This is a helper function. This is only used to help the AI strafe back and forth   *
+     *              when running away to help dodge incoming projectiles. Waits exactly 1 second.       *
+     * Syntax: StartCoroutine("WaitSeconds");                                                           *
+     ****************************************************************************************************/
+    IEnumerator WaitSeconds()
+    {
+        zigZagWait = true;
+        zigZagDirection = -zigZagDirection;
+        yield return new WaitForSeconds(1);
+        zigZagWait = false;
+    }
+
+
+    /****************************************************************************************************
      * Description: Called when something collides with the AI.                                         *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
@@ -382,39 +413,16 @@ public class AIController : CharacterBase {
 
 
     /****************************************************************************************************
-     * Description: Called when something collides with the AI.                                         *
+     * Description: Called when something collides with the AI's trigger. This is used only for         *
+     *              checking to see if there is an enemy really close by.                               *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-    void OnTriggerEnter(Collider collision)
+    void OnTriggerEnter(Collider col)
     {
-        if (currentTarget != null)
+        foreach (Transform child in col.transform.GetComponentsInChildren<Transform>())
         {
-            if (collision.gameObject == currentTarget.gameObject)
-                targetInRange = true;
+            if (child.name == "Head")
+                currentTarget = child;
         }
-
-    }
-
-
-    /****************************************************************************************************
-     * Description: Called when whatever has collidied with the AI leaves the collision area.           *
-     * Syntax: ---                                                                                      *
-     ****************************************************************************************************/
-    void OnTriggerExit(Collider collision)
-    {
-        if (currentTarget != null)
-        {
-            if (collision.gameObject == currentTarget.gameObject)
-                targetInRange = false;
-        }
-    }
-
-
-    IEnumerator WaitSeconds()
-    {
-        zigZagWait = true;
-        zigZagDirection = -zigZagDirection;
-        yield return new WaitForSeconds(1);
-        zigZagWait = false;
     }
 }

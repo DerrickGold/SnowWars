@@ -90,7 +90,7 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void Update()
     {
-        //Keep track of player buffs
+        //DEBUGGING ONLY
 		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
 		updateBuffTimers();
 
