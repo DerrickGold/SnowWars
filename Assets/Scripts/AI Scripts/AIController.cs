@@ -37,7 +37,7 @@ public class AIController : CharacterBase {
     private bool zigZagWait = false;
     private int zigZagDirection = 0;
 
-    public GameObject Debug_Cube;
+    //public GameObject Debug_Cube;
 
 
     /****************************************************************************************************
@@ -65,11 +65,12 @@ public class AIController : CharacterBase {
         chooseRandomHatColor();
 
         //DEBUG_CUBE
+		/*
         foreach (GameObject obj in GameObject.FindObjectsOfType(typeof(GameObject)))
         {
             if (obj.name == "DEBUG_CUBE")
                 Debug_Cube = obj;
-        }
+        }*/
     }
 
 
@@ -129,7 +130,8 @@ public class AIController : CharacterBase {
                             moveDirection += transform.right;
                             break;
                     }
-                    Debug_Cube.transform.position = transform.position + moveDirection;
+
+                    //Debug_Cube.transform.position = transform.position + moveDirection;
                     navMesh.destination = transform.position + moveDirection;
                 }
                 break;
