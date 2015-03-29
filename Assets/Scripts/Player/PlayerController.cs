@@ -34,8 +34,6 @@ public class PlayerController : CharacterBase
     private bool runOnCooldown = false;
 	private bool inWater = false;
 
-    private float walkSpeed = 5.0f;
-    private float runSpeed = 7.0f;
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
@@ -71,7 +69,7 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		//activateBuff(BuffFlag.INF_HEALTH);
+		activateBuff(BuffFlag.INF_HEALTH);
     }
 
 
@@ -125,13 +123,13 @@ public class PlayerController : CharacterBase
                 break;
 
             case PlayerState.WALKING:
-                movement(walkSpeed);
+                movement(WALK_SPEED);
                 if (getStamina() < 100.0f)
 					Stamina += 0.1f;
                 break;
 
             case PlayerState.RUNNING:
-                movement(runSpeed);
+                movement(RUN_SPEED);
 				Stamina -= 0.2f;
                 if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
@@ -162,7 +160,7 @@ public class PlayerController : CharacterBase
         //Keep parts of the player body in line with the camera
         bodyRotation();
 
-		//if the player is standing in water, they will lose health
+		//If the player is standing in water, they will lose health
 		if (inWater)
 			Health = getHealth() - 1;
     }

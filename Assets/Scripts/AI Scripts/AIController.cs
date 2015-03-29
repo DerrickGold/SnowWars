@@ -17,6 +17,7 @@ public class AIController : CharacterBase {
 
     static public int VIEW_RANGE = 50;
     static public float AIM_ADJUST_FACTOR = 1.0f;
+    static public float MAX_TARGET_RANGE = 8.0f;
 
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
@@ -35,7 +36,7 @@ public class AIController : CharacterBase {
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
     private bool zigZagWait = false;
-    private int zigZagDirection = 0;
+    private int zigZagDirection = 1;
 
     public GameObject Debug_Cube;
 
@@ -79,6 +80,10 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void Update()
     {
+        //If the AI has a target, check if the target is in range
+        if (currentTarget)
+            targetInRange = Vector3.Distance(transform.position, currentTarget.position) <= MAX_TARGET_RANGE ? true : false;
+
         switch (state)
         {
             case State.WALKING:
@@ -88,6 +93,10 @@ public class AIController : CharacterBase {
                 //Be offensive if health isn't too low
                 if (Health > 30 && !beingSafe)
                 {
+                    //Start walking to conserve stamina for desperate measures
+                    navMesh.speed = WALK_SPEED;
+                    navMesh.stoppingDistance = 7;
+
                     //Look at the target
                     Head.transform.LookAt(currentTarget);
                     Thorax.transform.LookAt(currentTarget);
@@ -105,6 +114,10 @@ public class AIController : CharacterBase {
                 //Be defensive if health has dropped to critical levels
                 else
                 {
+                    //Run as fast as it can to escape danger!
+                    navMesh.speed = RUN_SPEED;
+                    navMesh.stoppingDistance = 0;
+
                     beingSafe = true;
 
                     //Look away from the target
@@ -118,15 +131,14 @@ public class AIController : CharacterBase {
                     if (!zigZagWait)
                     {
                         StartCoroutine("WaitSeconds");
-                        zigZagDirection = Random.Range(-1, 2);
                     }
                     switch (zigZagDirection)
                     {
                         case -1:
-                            moveDirection -= transform.right;
+                            moveDirection -= transform.right - (transform.forward * 5);
                             break;
                         case 1:
-                            moveDirection += transform.right;
+                            moveDirection += transform.right + (transform.forward * 5);
                             break;
                     }
                     Debug_Cube.transform.position = transform.position + moveDirection;
@@ -227,9 +239,6 @@ public class AIController : CharacterBase {
             }
         }
         while (currentTarget == transform);
-
-        //Quickly check to see if the target is in range
-        targetInRange = Vector3.Distance(transform.position, currentTarget.position) <= 40 ? true : false;
     }
 
 
@@ -402,7 +411,8 @@ public class AIController : CharacterBase {
     IEnumerator WaitSeconds()
     {
         zigZagWait = true;
-        yield return new WaitForSeconds(0.5f);
+        zigZagDirection = -zigZagDirection;
+        yield return new WaitForSeconds(1);
         zigZagWait = false;
     }
 }

@@ -46,11 +46,11 @@ public class GameplayStats : MonoBehaviour {
 
 		if(team == 0) {
 			teamSizeA--;
-			player.transform.position = spawnA[0].position + new Vector3(0, 1f, 0);
+			//player.transform.position = spawnA[0].position + new Vector3(0, 1f, 0);
 		}
 		else {
 			teamSizeB--;
-			player.transform.position = spawnB[0].position + new Vector3(0, 1f, 0);
+			//player.transform.position = spawnB[0].position + new Vector3(0, 1f, 0);
 		}
 
 		//spawn all snowmen

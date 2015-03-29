@@ -26,7 +26,8 @@ public class CharacterBase: MonoBehaviour {
     static public int BASE_SNOWBALL_DAMAGE = 15;
     static public int SUPER_SNOWBALL_DAMAGE = 15;
     static public float RESPAWN_TIME = 3.0f; //In seconds
-    static public float WALK_SPEED = 4.0f;
+    static public float WALK_SPEED = 5.0f;
+    static public float RUN_SPEED = 7.0f;
     static public float SPEED_BOOST = 1.0f;
     static public int AMMO_SUBTRACT_AMOUNT = 2;
     static public int SUPER_SNOWBALL_SUBTRACT = 5;
