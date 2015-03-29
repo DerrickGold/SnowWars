@@ -32,6 +32,7 @@ public class PlayerController : CharacterBase
     private bool isJumping = false;
     private bool isGrounded = false;
     private bool runOnCooldown = false;
+	private bool inWater = false;
 
     private float walkSpeed = 5.0f;
     private float runSpeed = 7.0f;
@@ -70,7 +71,7 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		activateBuff(BuffFlag.INF_HEALTH);
+		//activateBuff(BuffFlag.INF_HEALTH);
     }
 
 
@@ -160,6 +161,10 @@ public class PlayerController : CharacterBase
 
         //Keep parts of the player body in line with the camera
         bodyRotation();
+
+		//if the player is standing in water, they will lose health
+		if (inWater)
+			Health = getHealth() - 1;
     }
 
 
@@ -323,6 +328,10 @@ public class PlayerController : CharacterBase
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
     }
 
+	/****************************************************************************************************
+     * Description: This is called whenever something with IsTrigger set collides with the player.      *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void OnTriggerEnter (Collider col)
 	{
         //If the player hits spikes, instant death!
@@ -333,6 +342,23 @@ public class PlayerController : CharacterBase
 			int randBuff = Random.Range(1,7);
 			print(randBuff);
 			ActiveBuffs |= (1<<randBuff);
+		}
+		//If the player has stepped into some water
+		if (col.gameObject.tag.Equals ("WATER")) {
+			inWater = true;
+		}
+
+	}
+
+
+    /****************************************************************************************************
+     * Description: This is called whenever something with IsTrigger stops colliding with the player.   *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+	void OnTriggerExit( Collider col){
+		//If the player stepped out of water
+		if (col.gameObject.tag.Equals ("WATER")) {
+			inWater = false;
 		}
 	}
 
