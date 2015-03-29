@@ -46,7 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\GameplayStats.cs" />
      <Compile Include="Assets\Scripts\AI Scripts\AIController.cs" />
      <Compile Include="Assets\Scripts\Buff Scripts\Autodestruct.cs" />
      <Compile Include="Assets\Scripts\Buff Scripts\BuffPickup.cs" />
@@ -55,6 +54,7 @@
      <Compile Include="Assets\Scripts\Menu Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\Misc\CharacterBase.cs" />
      <Compile Include="Assets\Scripts\Misc\Common.cs" />
+     <Compile Include="Assets\Scripts\Misc\GameplayStats.cs" />
      <Compile Include="Assets\Scripts\Misc\JustForFun.cs" />
      <Compile Include="Assets\Scripts\Misc\MouseLook.cs" />
      <Compile Include="Assets\Scripts\Misc\PauseMenu.cs" />
