@@ -54,13 +54,15 @@ public class GameplayStats : MonoBehaviour
         {
             teamSizeA--; //one less player for this team
             //player.transform.position = spawnA[0].position + new Vector3(0, 1f, 0);
-            Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
+            GameObject play = (GameObject)Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
+			play.tag = "TeamA";
         }
         else
         {
             teamSizeB--; //one less player for this team
             //player.transform.position = spawnB[0].position + new Vector3(0, 1f, 0);
-            Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
+			GameObject play = (GameObject)Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
+			play.tag = "TeamB";
         }
 
         int spawnpoint;
@@ -68,12 +70,15 @@ public class GameplayStats : MonoBehaviour
         for (int i = 0; i < teamSizeA; i++)
         {
             spawnpoint = Random.Range(0, spawnA.Count); //random spawn location for this team
-            Instantiate(AIprefab, spawnA[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+            GameObject AI = (GameObject)Instantiate(AIprefab, spawnA[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+			AI.tag = "TeamA";
+
         }
         for (int i = 0; i < teamSizeB; i++)
         {
             spawnpoint = Random.Range(0, spawnB.Count); //random spawn location for this team
-            Instantiate(AIprefab, spawnB[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+			GameObject AI = (GameObject)Instantiate(AIprefab, spawnB[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+			AI.tag = "TeamB";
         }
 
     }

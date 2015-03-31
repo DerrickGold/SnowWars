@@ -1,6 +1,6 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Derrick Gold
- * Secondary Contributors: Curtis Murray
+ * Secondary Contributors: Curtis Murray, Jaymeson Wickins
  * 
  * Description: This script is the driving force behind the AI. This script controls all of the AI
  *              in its entirety. Keeps track of the AI's variables and tells the AI how to act and
@@ -170,7 +170,7 @@ public class AIController : CharacterBase {
                 break;
         }
 
-        //Check to see if the player is moving to regain HP
+        //Check to see if the AI is moving to regain HP
         if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
         {
             lastRegenLocation = transform.position;
@@ -190,7 +190,7 @@ public class AIController : CharacterBase {
                 print("Enemy is dead. Choose new target.");
             }
         }
-        else if (curTargetName == "Player")
+        else if (curTargetName == "Player(Clone)")
         {
             if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
             {
@@ -198,7 +198,7 @@ public class AIController : CharacterBase {
                 print("Player is dead. Choose new target.");
             }
         }
-        else if (curTargetName != "AI(Clone)" && curTargetName != "Player")
+        else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
         {
             pickRandomEnemy();
             print("Target is not Enemy and Player. Choose new target.");
@@ -216,7 +216,26 @@ public class AIController : CharacterBase {
         //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
 
+	/****************************************************************************************************
+     * Description: This is a helper function. Return the tag for the enemy team.                       *
+     *                                                                                                  *
+     * Syntax: getEnemyTag();                                                                           *
+     ****************************************************************************************************/
+	string getEnemyTag(){
 
+		switch (gameObject.tag) {
+		case "TeamA":
+			return "TeamB";
+			break;
+		case "TeamB":
+			return "TeamA";
+			break;
+		default:
+			return "Team0";
+			break;
+		}
+	
+	}
     /****************************************************************************************************
      * Description: This is a helper function. Grabs a list of all possible enemies that can be         *
      *              targeted.                                                                           *
@@ -224,16 +243,25 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void getListOfEnemies()
     {
+		string enemyTag = getEnemyTag (); //get the tag of the enemy
+
         //Get a list of all enemys in the game
-        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Enemy"))
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag(enemyTag))
         {
             //Don't add itself!
             if (g != gameObject)
             {
-                State aiState = g.GetComponent<AIController>().state;
-                if (aiState != State.DEAD && aiState != State.RESPAWN)
-                    allEnemies.Add(g);
-            }
+				if (g.GetComponent<AIController>() != null){
+					State aiState = g.GetComponent<AIController>().state;
+					if (aiState != State.DEAD && aiState != State.RESPAWN)
+                    	allEnemies.Add(g);
+					
+				}
+				else if (g.GetComponent<PlayerController>() != null){
+					PlayerController.PlayerState playerState = g.GetComponent<PlayerController>().playerState;
+					if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
+				}
+			}
         }
 
         //Add the player to the list of possible targets
@@ -419,10 +447,11 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void OnTriggerEnter(Collider col)
     {
-        foreach (Transform child in col.transform.GetComponentsInChildren<Transform>())
-        {
-            if (child.name == "Head")
-                currentTarget = child;
-        }
-    }
+		if (col.gameObject.tag == getEnemyTag()) {
+			foreach (Transform child in col.transform.GetComponentsInChildren<Transform>()) {
+				if (child.name == "Head")
+					currentTarget = child;
+			}
+		}
+	}
 }
