@@ -75,17 +75,6 @@ public class PlayerController : CharacterBase
 
 
     /****************************************************************************************************
-     * Description: Used to initialize required variables.                                              *
-     * Syntax: ---                                                                                      *
-     ****************************************************************************************************/
-    void Start()
-    {
-        //TESTING PURPOSES ONLY.
-        chooseRandomHatColor();
-    }
-
-
-    /****************************************************************************************************
      * Description: The HUB of the entire player. Controls and regulates almost everything.             *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/

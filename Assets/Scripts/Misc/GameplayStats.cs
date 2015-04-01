@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 public class GameplayStats : MonoBehaviour
 {
-
     public GameObject AIprefab;
     public GameObject player;
 
@@ -29,63 +28,75 @@ public class GameplayStats : MonoBehaviour
     private List<Transform> spawnA = new List<Transform>();
     private List<Transform> spawnB = new List<Transform>();
 
+    private List<string> hatColors = new List<string>();
 
-    // Use this for initialization
     void Start()
     {
-        //determine which team the main player is on
-        int team = Random.Range(0, 2);
-        //team A if team = 0 and team B if team = 1
+        //Choose a random color of hat for each team
+        populateHatColors();
+        int teamOneColor = Random.Range(0, hatColors.Count);
+        int teamTwoColor;
+        do
+            teamTwoColor = Random.Range(0, hatColors.Count);
+        while (teamOneColor == teamTwoColor);
 
-        //get a list of spawn points for both teams
+        //Determine which team the main player is on
+        int team = Random.Range(0, 2); //team A = 0 || team B = 1
+
+        //Get a list of spawn points for both teams
         foreach (Transform child in SpawnpointsA.transform)
-        {
-            //spawnA[idx++] = child;
             spawnA.Add(child);
-        }
         foreach (Transform child in SpawnpointsB.transform)
-        {
-            //spawnB[idx++] = child;
             spawnB.Add(child);
-        }
 
-        //this is for the player
-        if (team == 0)
-        {
-            teamSizeA--; //one less player for this team
-            //player.transform.position = spawnA[0].position + new Vector3(0, 1f, 0);
+        //This is for the player
+        if (team == 0) {
+            teamSizeA--;
             GameObject play = (GameObject)Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
 			play.tag = "TeamA";
+            play.GetComponent<PlayerController>().setHatColor(hatColors[teamOneColor]);
         }
-        else
-        {
-            teamSizeB--; //one less player for this team
-            //player.transform.position = spawnB[0].position + new Vector3(0, 1f, 0);
+        else {
+            teamSizeB--;
 			GameObject play = (GameObject)Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
 			play.tag = "TeamB";
+            play.GetComponent<PlayerController>().setHatColor(hatColors[teamTwoColor]);
         }
 
+        //Spawn all snowmen
         int spawnpoint;
-        //spawn all snowmen
         for (int i = 0; i < teamSizeA; i++)
         {
-            spawnpoint = Random.Range(0, spawnA.Count); //random spawn location for this team
+            //Random spawn location for this team
+            spawnpoint = Random.Range(0, spawnA.Count);
             GameObject AI = (GameObject)Instantiate(AIprefab, spawnA[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
 			AI.tag = "TeamA";
+            AI.GetComponent<AIController>().setHatColor(hatColors[teamOneColor]);
 
         }
         for (int i = 0; i < teamSizeB; i++)
         {
-            spawnpoint = Random.Range(0, spawnB.Count); //random spawn location for this team
+            //Random spawn location for this team
+            spawnpoint = Random.Range(0, spawnB.Count);
 			GameObject AI = (GameObject)Instantiate(AIprefab, spawnB[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
-			AI.tag = "TeamB";
+            AI.tag = "TeamB";
+            AI.GetComponent<AIController>().setHatColor(hatColors[teamTwoColor]);
         }
-
     }
 
-    // Update is called once per frame
-    void Update()
+    /****************************************************************************************************
+     * Description: This is a helper function. This simply populates the list of hat colors that can    *
+     *              be chosen from.                                                                     *
+     * Syntax: populateHatColors();                                                                     *
+     ****************************************************************************************************/
+    private void populateHatColors()
     {
-
+        hatColors.AddRange(new string[] { "BlackHat",
+                                          "BlueHat",
+                                          "GreenHat",
+                                          "OrangeHat",
+                                          "PurpleHat",
+                                          "RedHat",
+                                          "YellowHat",});
     }
 }

@@ -61,7 +61,6 @@ public class AIController : CharacterBase {
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
-        chooseRandomHatColor();
 
         //activateBuff(BuffFlag.INF_HEALTH);
     }
@@ -217,12 +216,11 @@ public class AIController : CharacterBase {
 	}
 
 	/****************************************************************************************************
-     * Description: This is a helper function. Return the tag for the enemy team.                       *
+     * Description: This is a helper function. Return the tag of an enemy.                              *
      *                                                                                                  *
      * Syntax: getEnemyTag();                                                                           *
      ****************************************************************************************************/
 	string getEnemyTag(){
-
 		switch (gameObject.tag) {
 		case "TeamA":
 			return "TeamB";
@@ -234,7 +232,6 @@ public class AIController : CharacterBase {
 			return "Team0";
 			break;
 		}
-	
 	}
     /****************************************************************************************************
      * Description: This is a helper function. Grabs a list of all possible enemies that can be         *
@@ -243,7 +240,7 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void getListOfEnemies()
     {
-		string enemyTag = getEnemyTag (); //get the tag of the enemy
+		string enemyTag = getEnemyTag ();
 
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag(enemyTag))
@@ -255,7 +252,6 @@ public class AIController : CharacterBase {
 					State aiState = g.GetComponent<AIController>().state;
 					if (aiState != State.DEAD && aiState != State.RESPAWN)
                     	allEnemies.Add(g);
-					
 				}
 				else if (g.GetComponent<PlayerController>() != null){
 					PlayerController.PlayerState playerState = g.GetComponent<PlayerController>().playerState;

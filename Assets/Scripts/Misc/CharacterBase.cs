@@ -151,16 +151,27 @@ public class CharacterBase: MonoBehaviour {
 
 
     /****************************************************************************************************
-     * Description: THIS IS A TESTING FUNCTION ONLY! This function is called when the character wants   *
-     *              a new randomly selected color of hat.                                               *
+     * Description: This function is called when the character wants a new randomly selected color of   *
+     *              hat.                                                                                *
      * Syntax: chooseRandomHatColor();                                                                  *
      ****************************************************************************************************/
-    public void chooseRandomHatColor()
+    public void setHatColor(string colorOfHat = "Random")
     {
-        int color = Random.Range(0, 6);
-        hatTop.GetComponent<MeshRenderer>().material = hatColors[color];
-        foreach (Material mat in hatColors)
-        {
+        //If hat is a random color
+        if (colorOfHat != "Random") {
+            foreach (Material mat in hatColors) {
+                if (mat.name == colorOfHat)
+                    hatTop.GetComponent<MeshRenderer>().material = mat;
+            }
+        }
+        //If hat is a specific color
+        else {
+            int color = Random.Range(0, 6);
+            hatTop.GetComponent<MeshRenderer>().material = hatColors[color];
+        }
+
+        //Set the base of the hat to always be black
+        foreach (Material mat in hatColors) {
             if (mat.name == "BlackHat")
                 hatBase.GetComponent<MeshRenderer>().material = mat;
         }
