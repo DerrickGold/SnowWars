@@ -338,6 +338,7 @@ public class AIController : CharacterBase {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
 			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
 
+			superSizeSnowBall (instantiatedProjectile);
 			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
 			snowBall.damage = getSnowBallDamage();
             snowBall.origin = transform;

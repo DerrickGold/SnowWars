@@ -69,7 +69,8 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		//activateBuff(BuffFlag.INF_HEALTH);
+		activateBuff(BuffFlag.INF_HEALTH);
+		activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
 
@@ -91,8 +92,10 @@ public class PlayerController : CharacterBase
     void Update()
     {
         //DEBUGGING ONLY
+		setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
 		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
 		updateBuffTimers();
+
 
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
@@ -201,6 +204,8 @@ public class PlayerController : CharacterBase
     {
         //Create a new snowball
 		Rigidbody snowBall = Instantiate(SnowBallTemplate.rigidbody, snowballSpawnLocation.position, Camera.main.transform.rotation) as Rigidbody;
+
+		superSizeSnowBall (snowBall);
         snowBall.AddForce(Camera.main.transform.forward * throwingSpeed, ForceMode.Impulse);
         snowBall.AddForce(Camera.main.transform.forward * (controller.velocity.magnitude * Input.GetAxis("Vertical") / 2), ForceMode.Impulse);
         globalScript.sfx[(int)Common.AudioSFX.SNOWBALL_THROW].Play();

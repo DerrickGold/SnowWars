@@ -332,4 +332,26 @@ public class CharacterBase: MonoBehaviour {
 		}
 		return BASE_SNOWBALL_DAMAGE;
 	}
+
+
+	/****************************************************************************************************
+     * Description: Sets up the instantiated snowball for if the super snowball buff is active or not.  *
+     * Syntax: superSizeSnowBall(snowBall);                                                             *
+     * Returns: Nothing                          *
+     ****************************************************************************************************/
+	public void superSizeSnowBall(Rigidbody snowBall){ 
+		ParticleRenderer[] superEffect = snowBall.GetComponentsInChildren<ParticleRenderer>();
+		//if effect is active, enable the effect for the super snowball
+		foreach(ParticleRenderer pr in superEffect) {
+			pr.gameObject.SetActive(isEffectActive (BuffFlag.SUPER_SNOWBALL));
+		}
+		//make sure we disable the lightsource too
+		Light superLight = snowBall.GetComponentInChildren<Light> ();
+		superLight.gameObject.SetActive (isEffectActive (BuffFlag.SUPER_SNOWBALL));
+
+		if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
+			Vector3 curSize = snowBall.transform.localScale;
+			snowBall.transform.localScale = new Vector3(curSize.x * 5, curSize.y * 5, curSize.z * 5);
+		}
+	}
 }
