@@ -30,7 +30,7 @@ public class CharacterBase: MonoBehaviour {
     static public float RUN_SPEED = 7.0f;
     static public float SPEED_BOOST = 1.0f;
     static public int AMMO_SUBTRACT_AMOUNT = 2;
-    static public int SUPER_SNOWBALL_SUBTRACT = 5;
+    static public int SUPER_SNOWBALL_SUBTRACT = 15;
 
     public Material[] hatColors;
 
@@ -359,10 +359,11 @@ public class CharacterBase: MonoBehaviour {
 		//make sure we disable the lightsource too
 		Light superLight = snowBall.GetComponentInChildren<Light> ();
 		superLight.gameObject.SetActive (isEffectActive (BuffFlag.SUPER_SNOWBALL));
-
-		if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
-			Vector3 curSize = snowBall.transform.localScale;
-			snowBall.transform.localScale = new Vector3(curSize.x * 5, curSize.y * 5, curSize.z * 5);
-		}
+		
+		Projectile snowBallScript = snowBall.GetComponent<Projectile>();
+		snowBallScript.damage = getSnowBallDamage();
+		snowBallScript.origin = transform;
+		snowBallScript.originHP = Health;
+		snowBallScript.isSuper = isEffectActive (BuffFlag.SUPER_SNOWBALL);
 	}
 }

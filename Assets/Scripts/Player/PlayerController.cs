@@ -69,8 +69,8 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		activateBuff(BuffFlag.INF_HEALTH);
-		activateBuff(BuffFlag.SUPER_SNOWBALL);
+		//activateBuff(BuffFlag.INF_HEALTH);
+		//activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
 
@@ -81,8 +81,8 @@ public class PlayerController : CharacterBase
     void Update()
     {
         //DEBUGGING ONLY
-		setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
-		setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
+		//setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
+		//setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
 		updateBuffTimers();
 
 

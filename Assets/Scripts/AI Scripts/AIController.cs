@@ -62,7 +62,7 @@ public class AIController : CharacterBase {
         spawnPosition = transform.position;
         pickRandomEnemy();
 
-        //activateBuff(BuffFlag.INF_HEALTH);
+        
     }
 
 
@@ -73,7 +73,8 @@ public class AIController : CharacterBase {
     void Update()
     {
         //DEBUGGING ONLY
-        setBuffTimer(BuffFlag.INF_HEALTH, 100.0f);
+		//activateBuff(BuffFlag.SUPER_SNOWBALL);
+        //setBuffTimer(BuffFlag.SUPER_SNOWBALL, 100.0f);
         updateBuffTimers();
 
         //If the AI has a target, check if the target is in range
@@ -326,10 +327,6 @@ public class AIController : CharacterBase {
 			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
 
 			superSizeSnowBall (instantiatedProjectile);
-			Projectile snowBall = instantiatedProjectile.GetComponent<Projectile>();
-			snowBall.damage = getSnowBallDamage();
-            snowBall.origin = transform;
-            snowBall.originHP = Health;
             instantiatedProjectile.transform.eulerAngles += new Vector3(-getTargetAngle(), 0, 0);
 
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * MAX_THROW_FORCE, ForceMode.Impulse);
