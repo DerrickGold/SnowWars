@@ -69,7 +69,7 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		activateBuff(BuffFlag.INF_HEALTH);
+		//activateBuff(BuffFlag.INF_HEALTH);
 		activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
