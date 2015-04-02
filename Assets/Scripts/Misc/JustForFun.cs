@@ -13,14 +13,13 @@ public class JustForFun : MonoBehaviour
 {
     public GameObject ai;
 
-
     /****************************************************************************************************
      * Description: Only called once. Spawns 'amount' of AI in 'radius' of the player.                  *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
     void Start()
     {
-        for (float amount = 10f, radius = 50f; amount > 0; amount--)
+        for (float amount = 32f, radius = 50f; amount > 0; amount--)
         {
             float randomX = Random.Range(transform.position.x - radius, transform.position.x + radius);
             float randomZ = Random.Range(transform.position.z - radius, transform.position.z + radius);

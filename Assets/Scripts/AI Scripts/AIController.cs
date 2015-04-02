@@ -184,24 +184,15 @@ public class AIController : CharacterBase {
         if (curTargetName == "AI(Clone)")
         {
             if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
-            {
                 pickRandomEnemy();
-                print("Enemy is dead. Choose new target.");
-            }
         }
         else if (curTargetName == "Player(Clone)")
         {
             if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
-            {
                 pickRandomEnemy();
-                print("Player is dead. Choose new target.");
-            }
         }
         else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
-        {
             pickRandomEnemy();
-            print("Target is not Enemy and Player. Choose new target.");
-        }
     }
 
 

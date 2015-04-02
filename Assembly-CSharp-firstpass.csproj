@@ -46,19 +46,14 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\BlurEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ColorCorrectionEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ContrastStretchEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\GlowEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\GrayscaleEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ImageEffectBase.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\ImageEffects.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\MotionBlur.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\NoiseEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\SSAOEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\SepiaToneEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\TwirlEffect.cs" />
-     <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\VortexEffect.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Sources\Scripts\Water.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\Displace.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\GerstnerDisplace.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\MeshContainer.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\PlanarReflection.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\SpecularLighting.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\WaterBase.cs" />
+     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\WaterTile.cs" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicGlow.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpIBLOCC.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailOpaque.shader" />
@@ -67,12 +62,10 @@
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\Flag.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailParallax.shader" />
      <None Include="Assets\Assets\Winter Assets\Winter Assets\DemoScene\1.3\WinterAssetsDemo1.2\BeastSettings.xml" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\NFAA.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\Basic Refraction.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\BumpDetail.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\SSAA.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\WaterFlow.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAAPreset3.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailSSSOC.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBLTransparent.shader" />
@@ -89,18 +82,17 @@
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\StandarTopBottoMob.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParallaxOclussion.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpedOclussion.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\DLAA.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Sources\Shaders\FX-Water.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTopBottom.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetail.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAA2.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailRelief.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\LightingEmissiveRim.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\StandarMob.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBL.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParticleRefraction.shader" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAA3Console.shader" />
-     <None Include="Assets\Terrain Assets\TerrainToolkit\Read me.txt" />
-     <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAAPreset2.shader" />
+     <None Include="Assets\TerrainToolkit\Read me.txt" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\MixedLightingRim.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpDetailReflection.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTranslucent.shader" />

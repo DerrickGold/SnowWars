@@ -18,18 +18,30 @@ public class MainMenu : MonoBehaviour
 	public string levelToLoad = "";
 	
 	private string clicked = "";
-	private Rect WindowRect = new Rect((Screen.width/2)-200, Screen.height/2 - 100, 400, 400);
-	private float volume = 1.0f;
+	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-200, Screen.width / 4, Screen.height / 2);
+    private float volume = 1.0f;
+
+    private float startingScreenWidth;
+
+
+    void Start()
+    {
+        startingScreenWidth = Screen.width;
+    }
 
 
     /****************************************************************************************************
-     * Description: Used to check if the player wants to enter the pause menu.                          *
+     * Description: Used to check if the player wants to enter the pause menu. Also handles resizing    *
+     *              of the menu if the screen size changes.                                             *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
     private void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
             clicked = "";
+
+        if (startingScreenWidth != Screen.width)
+            WindowRect.Set((Screen.width / 2) - 50, (Screen.height / 2) - 200, Screen.width / 4, Screen.height / 2);
     }
 	
 

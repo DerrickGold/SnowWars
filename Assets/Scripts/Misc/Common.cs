@@ -10,18 +10,21 @@ using UnityEngine;
 using System.Collections;
 
 public class Common: MonoBehaviour {
+    //Player GameObjects
+    [HideInInspector]
     public GameObject player;
 
-    //AI variables
+    //AI GameObjects
+    [HideInInspector]
 	public GameObject[] ai;
 
-    //Sound variables
+    //Sound GameObjects
 	public enum AudioSFX {
 			SNOWBALL_THROW = 0, SNOWBALL_HIT = 1
 	};
 	public AudioSource[] sfx;
 
-    //Game variables
+    //Misc GameObjects
 	public GameObject SnowBall;
     public GameObject DeathExplosion;
 }
