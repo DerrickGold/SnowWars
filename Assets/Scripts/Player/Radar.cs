@@ -22,18 +22,12 @@ public class Radar : MonoBehaviour
 	public float radarZoom = 2.0f;
 	
 	// Center Object information
-	public bool   radarCenterActive;
 	public Color  radarCenterColor = new Color(255, 255, 255);
-	public string radarCenterTag;
+	private int team = 0; //0 = FFA | 1 = TeamA | 2 = TeamB
 	
 	// Blip information
-	public bool   radarBlip1Active;
-	public Color  radarBlip1Color = new Color(255, 0, 0);
-	public string radarBlip1Tag;
-	
-	public bool   radarBlip2Active;
-	public Color  radarBlip2Color = new Color(0, 255, 0);
-	public string radarBlip2Tag;
+	public Color  radarEnemyColor = new Color(255, 0, 0);
+	public Color  radarFriendlyColor = new Color(0, 255, 0);
 	
 	// Internal vars
 	private GameObject centerObject;
@@ -63,8 +57,8 @@ public class Radar : MonoBehaviour
 		radarBlip2Texture = new Texture2D(3, 3, TextureFormat.RGB24, false);
 		
 		CreateBlipTexture(radarCenterTexture, radarCenterColor);
-		CreateBlipTexture(radarBlip1Texture, radarBlip1Color);
-		CreateBlipTexture(radarBlip2Texture, radarBlip2Color);
+		CreateBlipTexture(radarBlip1Texture, radarEnemyColor);
+		CreateBlipTexture(radarBlip2Texture, radarFriendlyColor);
 
 		if (radarType != RadarTypes.Textured)
 		{
@@ -74,9 +68,15 @@ public class Radar : MonoBehaviour
 
 		
 		// Get our center object
-		GameObject[] gos;
-		gos = GameObject.FindGameObjectsWithTag(radarCenterTag);
-		centerObject = gos[0];
+		foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
+			if (g.name == "Player(Clone)") {
+				centerObject = g;
+				if (centerObject.tag == "TeamA")
+					team = 1;
+				else if (centerObject.tag == "TeamB")
+					team = 2;
+			}
+		}
 	}
 	
 	
@@ -84,45 +84,50 @@ public class Radar : MonoBehaviour
      * Description: Used to update and draw the radar.                                                  *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void OnGUI ()
-	{
-		GameObject[] gos;
-
+	void OnGUI (){
 		// Draw the radar background
 		if (radarType != RadarTypes.Transparent)
 		{
 			Rect radarRect = new Rect(radarCenter.x - radarWidth / 2, radarCenter.y - radarHeight / 2, radarWidth, radarHeight);
 			GUI.DrawTexture(radarRect, radarTexture);
 		}
-		
-		// Draw blips
-		if (radarBlip1Active)
-		{
-			// Find all game objects
-			gos = GameObject.FindGameObjectsWithTag(radarBlip1Tag);
-			
-			// Iterate through them and call drawBlip function
-			foreach (GameObject go in gos)
-			{
-				drawBlip(go, radarBlip1Texture);
+		if (centerObject == null) {
+			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
+				if (g.name == "Player(Clone)") {
+					centerObject = g;
+					if (centerObject.tag == "TeamA")
+						team = 1;
+					else if (centerObject.tag == "TeamB")
+						team = 2;
+				}
 			}
 		}
-		if (radarBlip2Active)
-		{
-			gos = GameObject.FindGameObjectsWithTag(radarBlip2Tag);
-			
-			foreach (GameObject go in gos)
-			{
-				drawBlip(go, radarBlip2Texture);
+		// Find all game objects
+		if (centerObject != null) {
+			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
+				if (g.name == "AI(Clone)") {
+					////
+					if (centerObject.tag == g.tag)
+						drawBlip (g, radarBlip2Texture);
+					else
+						drawBlip (g, radarBlip1Texture);
+				}
 			}
 		}
-		
+			
+		/* Iterate through them and call drawBlip function
+		foreach (GameObject go in gos)
+			drawBlip(go, radarBlip1Texture);
+		gos = GameObject.FindGameObjectsWithTag(radarBlip2Tag);
+			
+		foreach (GameObject go in gos)
+			drawBlip(go, radarBlip2Texture);*/
+
 		// Draw center oject
-		if (radarCenterActive)
-		{
-			Rect centerRect = new Rect(radarCenter.x - 1.5f, radarCenter.y - 1.5f, 3, 3);
-			GUI.DrawTexture(centerRect, radarCenterTexture);
-		}
+		Rect centerRect;
+		centerRect = new Rect(radarCenter.x - 1.5f, radarCenter.y - 1.5f, 3, 3);
+		GUI.DrawTexture(centerRect, radarCenterTexture);
+
 	}
 	
 

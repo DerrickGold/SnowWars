@@ -15,7 +15,6 @@ public class MainMenu : MonoBehaviour
 	public bool DragWindow = false;
 	public bool snowEffects = true;
 	public bool Fullscreen;
-	public string levelToLoad;
 	
 	private string clicked = "";
 	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-50, Screen.width / 4, Screen.height / 2);
@@ -82,13 +81,11 @@ public class MainMenu : MonoBehaviour
 	private void gameModeFunc(int id)
 	{
 		if (GUILayout.Button ("Team Deathmatch")) {
-			levelToLoad = "TeamDeathmatchLvl";
-			Application.LoadLevel(levelToLoad);
+			Application.LoadLevel("LevelOne");
 			Debug.Log("Team Deathmatch");
 		}
 		if (GUILayout.Button ("Free For All")) {
-			levelToLoad = "FreeForAllLvl";
-			Application.LoadLevel (levelToLoad);
+			Application.LoadLevel (null);
 			Debug.Log("Free for All");
 		}
 		if (GUILayout.Button("Back"))
@@ -98,10 +95,8 @@ public class MainMenu : MonoBehaviour
 
 	}
     /****************************************************************************************************
-     * Description: DESCRIBE WHAT THIS FUNCTION DOES.                                                   *
-     * Syntax: optionsFunc(int id);                                                                     *
-     * Values:                                                                                          *
-     *          id = DESCRIBE WHAT id IS                                                                *
+     * Description: Create the menu screen when the options button is clicked                                                   *
+     * Syntax: optionsFunc(int id);                                                                     *                                                                *
      ****************************************************************************************************/
 	private void optionsFunc(int id)
 	{
@@ -126,7 +121,7 @@ public class MainMenu : MonoBehaviour
 
 
     /****************************************************************************************************
-     * Description: DESCRIBE WHAT THIS FUNCTION DOES.                                                   *
+     * Description: Navigte the main menu to decide what screen to create.                                                   *
      * Syntax: menuFunc(int id);                                                                     *
      * Values:                                                                                          *
      *          id = DESCRIBE WHAT id IS                                                                *
@@ -153,7 +148,7 @@ public class MainMenu : MonoBehaviour
 
 
     /****************************************************************************************************
-     * Description: DESCRIBE WHAT THIS FUNCTION DOES HERE.                                              *
+     * Description: Create the resolution buttons in the video options                                              *
      * Syntax: resolutionBtns();                                                                        (
      ****************************************************************************************************/
 	private void resolutionBtns(){

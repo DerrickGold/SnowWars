@@ -155,7 +155,7 @@ public class CharacterBase: MonoBehaviour {
      *              hat.                                                                                *
      * Syntax: chooseRandomHatColor();                                                                  *
      ****************************************************************************************************/
-    public void setHatColor(string colorOfHat = "Random")
+    public void setHatColor(string colorOfHat)
     {
         //If hat is a random color
         if (colorOfHat != "Random") {
