@@ -422,10 +422,11 @@ public class AIController : CharacterBase {
         //If a snowball hit the AI
         if (col.gameObject.name == "Snowball(Clone)")
             Health -= col.gameObject.GetComponent<Projectile>().damage;
-    }
 
-
-    /****************************************************************************************************
+	}
+	
+	
+	/****************************************************************************************************
      * Description: Called when something collides with the AI's trigger. This is used only for         *
      *              checking to see if there is an enemy really close by.                               *
      * Syntax: ---                                                                                      *
@@ -438,5 +439,6 @@ public class AIController : CharacterBase {
 					currentTarget = child;
 			}
 		}
+		getPickup(col);
 	}
 }

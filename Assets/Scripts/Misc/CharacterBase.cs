@@ -366,4 +366,19 @@ public class CharacterBase: MonoBehaviour {
 		snowBallScript.originHP = Health;
 		snowBallScript.isSuper = isEffectActive (BuffFlag.SUPER_SNOWBALL);
 	}
+
+
+
+	public void getPickup(Collider col) {
+		//Did the player pickup a buff?
+		if (col.gameObject.tag.Equals ("PickUp")) {
+			int randBuff = Random.Range(1,7);
+			print(randBuff);
+			BuffFlag temp = (BuffFlag)((int)1<<randBuff);
+			activateBuff(temp);
+			//activate buff for 20 to 30 seconds
+			setBuffTimer(temp, Random.Range(20, 30));
+		}
+	}
+
 }

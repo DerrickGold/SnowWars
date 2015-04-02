@@ -330,14 +330,7 @@ public class PlayerController : CharacterBase
 		if (col.gameObject.tag.Equals ("SPIKES"))
 			Health = getHealth() - getMaxHealth();
         //Did the player pickup a buff?
-		if (col.gameObject.tag.Equals ("PickUp")) {
-			int randBuff = Random.Range(1,7);
-			print(randBuff);
-			BuffFlag temp = (BuffFlag)((int)1<<randBuff);
-			activateBuff(temp);
-			//activate buff for 20 to 30 seconds
-			setBuffTimer(temp, Random.Range(20, 30));
-		}
+		getPickup(col);
 		//If the player has stepped into some water
 		if (col.gameObject.tag.Equals ("WATER")) {
 			inWater = true;
