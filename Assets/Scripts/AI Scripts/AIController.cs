@@ -153,6 +153,7 @@ public class AIController : CharacterBase {
                 break;
 
             case State.DEAD:
+				
                 if (!stateCoroutine)
                 {
                     targetInRange = false;
@@ -165,6 +166,10 @@ public class AIController : CharacterBase {
                 break;
 
             case State.RESPAWN:
+				//increment the score for the opposite team
+				//do not increment when the AI dies because the AI will remain in dead state for more than 1 frame
+				if (gameObject.tag == "TeamA") globalScript.TEAM_B_KILLS++;
+				else globalScript.TEAM_A_KILLS++;
                 respawn();
                 state = State.WALKING;
                 break;

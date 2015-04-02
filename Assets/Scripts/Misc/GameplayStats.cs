@@ -11,6 +11,8 @@ using System.Collections.Generic;
 
 public class GameplayStats : MonoBehaviour
 {
+	private Common common;
+
     public GameObject AIprefab;
     public GameObject player;
 
@@ -18,6 +20,7 @@ public class GameplayStats : MonoBehaviour
     public int teamSizeB = 16;
     public float TEAM_A_KILLS = 0;
     public float TEAM_B_KILLS = 0;
+	public int GAME_MAX_SCORE = 20;
 
     public GameObject SpawnpointsA;
     public GameObject SpawnpointsB;
@@ -32,6 +35,7 @@ public class GameplayStats : MonoBehaviour
 
     void Start()
     {
+		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
         //Choose a random color of hat for each team
         populateHatColors();
         int teamOneColor = Random.Range(0, hatColors.Count);
@@ -83,6 +87,19 @@ public class GameplayStats : MonoBehaviour
             AI.GetComponent<AIController>().setHatColor(hatColors[teamTwoColor]);
         }
     }
+
+	void Update()
+	{
+		TEAM_A_KILLS = common.TEAM_A_KILLS;
+		TEAM_B_KILLS = common.TEAM_B_KILLS;
+		
+		if (TEAM_A_KILLS == GAME_MAX_SCORE) {
+			print ("Team a wins!");
+		}
+		else if (TEAM_B_KILLS == GAME_MAX_SCORE){
+			print ("Team b wins!");
+		}
+	}
 
     /****************************************************************************************************
      * Description: This is a helper function. This simply populates the list of hat colors that can    *
