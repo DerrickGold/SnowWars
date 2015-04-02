@@ -15,23 +15,25 @@ public class MainMenu : MonoBehaviour
 	public bool DragWindow = false;
 	public bool snowEffects = true;
 	public bool Fullscreen;
-	public string levelToLoad = "";
+	public string levelToLoad;
 	
 	private string clicked = "";
-	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-200, Screen.width / 4, Screen.height / 2);
+	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-50, Screen.width / 4, Screen.height / 2);
     private float volume = 1.0f;
 
+    private float startingScreenHeight;
     private float startingScreenWidth;
-
 
     void Start()
     {
+        startingScreenHeight = Screen.height;
         startingScreenWidth = Screen.width;
     }
 
 
     /****************************************************************************************************
-     * Description: Used to check if the player wants to enter the pause menu. Also handles resizing    *
+     * Description: Allow the user to return to the main menu using the escape key. Also handles        *
+     *              resizing                                                                            *
      *              of the menu if the screen size changes.                                             *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
@@ -40,13 +42,13 @@ public class MainMenu : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
             clicked = "";
 
-        if (startingScreenWidth != Screen.width)
-            WindowRect.Set((Screen.width / 2) - 50, (Screen.height / 2) - 200, Screen.width / 4, Screen.height / 2);
+        if (startingScreenHeight != Screen.height || startingScreenWidth != Screen.width)
+            WindowRect.Set((Screen.width / 2) - 50, (Screen.height / 2)-50, Screen.width / 4, Screen.height / 2);
     }
 	
 
     /****************************************************************************************************
-     * Description: DESCRIBE WHAT UPDATE() IS USED FOR.                                                 *
+     * Description: Decide what is drawn on the gui based on the clicked variable.                                                 *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
     private void OnGUI()
@@ -57,26 +59,44 @@ public class MainMenu : MonoBehaviour
 			GUI.DrawTexture(new Rect((Screen.width / 2) - 100, 30, 200, 200), LOGO);
 		
 		GUI.skin = guiSkin;
-		if (clicked == "")
-		{
-			WindowRect = GUI.Window(0, WindowRect, menuFunc, "Main Menu");
-		}
-		else if (clicked == "options")
-		{
-			WindowRect = GUI.Window(1, WindowRect, optionsFunc, "Options");
-		}
-		else if (clicked == "video")
-		{
-			resolutionBtns();
-			antiAlias();
-			if (GUILayout.Button("Back"))
-			{
+		if (clicked == "") {
+			WindowRect = GUI.Window (0, WindowRect, menuFunc, "Main Menu");
+		} else if (clicked == "options") {
+			WindowRect = GUI.Window (1, WindowRect, optionsFunc, "Options");
+		} else if (clicked == "video") {
+			resolutionBtns ();
+			antiAlias ();
+			tripleBufferingBtns ();
+			vSyncBtns ();
+			QualityBtns ();
+			if (GUILayout.Button ("Back")) {
 				clicked = "options";
 			}
+		} 
+		else if (clicked == "GameMode") {
+			clicked = "GameMode";
+			WindowRect = GUI.Window(2, WindowRect, gameModeFunc, "Game Mode");
 		}
 	}
 	
+	private void gameModeFunc(int id)
+	{
+		if (GUILayout.Button ("Team Deathmatch")) {
+			levelToLoad = "TeamDeathmatchLvl";
+			Application.LoadLevel(levelToLoad);
+			Debug.Log("Team Deathmatch");
+		}
+		if (GUILayout.Button ("Free For All")) {
+			levelToLoad = "FreeForAllLvl";
+			Application.LoadLevel (levelToLoad);
+			Debug.Log("Free for All");
+		}
+		if (GUILayout.Button("Back"))
+		{
+			clicked = "";
+		}
 
+	}
     /****************************************************************************************************
      * Description: DESCRIBE WHAT THIS FUNCTION DOES.                                                   *
      * Syntax: optionsFunc(int id);                                                                     *
@@ -117,7 +137,7 @@ public class MainMenu : MonoBehaviour
 		if (GUILayout.Button("Play Game"))
 		{
 			//Play game is clicked
-			Application.LoadLevel(levelToLoad);
+			clicked = "GameMode";
 		}
 		if (GUILayout.Button("Options"))
 		{
@@ -179,4 +199,51 @@ public class MainMenu : MonoBehaviour
 			Debug.Log ("Off");
 		}
 	}
+	/****************************************************************************************************
+     * Description: Called when the player turns triple buffering on or off in the menu.                *
+     * Syntax: tripleBufferingBtns();                                                                   *
+     ****************************************************************************************************/
+
+	private void tripleBufferingBtns(){
+				GUI.TextField (new Rect (300, 150, 100, 50), "Triple Buffering");
+				if (GUI.Button (new Rect (400, 150, 100.0f, 50), "On")) {
+						QualitySettings.maxQueuedFrames = 3;
+						Debug.Log ("On");
+				}
+				if (GUI.Button (new Rect (500, 150, 100.0f, 50), "Off")) {
+						QualitySettings.maxQueuedFrames = 0;
+						Debug.Log ("Off");
+				}
+	}
+	/****************************************************************************************************
+     * Description: Called when the player turns vertical sync on or off in the menu.                   *
+     * Syntax: vSyncBtns();                                                                             *
+     ****************************************************************************************************/
+	private void vSyncBtns(){
+		GUI.TextField (new Rect (300, 200, 100, 50), "Vertical Sync");
+		if (GUI.Button (new Rect (400, 200, 100.0f, 50), "On")) {
+			QualitySettings.vSyncCount = 1;
+			Debug.Log ("On");
+		}
+		if (GUI.Button (new Rect (500, 200, 100.0f, 50), "Off")) {
+			QualitySettings.vSyncCount = 0;
+			Debug.Log ("Off");
+		}
+	}
+	/****************************************************************************************************
+     * Description: Called when the player increases or decreases the overall settings in the menu.     *
+     * Syntax: QualityBtns();                                                                             *
+     ****************************************************************************************************/
+	private void QualityBtns(){
+		GUI.TextField (new Rect (300, 250, 100, 50), "Quality");
+		if (GUI.Button (new Rect (400, 250, 100.0f, 50), "Increase")) {
+			QualitySettings.IncreaseLevel();
+			Debug.Log ("Increase");
+		}
+		if (GUI.Button (new Rect (500, 250, 100.0f, 50), "Decrease")) {
+			QualitySettings.DecreaseLevel();
+			Debug.Log ("Decrease");
+		}
+	}
+
 }
