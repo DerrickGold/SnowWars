@@ -57,6 +57,9 @@ public class MainMenu : MonoBehaviour
 		{
 			resolutionBtns();
 			antiAlias();
+			tripleBufferingBtns();
+			vSyncBtns();
+			QualityBtns();
 			if (GUILayout.Button("Back"))
 			{
 				clicked = "options";
@@ -167,4 +170,41 @@ public class MainMenu : MonoBehaviour
 			Debug.Log ("Off");
 		}
 	}
+
+	private void tripleBufferingBtns(){
+				GUI.TextField (new Rect (300, 150, 100, 50), "Triple Buffering");
+				if (GUI.Button (new Rect (400, 150, 100.0f, 50), "On")) {
+						QualitySettings.maxQueuedFrames = 3;
+						Debug.Log ("On");
+				}
+				if (GUI.Button (new Rect (500, 150, 100.0f, 50), "Off")) {
+						QualitySettings.maxQueuedFrames = 0;
+						Debug.Log ("Off");
+				}
+	}
+
+	private void vSyncBtns(){
+		GUI.TextField (new Rect (300, 200, 100, 50), "Vertical Sync");
+		if (GUI.Button (new Rect (400, 200, 100.0f, 50), "On")) {
+			QualitySettings.vSyncCount = 1;
+			Debug.Log ("On");
+		}
+		if (GUI.Button (new Rect (500, 200, 100.0f, 50), "Off")) {
+			QualitySettings.vSyncCount = 0;
+			Debug.Log ("Off");
+		}
+	}
+
+	private void QualityBtns(){
+		GUI.TextField (new Rect (300, 250, 100, 50), "Quality");
+		if (GUI.Button (new Rect (400, 250, 100.0f, 50), "Increase")) {
+			QualitySettings.IncreaseLevel();
+			Debug.Log ("Increase");
+		}
+		if (GUI.Button (new Rect (500, 250, 100.0f, 50), "Decrease")) {
+			QualitySettings.DecreaseLevel();
+			Debug.Log ("Decrease");
+		}
+	}
+
 }
