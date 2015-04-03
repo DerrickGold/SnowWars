@@ -1,13 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu Scripts\MainMenu.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Editor\Water (Pro Only)\Water4\WaterEditorUtility.cs">
     <Files>
-      <File FileName="Assets\Scripts\Player\Radar.cs" Line="30" Column="47" />
-      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="183" Column="4" />
-      <File FileName="Assets\Scripts\Player\PlayerController.cs" Line="378" Column="2" />
-      <File FileName="Assets\Scripts\Misc\Common.cs" Line="1" Column="1" />
-      <File FileName="c:\Users\Shaun\Documents\GitHub\SnowWars\Assets\Scripts\Misc\CharacterBase.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" Line="1" Column="1" />
+      <File FileName="Assets\Editor\Water (Pro Only)\Water4\WaterEditorUtility.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
