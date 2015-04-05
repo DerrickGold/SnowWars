@@ -47,14 +47,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Standard Assets\Water (Basic)\Sources\Scripts\WaterSimple.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Sources\Scripts\Water.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\Displace.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\GerstnerDisplace.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\MeshContainer.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\PlanarReflection.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\SpecularLighting.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\WaterBase.cs" />
-     <Compile Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Scripts\WaterTile.cs" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\PlanetDataInc.cginc" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicGlow.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpIBLOCC.shader" />
@@ -74,7 +66,7 @@
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Sky\RenderEnvironmentSimple.shader" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Utility\ImageScalerLog.shader" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\ToneMapping.shader" />
-     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
+     <None Include="Assets\Terrain Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
      <None Include="Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveSimpleInc.cginc" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\ComposeAtmosphere.shader" />
@@ -109,7 +101,7 @@
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\BumpedOclussion.shader" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\LocalVariationsInc.cginc" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Sky\RenderEnvironmentNone.shader" />
-     <None Include="Assets\Standard Assets\Water (Pro Only)\Sources\Shaders\FX-Water.shader" />
+     <None Include="Assets\Terrain Assets\Water (Pro Only)\Sources\Shaders\FX-Water.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicTopBottom.shader" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\LightSupportInc.cginc" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Utility\ImageScaler.shader" />
@@ -119,9 +111,9 @@
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Sky\SkyCompositionInc.cginc" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Detail\DetailRelief.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\LightingEmissiveRim.shader" />
-     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
+     <None Include="Assets\Terrain Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
      <None Include="Assets\Assets\Nuaj\Resources\Shaders\Sky\AerialPerspectiveNoneInc.cginc" />
-     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
+     <None Include="Assets\Terrain Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Mobile\StandarMob.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Standar\Basic\BasicIBL.shader" />
      <None Include="Assets\Assets\Winter Assets\_DLNK MaterialPack\Custom Shaders\Deprecated\ParticleRefraction.shader" />
