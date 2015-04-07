@@ -337,27 +337,21 @@ public class PlayerController : CharacterBase
 		if (isEffectActive (BuffFlag.INF_AMMO)) {
 			img.enabled = true;
 			img.sprite = globalScript.infAmmonIcon;
-			Debug.Log ("infAmmo");
 		} else if (isEffectActive (BuffFlag.INF_HEALTH)) {
 			img.enabled = true;
 			img.sprite = globalScript.infHealthIcon;
-			Debug.Log ("i");
 		} else if (isEffectActive (BuffFlag.INF_STAMINA)) {
 			img.enabled = true;
 			img.sprite = globalScript.infStaminIcon;
-			Debug.Log ("i");
 		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) {
 			img.enabled = true;
 			img.sprite = globalScript.healthIcon;
-			Debug.Log ("I");
 		} else if (isEffectActive (BuffFlag.SPEED_BOOST)) {
 			img.enabled = true;
 			img.sprite = globalScript.speedBoostIcon;
-			Debug.Log ("I");
 		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
 			img.enabled = true;
 			img.sprite = globalScript.superSnowballIcon;
-			Debug.Log ("I");
 		} else {
 			img.enabled = false;
 		}
