@@ -41,6 +41,8 @@ public class PlayerController : CharacterBase
 	
 
     //Game variables
+	private GameObject hud;// = GameObject.FindGameObjectWithTag("hud");
+	private Image img;
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
@@ -74,6 +76,12 @@ public class PlayerController : CharacterBase
 		//activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
+	void Start()
+	{
+		hud = GameObject.FindGameObjectWithTag("hud");
+		img = hud.transform.FindChild ("buff icon").GetComponent<Image> ();
+	}
+
 
     /****************************************************************************************************
      * Description: The HUB of the entire player. Controls and regulates almost everything.             *
@@ -85,7 +93,7 @@ public class PlayerController : CharacterBase
 		//setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
 		//setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
 		updateBuffTimers();
-
+		checkBuffs ();
 
         //Is the player moving?
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
@@ -324,6 +332,36 @@ public class PlayerController : CharacterBase
 			}
 		}
     }
+
+	void checkBuffs(){
+		if (isEffectActive (BuffFlag.INF_AMMO)) {
+			img.enabled = true;
+			img.sprite = globalScript.infAmmonIcon;
+			Debug.Log ("infAmmo");
+		} else if (isEffectActive (BuffFlag.INF_HEALTH)) {
+			img.enabled = true;
+			img.sprite = globalScript.infHealthIcon;
+			Debug.Log ("i");
+		} else if (isEffectActive (BuffFlag.INF_STAMINA)) {
+			img.enabled = true;
+			img.sprite = globalScript.infStaminIcon;
+			Debug.Log ("i");
+		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) {
+			img.enabled = true;
+			img.sprite = globalScript.healthIcon;
+			Debug.Log ("I");
+		} else if (isEffectActive (BuffFlag.SPEED_BOOST)) {
+			img.enabled = true;
+			img.sprite = globalScript.speedBoostIcon;
+			Debug.Log ("I");
+		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
+			img.enabled = true;
+			img.sprite = globalScript.superSnowballIcon;
+			Debug.Log ("I");
+		} else {
+			img.enabled = false;
+		}
+	}
 
 	/****************************************************************************************************
      * Description: This is called whenever something with IsTrigger set collides with the player.      *
