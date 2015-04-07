@@ -61,8 +61,6 @@ public class AIController : CharacterBase {
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
-
-        
     }
 
 
