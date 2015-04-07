@@ -42,6 +42,8 @@ public class PlayerController : CharacterBase
     private float slideAt = 0.6f;
 
     //Game variables
+	private GameObject hud;// = GameObject.FindGameObjectWithTag("hud");
+	private Image img;
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
@@ -76,6 +78,12 @@ public class PlayerController : CharacterBase
 		//activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
+	void Start()
+	{
+		hud = GameObject.FindGameObjectWithTag("hud");
+		img = hud.transform.FindChild ("buff icon").GetComponent<Image> ();
+	}
+
 
     /****************************************************************************************************
      * Description: Called after Awake(). Initializes any other required variables that weren't         *
@@ -98,7 +106,8 @@ public class PlayerController : CharacterBase
         //DEBUGGING ONLY
 		//setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
 		//setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
-		
+		checkBuffs();
+
         //Is the player moving?
         if (playerState != PlayerState.DEAD && playerState != PlayerState.RESPAWN)
         {
@@ -384,6 +393,30 @@ public class PlayerController : CharacterBase
 			}
 		}
     }
+
+	void checkBuffs(){
+		if (isEffectActive (BuffFlag.INF_AMMO)) {
+			img.enabled = true;
+			img.sprite = globalScript.infAmmonIcon;
+		} else if (isEffectActive (BuffFlag.INF_HEALTH)) {
+			img.enabled = true;
+			img.sprite = globalScript.infHealthIcon;
+		} else if (isEffectActive (BuffFlag.INF_STAMINA)) {
+			img.enabled = true;
+			img.sprite = globalScript.infStaminIcon;
+		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) {
+			img.enabled = true;
+			img.sprite = globalScript.healthIcon;
+		} else if (isEffectActive (BuffFlag.SPEED_BOOST)) {
+			img.enabled = true;
+			img.sprite = globalScript.speedBoostIcon;
+		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
+			img.enabled = true;
+			img.sprite = globalScript.superSnowballIcon;
+		} else {
+			img.enabled = false;
+		}
+	}
 
 	/****************************************************************************************************
      * Description: This is called whenever something with IsTrigger set collides with the player.      *

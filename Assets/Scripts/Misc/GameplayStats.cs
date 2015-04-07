@@ -25,13 +25,19 @@ public class GameplayStats : MonoBehaviour
     public GameObject SpawnpointsA;
     public GameObject SpawnpointsB;
 
-    //private Transform[] spawnA;
-    //private Transform[] spawnB;
-
     private List<Transform> spawnA = new List<Transform>();
     private List<Transform> spawnB = new List<Transform>();
+	private List<Transform> buffs = new List<Transform> ();
+
 
     private List<string> hatColors = new List<string>();
+
+	void Awake(){
+		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
+		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
+			buffs.Add(buffsObj.GetChild(i));
+		}
+	}
 
     void Start()
     {
