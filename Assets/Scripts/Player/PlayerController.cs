@@ -32,13 +32,14 @@ public class PlayerController : CharacterBase
     private bool isJumping = false;
     private bool isGrounded = false;
     private bool runOnCooldown = false;
-	private bool inWater = false;
+    private bool inWater = false;
+    private bool stateCoroutine = false;
+    private bool pauseTimer = false;
 
     private float jumpSpeed = 10.0f;
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
     private float slideAt = 0.6f;
-	
 
     //Game variables
 	private GameObject hud;// = GameObject.FindGameObjectWithTag("hud");
@@ -46,6 +47,7 @@ public class PlayerController : CharacterBase
     private Common globalScript;
     private AudioSource audio;
     public Transform snowballSpawnLocation;
+    private Vector3 cameraInitialPosition;
 
 
     /****************************************************************************************************
@@ -84,6 +86,18 @@ public class PlayerController : CharacterBase
 
 
     /****************************************************************************************************
+     * Description: Called after Awake(). Initializes any other required variables that weren't         *
+     *              initialized in Awake.                                                               *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Start()
+    {
+        spawnPosition = transform.position;
+        cameraInitialPosition = Camera.main.transform.localPosition;
+    }
+
+
+    /****************************************************************************************************
      * Description: The HUB of the entire player. Controls and regulates almost everything.             *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
@@ -92,28 +106,52 @@ public class PlayerController : CharacterBase
         //DEBUGGING ONLY
 		//setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
 		//setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
-		updateBuffTimers();
-		checkBuffs ();
+		checkBuffs();
 
         //Is the player moving?
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
+        if (playerState != PlayerState.DEAD && playerState != PlayerState.RESPAWN)
         {
-            //Is the player walking or running?
-            if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0 && runOnCooldown == false)
-                playerState = PlayerState.RUNNING;
-            else
-                playerState = PlayerState.WALKING;
-        }
-        //Is the player idling?
-        else if (!isJumping)
-            playerState = PlayerState.IDLE;
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
+            {
+                //Is the player walking or running?
+                if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0 && runOnCooldown == false)
+                    playerState = PlayerState.RUNNING;
+                else
+                    playerState = PlayerState.WALKING;
+            }
+            //Is the player idling?
+            else if (!isJumping)
+                playerState = PlayerState.IDLE;
 
-        //Check to see if the players stamina has bottomed out
-        if (Stamina <= 0)
-            runOnCooldown = true;
-        //Check to see if the player can run again after cooldown is up
-        if (runOnCooldown == true && Stamina >= 100)
-            runOnCooldown = false;
+            //Check to see if the players stamina has bottomed out
+            if (Stamina <= 0)
+                runOnCooldown = true;
+            //Check to see if the player can run again after cooldown is up
+            if (runOnCooldown == true && Stamina >= 100)
+                runOnCooldown = false;
+
+            //Is the player throwing a snowball?
+            if (Input.GetButtonDown("Fire1"))
+                throwingAnimation.Play("PlayerThrowingAnimation");
+
+            //Check to see if the player is moving to regain HP
+            if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth() < 100)
+            {
+                lastRegenLocation = transform.position;
+                Health += 1.0f;
+            }
+
+            //Keep parts of the player body in line with the camera
+            bodyRotation();
+
+            //If the player is standing in water, they will lose health
+            if (inWater)
+                Health = getHealth() - 1;
+
+            //Check to see if the player is dead
+            if (getHealth() <= 0)
+                playerState = PlayerState.DEAD;
+        }
 
         switch (playerState)
         {
@@ -136,34 +174,36 @@ public class PlayerController : CharacterBase
 					playerState = PlayerState.WALKING;
                 break;
 			case PlayerState.DEAD:
+                if (!stateCoroutine)
+                {
+                    dieAnimation();
+
+                    Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
+                    Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
+
+                    Screen.lockCursor = false;
+
+                    gameObject.GetComponent<MouseLook>().enabled = false;
+                    gameObject.GetComponent<CharacterController>().enabled = false;
+                    StartCoroutine(defaultStateTimer(RESPAWN_TIME, RESPAWN_TIME, PlayerState.RESPAWN));
+                }
 				break;
-        }
-
-        //Is the player throwing a snowball?
-        if (Input.GetButtonDown("Fire1") && getHealth () > 0)
-            throwingAnimation.Play("PlayerThrowingAnimation");
-
-        //Check to see if the player is dead
-        if (getHealth () <= 0)
-            death();
-
-        //Check to see if the player is moving to regain HP
-        if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth () < 100)
-        {
-            lastRegenLocation = transform.position;
-            Health += 1.0f;
+            case PlayerState.RESPAWN:
+                if (gameObject.tag == "TeamA")
+                    globalScript.TEAM_B_KILLS++;
+				else
+                    globalScript.TEAM_A_KILLS++;
+                respawn();
+                playerState = PlayerState.WALKING;
+                break;
         }
 
         //Update the UI
         staminaBar.value = getStamina ();
         healthBar.value = getHealth ();
 
-        //Keep parts of the player body in line with the camera
-        bodyRotation();
-
-		//If the player is standing in water, they will lose health
-		if (inWater)
-			Health = getHealth() - 1;
+        //Keep track of the buff timers
+        updateBuffTimers();
     }
 
 
@@ -185,11 +225,28 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void respawn()
     {
+        //Rebuild the players body
         rebuild();
+
+        //Reset the players health and stamina
         Health = getMaxHealth();
         Stamina = getMaxStamina();
+
+        //Reset the players buff timers
         resetBuffs();
+
+        //Spawn the player back at their original spawn position
         transform.position = spawnPosition;
+
+        //Re-enable the first person camera and disable the third person camera
+        Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = false;
+        Camera.main.gameObject.GetComponent<MouseLook>().enabled = true;
+        Camera.main.transform.localPosition = cameraInitialPosition;
+        Camera.main.transform.rotation = Head.transform.rotation;
+
+        //Give back control to the player
+        gameObject.GetComponent<MouseLook>().enabled = true;
+        gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
 
@@ -296,25 +353,29 @@ public class PlayerController : CharacterBase
         }
     }
 
-
     /****************************************************************************************************
-     * Description: Called when the player dies. Disables appropriate components and gives the players  *
-     *              body physics for ragdoll effect.                                                    *
-     * Syntax: death();                                                                                 *
+     * Description: A generic co-routine for changing the state machine's state after a specific amount *
+     *              of time. This time is randomly picked from the range between a minimum and maximum  *
+     *              time.                                                                               *
+     * Syntax: StartCoroutine(defaultStateTimer(float minTime, float maxTime, State next));             *
+     * Values:                                                                                          *
+     *          minTime = Minimum number of seconds to stay in the current state                        *
+     *          maxTime = Maximum number of seconds to stay in the current state                        *
+     *          next = Next state to switch to after the timer has finished                             *
      ****************************************************************************************************/
-    void death()
+    IEnumerator defaultStateTimer(float minTime, float maxTime, PlayerState next)
     {
-		dieAnimation();
+        stateCoroutine = true;
+        float curTime = 0;
+        float endTime = (Random.value * (maxTime - minTime)) + minTime;
 
-        Camera.main.gameObject.GetComponent<ThirdPersonCameraController>().enabled = true;
-        Screen.lockCursor = false;
-
-        Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
-        gameObject.GetComponent<MouseLook>().enabled = false;
-        gameObject.GetComponent<CharacterController>().enabled = false;
-        gameObject.GetComponent<PlayerController>().enabled = false;
-
-		playerState = PlayerState.DEAD;
+        while (curTime < endTime)
+        {
+            if (!pauseTimer) curTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        stateCoroutine = false;
+        playerState = next;
     }
 
 

@@ -63,9 +63,7 @@ public class AIController : CharacterBase {
         initializeSnowMan();
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
-       
-		pickRandomEnemy ();
-
+        pickRandomEnemy();
     }
 
 

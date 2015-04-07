@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
 	public Texture2D background, LOGO;
 	public bool DragWindow = false;
 	public bool snowEffects = true;
-	public bool Fullscreen;
+	public bool Fullscreen = false;
 	
 	private string clicked = "";
 	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-50, Screen.width / 4, Screen.height / 2);
