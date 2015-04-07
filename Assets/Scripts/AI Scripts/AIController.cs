@@ -47,10 +47,10 @@ public class AIController : CharacterBase {
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
 	void Awake () {
-       /* baseInitialization();
+        baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
-		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();*/
+		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();
 	}
 
 
@@ -64,13 +64,8 @@ public class AIController : CharacterBase {
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
        
+		pickRandomEnemy ();
 
-		baseInitialization();
-		globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
-		navMesh = GetComponent<NavMeshAgent>();
-		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();
-		pickRandomEnemy();
-		print (globalScript);
     }
 
 
@@ -93,10 +88,10 @@ public class AIController : CharacterBase {
         {
 
             case State.WALKING:
-				checkForNearestBuff();
                 if (currentTarget)
                 {
-                    updateBuffs();
+					
+					updateBuffs();
                     targetInSight = isTargetInView();
 
                     //Be offensive if health isn't too low
@@ -154,6 +149,7 @@ public class AIController : CharacterBase {
                         navMesh.destination = transform.position + moveDirection;
                     }
                 }
+				checkForNearestBuff();
                 break;
 
             case State.ATTACKING:
@@ -171,8 +167,17 @@ public class AIController : CharacterBase {
                     StartCoroutine(defaultStateTimer(RESPAWN_TIME, RESPAWN_TIME, State.RESPAWN));
                 }
                 break;
+			case State.ITEMTRACK:
+				navMesh.speed = RUN_SPEED;
+				helperGameObject.LookAt(currentTarget);
+				//Make the head and body look towards the target
+				Head.transform.LookAt(currentTarget);
+				Thorax.transform.LookAt(currentTarget);
+				navMesh.destination = currentTarget.position;
+				navMesh.stoppingDistance = 0.1f;
+				break;
 
-            case State.RESPAWN:
+			case State.RESPAWN:
 				//increment the score for the opposite team
 				//do not increment when the AI dies because the AI will remain in dead state for more than 1 frame
 				if (gameObject.tag == "TeamA") globalScript.TEAM_B_KILLS++;
@@ -193,41 +198,39 @@ public class AIController : CharacterBase {
         if (Health <= 0) state = State.DEAD;
 
         //Check to see if the AI's current target is dead
-        string curTargetName = currentTarget.gameObject.transform.root.name;
-        if (curTargetName == "AI(Clone)")
-        {
-            if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
-                pickRandomEnemy();
-        }
-        else if (curTargetName == "Player(Clone)")
-        {
-            if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
-                pickRandomEnemy();
-        }
-        else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
-            pickRandomEnemy();
+		if (currentTarget) {
+			string curTargetName = currentTarget.gameObject.transform.root.name;
+			if (curTargetName == "AI(Clone)") {
+				if (currentTarget.gameObject.transform.root.GetComponent<AIController> ().Health <= 0)
+					pickRandomEnemy ();
+			} else if (curTargetName == "Player(Clone)") {
+				if (currentTarget.gameObject.transform.root.GetComponent<PlayerController> ().Health <= 0)
+					pickRandomEnemy ();
+			} else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
+				pickRandomEnemy ();
+		}
     }
 
 
 	void checkForNearestBuff() {
 
-		if (!checkBuff) {
-			float shortestDistance = 99999.0f;
-			Transform targetBuff = null;
-			foreach (Transform o  in globalStats.buffs) {
-				float dist = Vector3.Distance (transform.position, o.position);
-				if (dist < shortestDistance) {
-					shortestDistance = dist;
-					targetBuff = o;
-				}
+		float shortestDistance = 99999.0f;
+		Transform targetBuff = null;
+		if (globalStats.buffs.Count <= 0)
+			return;
+		foreach (Transform o  in globalStats.buffs) {
+			float dist = Vector3.Distance (transform.position, o.position);
+			if (dist < shortestDistance) {
+				shortestDistance = dist;
+				targetBuff = o;
 			}
+		}
 
-			//only go after a buff if it is in view range
-			if (shortestDistance < MAX_TARGET_RANGE) {
-				currentTarget = targetBuff;
-				state = State.ITEMTRACK;
-				checkBuff = true;
-			}
+		//only go after a buff if it is in view range
+		if (shortestDistance < MAX_TARGET_RANGE * 5) {
+			currentTarget = targetBuff;
+			state = State.ITEMTRACK;
+			print ("ITEM TRACKING ENABLED");
 		}
 	}
 
@@ -480,7 +483,8 @@ public class AIController : CharacterBase {
 			}
 		}
 		if (getPickup (col)) {
-			checkBuff = false;
+			print ("Got buff!");
+			state = State.WALKING;
 		}
 	}
 }
