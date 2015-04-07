@@ -335,6 +335,7 @@ public class AIController : CharacterBase {
             instantiatedProjectile.transform.eulerAngles += new Vector3(-getTargetAngle(), 0, 0);
 
 			instantiatedProjectile.AddForce (instantiatedProjectile.transform.forward * MAX_THROW_FORCE, ForceMode.Impulse);
+			instantiatedProjectile.gameObject.GetComponent<Projectile>().origin = transform;
 
 			state = State.WALKING;
 			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
@@ -425,9 +426,12 @@ public class AIController : CharacterBase {
     void OnCollisionEnter(Collision col)
     {
         //If a snowball hit the AI
-        if (col.gameObject.name == "Snowball(Clone)")
+        if (col.gameObject.name == "Snowball(Clone)"){
             Health -= col.gameObject.GetComponent<Projectile>().damage;
-
+			if (Health <= 0) {
+			col.gameObject.GetComponent<Projectile> ().origin.gameObject.GetComponent<CharacterBase> ().score += 1;	
+			}
+		}
 	}
 	
 	

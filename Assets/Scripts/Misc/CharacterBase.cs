@@ -50,6 +50,8 @@ public class CharacterBase: MonoBehaviour {
 
 	public Vector3[] oldPartPositions = new Vector3[3];
 
+	public int score = 0;
+
 
     /****************************************************************************************************
      * Description: Used to initialize the core of the player and AI. Gets the snowball prefab that is  *

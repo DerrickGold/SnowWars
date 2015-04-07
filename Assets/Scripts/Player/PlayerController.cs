@@ -1,6 +1,6 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Curtis Murray
- * Secondary Contributors: Derrick Gold, Jaymeson Wickins
+ * Secondary Contributors: Derrick Gold, Jaymeson Wickins, Shaun Yonkers
  * 
  * Description: This script is placed on the player. This is the driving force behind the player.
  ****************************************************************************************************/
@@ -38,6 +38,7 @@ public class PlayerController : CharacterBase
     private float throwingSpeed = 20.0f;
     private float gravity = 30.0f;
     private float slideAt = 0.6f;
+	
 
     //Game variables
     private Common globalScript;
@@ -316,8 +317,12 @@ public class PlayerController : CharacterBase
     void OnCollisionEnter(Collision col)
     {
         //Did the player get hit by a snowball?
-        if (col.gameObject.name == "Snowball(Clone)") 
+        if (col.gameObject.name == "Snowball(Clone)") {
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
+			if (Health <= 0) {
+			col.gameObject.GetComponent<Projectile> ().origin.gameObject.GetComponent<CharacterBase> ().score += 1;
+			}
+		}
     }
 
 	/****************************************************************************************************
