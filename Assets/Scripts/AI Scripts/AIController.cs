@@ -23,6 +23,7 @@ public class AIController : CharacterBase {
     private SphereCollider triggerCollider;
     public Animation throwingAnimation;
     private Common globalScript;
+	private GameplayStats globalStats;
     public Transform snowballSpawnLocation;
     private List<GameObject> allEnemies = new List<GameObject>();
     public Transform helperGameObject;
@@ -37,6 +38,7 @@ public class AIController : CharacterBase {
 	bool pauseTimer = false;
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
+	bool checkBuff = false;
 
 
     /****************************************************************************************************
@@ -45,9 +47,10 @@ public class AIController : CharacterBase {
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
 	void Awake () {
-        baseInitialization();
+       /* baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
+		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();*/
 	}
 
 
@@ -60,9 +63,14 @@ public class AIController : CharacterBase {
         initializeSnowMan();
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
-        pickRandomEnemy();
+       
 
-        
+		baseInitialization();
+		globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
+		navMesh = GetComponent<NavMeshAgent>();
+		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();
+		pickRandomEnemy();
+		print (globalScript);
     }
 
 
@@ -83,7 +91,9 @@ public class AIController : CharacterBase {
 
         switch (state)
         {
+
             case State.WALKING:
+				checkForNearestBuff();
                 if (currentTarget)
                 {
                     updateBuffs();
@@ -162,9 +172,6 @@ public class AIController : CharacterBase {
                 }
                 break;
 
-            case State.ITEMTRACK:
-                break;
-
             case State.RESPAWN:
 				//increment the score for the opposite team
 				//do not increment when the AI dies because the AI will remain in dead state for more than 1 frame
@@ -200,6 +207,30 @@ public class AIController : CharacterBase {
         else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
             pickRandomEnemy();
     }
+
+
+	void checkForNearestBuff() {
+
+		if (!checkBuff) {
+			float shortestDistance = 99999.0f;
+			Transform targetBuff = null;
+			foreach (Transform o  in globalStats.buffs) {
+				float dist = Vector3.Distance (transform.position, o.position);
+				if (dist < shortestDistance) {
+					shortestDistance = dist;
+					targetBuff = o;
+				}
+			}
+
+			//only go after a buff if it is in view range
+			if (shortestDistance < MAX_TARGET_RANGE) {
+				currentTarget = targetBuff;
+				state = State.ITEMTRACK;
+				checkBuff = true;
+			}
+		}
+	}
+
 
 
     /****************************************************************************************************
@@ -448,6 +479,8 @@ public class AIController : CharacterBase {
 					currentTarget = child;
 			}
 		}
-		getPickup(col);
+		if (getPickup (col)) {
+			checkBuff = false;
+		}
 	}
 }
