@@ -28,6 +28,12 @@ public class Common: MonoBehaviour {
     //Misc GameObjects
 	public GameObject SnowBall;
     public GameObject DeathExplosion;
+	public Sprite infAmmonIcon;
+	public Sprite infHealthIcon;
+	public Sprite infStaminIcon;
+	public Sprite speedBoostIcon;
+	public Sprite superSnowballIcon;
+	public Sprite healthIcon;
 
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
