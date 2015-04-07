@@ -37,15 +37,20 @@ public class Common: MonoBehaviour {
 
 	void Start()
 	{
-		GameObject hud = GameObject.FindGameObjectWithTag ("hud");//<"hud">();
-		teamA_score = hud.transform.FindChild("teamA_score").GetComponent<Text>();
-		teamB_score = hud.transform.FindChild ("teamB_score").GetComponent<Text> ();
-
+        if (Application.loadedLevelName != "Intro")
+        {
+            GameObject hud = GameObject.FindGameObjectWithTag("hud");//<"hud">();
+            teamA_score = hud.transform.FindChild("teamA_score").GetComponent<Text>();
+            teamB_score = hud.transform.FindChild("teamB_score").GetComponent<Text>();
+        }
 	}
 
 	void Update()
 	{
-		teamA_score.text = TEAM_A_KILLS.ToString ();
-		teamB_score.text = TEAM_B_KILLS.ToString ();
+        if (Application.loadedLevelName != "Intro")
+        {
+            teamA_score.text = TEAM_A_KILLS.ToString();
+            teamB_score.text = TEAM_B_KILLS.ToString();
+        }
 	}
 }
