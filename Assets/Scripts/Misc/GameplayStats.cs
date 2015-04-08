@@ -27,9 +27,12 @@ public class GameplayStats : MonoBehaviour
 
     private List<Transform> spawnA = new List<Transform>();
     private List<Transform> spawnB = new List<Transform>();
-	private List<Transform> buffs = new List<Transform> ();
+
 	private List<GameObject> teamA = new List<GameObject> ();
 	private List<GameObject> teamB = new List<GameObject> ();
+
+	public List<Transform> buffs = new List<Transform> ();
+
 
     private List<string> hatColors = new List<string>();
 

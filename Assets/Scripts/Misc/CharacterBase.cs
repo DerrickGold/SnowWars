@@ -119,11 +119,11 @@ public class CharacterBase: MonoBehaviour {
 		//toggleCollider (Head, false);
 		
 		Base.transform.localPosition = oldPartPositions [0];
-        Base.transform.eulerAngles = new Vector3(0, 0, 0);
+        Base.transform.rotation = Base.transform.root.rotation;
         Thorax.transform.localPosition = oldPartPositions[1];
-        Thorax.transform.eulerAngles = new Vector3(0, 0, 0);
+        Thorax.transform.rotation = Thorax.transform.root.rotation;
         Head.transform.localPosition = oldPartPositions[2];
-        Head.transform.eulerAngles = new Vector3(0, 0, 0);
+        Head.transform.rotation = Head.transform.root.rotation;
 	}
 
 
@@ -371,7 +371,7 @@ public class CharacterBase: MonoBehaviour {
 
 
 
-	public void getPickup(Collider col) {
+	public bool getPickup(Collider col) {
 		//Did the player pickup a buff?
 		if (col.gameObject.tag.Equals ("PickUp")) {
 			int randBuff = Random.Range(1,7);
@@ -380,7 +380,9 @@ public class CharacterBase: MonoBehaviour {
 			activateBuff(temp);
 			//activate buff for 20 to 30 seconds
 			setBuffTimer(temp, Random.Range(20, 30));
+			return true;
 		}
+		return false;
 	}
 
 }
