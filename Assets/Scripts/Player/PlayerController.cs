@@ -78,12 +78,6 @@ public class PlayerController : CharacterBase
 		//activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
-	void Start()
-	{
-		hud = GameObject.FindGameObjectWithTag("hud");
-		img = hud.transform.FindChild ("buff icon").GetComponent<Image> ();
-	}
-
 
     /****************************************************************************************************
      * Description: Called after Awake(). Initializes any other required variables that weren't         *
@@ -92,6 +86,9 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void Start()
     {
+		hud = GameObject.FindGameObjectWithTag("hud");
+		img = hud.transform.FindChild ("buff icon").GetComponent<Image> ();
+
         spawnPosition = transform.position;
         cameraInitialPosition = Camera.main.transform.localPosition;
     }
