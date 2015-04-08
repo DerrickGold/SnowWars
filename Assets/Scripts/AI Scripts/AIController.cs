@@ -166,10 +166,6 @@ public class AIController : CharacterBase {
                 break;
 
             case State.RESPAWN:
-				//increment the score for the opposite team
-				//do not increment when the AI dies because the AI will remain in dead state for more than 1 frame
-				if (gameObject.tag == "TeamA") globalScript.TEAM_B_KILLS++;
-				else globalScript.TEAM_A_KILLS++;
                 respawn();
                 state = State.WALKING;
                 break;
@@ -429,7 +425,16 @@ public class AIController : CharacterBase {
         if (col.gameObject.name == "Snowball(Clone)"){
             Health -= col.gameObject.GetComponent<Projectile>().damage;
 			if (Health <= 0) {
-			col.gameObject.GetComponent<Projectile> ().origin.gameObject.GetComponent<CharacterBase> ().score += 1;	
+				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
+
+
+				//if this snowman was killed by someone on their own team, and this is not a free for all
+				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag){
+					myKiller.GetComponent<CharacterBase> ().score -= 1;	//lose a point for team killing
+				}
+				else{
+					myKiller.GetComponent<CharacterBase> ().score += 1;	
+				}
 			}
 		}
 	}
