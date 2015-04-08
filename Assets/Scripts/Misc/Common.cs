@@ -37,17 +37,20 @@ public class Common: MonoBehaviour {
 
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
+	public Color TEAM_A_COLOR = Color.black;
+	public Color TEAM_B_COLOR = Color.black;
+	public string playerTeam;
 
-	public Text teamB_score;
-	public Text teamA_score;
+	public Text topText;
+	public Text bottomText;
 
 	void Start()
 	{
         if (Application.loadedLevelName != "Intro")
         {
             GameObject hud = GameObject.FindGameObjectWithTag("hud");//<"hud">();
-            teamA_score = hud.transform.FindChild("teamA_score").GetComponent<Text>();
-            teamB_score = hud.transform.FindChild("teamB_score").GetComponent<Text>();
+            topText = hud.transform.FindChild("teamA_score").GetComponent<Text>();
+            bottomText = hud.transform.FindChild("teamB_score").GetComponent<Text>();
         }
 	}
 
@@ -55,8 +58,10 @@ public class Common: MonoBehaviour {
 	{
         if (Application.loadedLevelName != "Intro")
         {
-            teamA_score.text = TEAM_A_KILLS.ToString();
-            teamB_score.text = TEAM_B_KILLS.ToString();
+            	topText.text = TEAM_A_KILLS.ToString();
+				topText.color = TEAM_A_COLOR;
+            	bottomText.text = TEAM_B_KILLS.ToString();
+				bottomText.color = TEAM_B_COLOR;
         }
 	}
 }

@@ -50,7 +50,7 @@ public class AIController : CharacterBase {
         baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
-		globalStats = GameObject.FindGameObjectWithTag("Global").GetComponent<GameplayStats>();
+		globalStats = GameObject.FindGameObjectWithTag ("Global").GetComponent<GameplayStats> ();
 	}
 
 

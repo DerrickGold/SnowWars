@@ -9,7 +9,6 @@ public class FFAscript : MonoBehaviour {
 
 	private int maxPlayerSize = 31;
 	private int topScore;
-	private int secondScore;
 	private int playerScore;
 	private GameObject play;
 
@@ -62,18 +61,20 @@ public class FFAscript : MonoBehaviour {
 			}
 			if (checkScore > topScore)
 				topScore = checkScore;
-			if (checkScore < topScore && checkScore > secondScore)
-				secondScore = checkScore;
 		}
 		// Update the Hud to display the top two scores
-		if (topScore > playerScore)
+		if (topScore > playerScore) {
 			common.TEAM_A_KILLS = topScore;
-		if (secondScore > playerScore)
-			common.TEAM_B_KILLS = secondScore;
-		if (playerScore > topScore)
-			common.TEAM_A_KILLS = playerScore;
-		if (playerScore > secondScore && playerScore < topScore)
+			common.TEAM_A_COLOR = Color.red;
 			common.TEAM_B_KILLS = playerScore;
+			common.TEAM_B_COLOR = Color.blue;
+		}
+		if (playerScore > topScore) {
+			common.TEAM_A_KILLS = playerScore;
+			common.TEAM_A_COLOR = Color.blue;
+			common.TEAM_B_KILLS = topScore;
+			common.TEAM_B_COLOR = Color.red;
+		}
 	}
 	
 	private void populateHatColors()

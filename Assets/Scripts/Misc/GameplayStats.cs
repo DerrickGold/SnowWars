@@ -70,6 +70,8 @@ public class GameplayStats : MonoBehaviour
 			teamA.Add(play); //add player to team A list
 			play.tag = "TeamA";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamOneColor]);
+			common.TEAM_A_COLOR = Color.blue;
+			common.TEAM_B_COLOR = Color.red;
         }
         else {
             teamSizeB--;
@@ -77,6 +79,8 @@ public class GameplayStats : MonoBehaviour
 			teamB.Add(play); //add player to team B list
 			play.tag = "TeamB";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamTwoColor]);
+			common.TEAM_A_COLOR = Color.red;
+			common.TEAM_B_COLOR = Color.blue;
         }
 
         //Spawn all snowmen
