@@ -229,7 +229,12 @@ public class AIController : CharacterBase {
     }
 
 
-	void checkForNearestBuff()
+    /****************************************************************************************************
+     * Description: This is a helper function. Called when the AI starts, respawns and when their       *
+     *              target dies. It checks if there are any buffs in the local vicinity.                *
+     * Syntax: checkForNearestBuff();                                                                     *
+     ****************************************************************************************************/
+    void checkForNearestBuff()
     {
 		float shortestDistance = 99999.0f;
 		Transform targetBuff = null;
@@ -249,7 +254,8 @@ public class AIController : CharacterBase {
 		}
 
 		//Only go after a buff if it is within a suitable range
-		if (shortestDistance < MAX_TARGET_RANGE * 200) {
+		if (shortestDistance < MAX_TARGET_RANGE * 2)
+        {
 			currentTarget = targetBuff;
 			state = State.ITEMTRACK;
 		}
@@ -261,10 +267,10 @@ public class AIController : CharacterBase {
      * Description: This is a helper function. Called to initialize the AI.                             *
      * Syntax: initializeSnowMan();                                                                     *
      ****************************************************************************************************/
-    void initializeSnowMan() {
+    void initializeSnowMan()
+    {
 		triggerCollider = GetComponent<SphereCollider> ();
 		MovementSpeed = navMesh.speed;
-        //currentTarget = globalScript.player.transform.Find("Snowman/Head");
 	}
 
 	/****************************************************************************************************
@@ -272,8 +278,10 @@ public class AIController : CharacterBase {
      *                                                                                                  *
      * Syntax: getEnemyTag();                                                                           *
      ****************************************************************************************************/
-	string getEnemyTag(){
-		switch (gameObject.tag) {
+	string getEnemyTag()
+    {
+		switch (gameObject.tag)
+        {
 		case "TeamA":
 			return "TeamB";
 			break;
@@ -311,10 +319,6 @@ public class AIController : CharacterBase {
 				}
 			}
         }
-
-        //Add the player to the list of possible targets
-        //PlayerController.PlayerState playerState = globalScript.player.GetComponent<PlayerController>().playerState;
-        //if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
     }
 
 
@@ -364,7 +368,6 @@ public class AIController : CharacterBase {
 
         float verticalSpeed = Mathf.Sqrt(2 * gravity * height);
         float travelTime = Mathf.Sqrt(2 * (height - offsetHeight) / gravity) + Mathf.Sqrt(2 * height / gravity);
-        //float travelTime = Mathf.Sqrt(2 * Mathf.Abs (offsetHeight) / gravity) ;
         float horizontalSpeed = range / travelTime;
         float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
 
@@ -381,8 +384,6 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     public void throwing()
     {
-        //if (navMesh.enabled == true)
-		//    navMesh.destination = currentTarget.position;
 		if (!stateCoroutine) {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
 			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
@@ -394,7 +395,6 @@ public class AIController : CharacterBase {
 			instantiatedProjectile.gameObject.GetComponent<Projectile>().origin = transform;
 
 			state = State.WALKING;
-			//StartCoroutine(defaultStateTimer(1, 1, State.WALKING));
 			subtractAmmo();
 		}
 	}
@@ -525,6 +525,7 @@ public class AIController : CharacterBase {
 		if (getPickup(col))
         {
 			print ("Got buff!");
+            pickRandomEnemy();
 			state = State.WALKING;
 		}
 	}
