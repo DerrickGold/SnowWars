@@ -25,6 +25,8 @@ public class GameplayStats : MonoBehaviour
     public GameObject SpawnpointsA;
     public GameObject SpawnpointsB;
 
+	public GameObject play;
+
     private List<Transform> spawnA = new List<Transform>();
     private List<Transform> spawnB = new List<Transform>();
 
@@ -61,7 +63,7 @@ public class GameplayStats : MonoBehaviour
         //This is for the player
         if (team == 0) {
             teamSizeA--;
-            GameObject play = (GameObject)Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
+            play = (GameObject)Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
 			teamA.Add(play); //add player to team A list
 			play.tag = "TeamA";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamOneColor]);
@@ -70,7 +72,7 @@ public class GameplayStats : MonoBehaviour
         }
         else {
             teamSizeB--;
-			GameObject play = (GameObject)Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
+			play = (GameObject)Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
 			teamB.Add(play); //add player to team B list
 			play.tag = "TeamB";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamTwoColor]);
@@ -116,9 +118,11 @@ public class GameplayStats : MonoBehaviour
 		
 		if (TEAM_A_KILLS == GAME_MAX_SCORE) {
 			common.alertText.text = "Team A Wins!";
+			common.gameEnd = true;
 		}
 		else if (TEAM_B_KILLS == GAME_MAX_SCORE){
 			common.alertText.text = "Team B Wins!";
+			common.gameEnd = true;
 		}
 	}
 
