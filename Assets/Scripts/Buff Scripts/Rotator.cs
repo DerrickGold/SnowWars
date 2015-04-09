@@ -23,8 +23,6 @@ public class Rotator : MonoBehaviour {
      ****************************************************************************************************/
 	void Start()
 	{
-		buffBounceSpeed = 2f;
-		buffBounceHeight = 2f;
 		originalPos = transform.position;
 	}
 

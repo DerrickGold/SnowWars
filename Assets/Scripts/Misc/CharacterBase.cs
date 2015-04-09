@@ -374,6 +374,10 @@ public class CharacterBase: MonoBehaviour {
 	public bool getPickup(Collider col) {
 		//Did the player pickup a buff?
 		if (col.gameObject.tag.Equals ("PickUp")) {
+			//on collision with a buff, deactivate it
+			Rotator buffScript = col.gameObject.GetComponent<Rotator>();
+			buffScript.destroy = true;
+
 			int randBuff = Random.Range(1,7);
 			print(randBuff);
 			BuffFlag temp = (BuffFlag)((int)1<<randBuff);
