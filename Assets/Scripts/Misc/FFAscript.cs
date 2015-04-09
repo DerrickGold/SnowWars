@@ -18,6 +18,12 @@ public class FFAscript : MonoBehaviour {
 	private List<GameObject> AIList = new List<GameObject> ();
 	private List<string> hatColors = new List<string>();
 
+	void Awake(){
+		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
+		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
+			common.buffs.Add (buffsObj.GetChild (i));
+		}
+	}
 	// Use this for initialization
 	void Start () {
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
@@ -46,7 +52,7 @@ public class FFAscript : MonoBehaviour {
 		playerScore = play.GetComponent<CharacterBase> ().score;
 		if (playerScore >= MAX_SCORE) {
 			Time.timeScale = 0;
-			print ("player wins!");
+			common.alertText.text = "Player Wins!!";
 			System.Threading.Thread.Sleep (500);
 			Application.LoadLevel ("MainMenu");
 		}
@@ -55,7 +61,7 @@ public class FFAscript : MonoBehaviour {
 			int checkScore = AI.GetComponent<CharacterBase>().score;
 			if (checkScore >= MAX_SCORE){
 				Time.timeScale = 0;
-				print ("AI wins!");
+				common.alertText.text = "AI Wins!!";
 				System.Threading.Thread.Sleep (500);
 				Application.LoadLevel("MainMenu");
 			}
