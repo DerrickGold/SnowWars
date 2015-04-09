@@ -1,17 +1,19 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI Scripts\AIController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Misc\FFAscript.cs">
     <Files>
-      <File FileName="Assets\Scripts\AI Scripts\AIController.cs" Line="214" Column="11" />
-      <File FileName="Assets\Scripts\Player\PlayerController.cs" Line="431" Column="1" />
-      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="25" Column="4" />
-      <File FileName="Assets\Scripts\Misc\Common.cs" Line="54" Column="34" />
-      <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="39" Column="11" />
+      <File FileName="Assets\Scripts\Buff Scripts\BuffPickup.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="50" Column="59" />
+      <File FileName="Assets\Scripts\AI Scripts\AIController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player\PlayerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Misc\Common.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Misc\Projectile.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Misc\CharacterBase.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Misc\JustForFun.cs" Line="1" Column="1" />
       <File FileName="Assets\test.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Misc\MouseLook.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

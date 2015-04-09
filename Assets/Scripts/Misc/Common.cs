@@ -36,6 +36,7 @@ public class Common: MonoBehaviour {
 	public Sprite superSnowballIcon;
 	public Sprite healthIcon;
 
+	public bool gameEnd = false;
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
 	public Color TEAM_A_COLOR = Color.black;
@@ -49,6 +50,8 @@ public class Common: MonoBehaviour {
 
 	public List<Transform> buffs;
 
+	private GameObject hud;
+
 	void Awake()
 	{
 		buffs = new List<Transform> ();
@@ -57,11 +60,12 @@ public class Common: MonoBehaviour {
 	{
         if (Application.loadedLevelName != "Intro")
         {
-            GameObject hud = GameObject.FindGameObjectWithTag("hud");//<"hud">();
+            hud = GameObject.FindGameObjectWithTag("hud");
             topText = hud.transform.FindChild("teamA_score").GetComponent<Text>();
             bottomText = hud.transform.FindChild("teamB_score").GetComponent<Text>();
 			alertText = hud.transform.FindChild("Alerts").GetComponent<Text>();
 			buffText = hud.transform.FindChild("buff text").GetComponent<Text>();
+
 			alertText.text = "";
 			buffText.text = "";
         }
@@ -76,5 +80,22 @@ public class Common: MonoBehaviour {
             	bottomText.text = TEAM_B_KILLS.ToString();
 				bottomText.color = TEAM_B_COLOR;
         }
+
+		if (gameEnd) {
+			Time.timeScale = 0.0f;
+			Screen.lockCursor = false;
+			hud.transform.FindChild("menuButton").gameObject.SetActive(true);
+			hud.transform.FindChild("exitButton").gameObject.SetActive(true);
+		}
+	}
+
+	public void exitGame()
+	{
+		Application.Quit ();
+	}
+
+	public void loadMenu()
+	{
+		Application.LoadLevel ("MainMenu");
 	}
 }

@@ -47,8 +47,11 @@ public class MouseLook : MonoBehaviour {
 	void Update ()
 	{
         //Check to see if player wants to go into edit mode
-        if (Input.GetKeyDown(KeyCode.BackQuote))
-            editMode = !editMode;
+        if (Input.GetKeyDown (KeyCode.BackQuote)) {
+			editMode = !editMode;
+			Screen.lockCursor = editMode;
+		}
+
 
         //Edit mode
         if (editMode == false)
@@ -73,9 +76,6 @@ public class MouseLook : MonoBehaviour {
 
                 transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
             }
-            Screen.lockCursor = true;
         }
-        else
-            Screen.lockCursor = false;
 	}
 }

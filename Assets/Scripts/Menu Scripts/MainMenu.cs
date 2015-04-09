@@ -1,5 +1,5 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Shaun Yonkers (VERIFY LAST NAME SPELLING)
+ * Primary Contributor: Shaun Yonkers
  * 
  * Description: This script is the driving force behind the main menu as well as the in-game menu.
  *              This allows the player to start and stop games, change options, etc.
@@ -25,6 +25,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+		Screen.lockCursor = false;
         startingScreenHeight = Screen.height;
         startingScreenWidth = Screen.width;
     }
@@ -85,7 +86,7 @@ public class MainMenu : MonoBehaviour
 			Debug.Log("Team Deathmatch");
 		}
 		if (GUILayout.Button ("Free For All")) {
-			Application.LoadLevel (null);
+			Application.LoadLevel ("LevelTwo");
 			Debug.Log("Free for All");
 		}
 		if (GUILayout.Button("Back"))

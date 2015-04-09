@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FFAscript : MonoBehaviour {
-	static private int MAX_SCORE = 20;
+	static private int MAX_SCORE = 100;
 
 	private Common common;
 
 	private int maxPlayerSize = 31;
 	private int topScore;
 	private int playerScore;
+	private bool gameEnd = false;
 	private GameObject play;
-
 	public GameObject AIprefab;
 	public GameObject player;
 
@@ -49,19 +49,15 @@ public class FFAscript : MonoBehaviour {
 		//get the player score and check if they won
 		playerScore = play.GetComponent<CharacterBase> ().score;
 		if (playerScore >= MAX_SCORE) {
-			Time.timeScale = 0;
 			common.alertText.text = "Player Wins!!";
-			System.Threading.Thread.Sleep (500);
-			Application.LoadLevel ("MainMenu");
+			common.gameEnd = true;
 		}
 		// Loop through all the AI and find the two with the highest kills and see if any of them won
 		foreach (GameObject AI in AIList) {
 			int checkScore = AI.GetComponent<CharacterBase>().score;
 			if (checkScore >= MAX_SCORE){
-				Time.timeScale = 0;
 				common.alertText.text = "AI Wins!!";
-				System.Threading.Thread.Sleep (500);
-				Application.LoadLevel("MainMenu");
+				common.gameEnd = true;
 			}
 			if (checkScore > topScore)
 				topScore = checkScore;
@@ -81,6 +77,7 @@ public class FFAscript : MonoBehaviour {
 		}
 	}
 	
+
 	private void populateHatColors()
 	{
 		hatColors.AddRange(new string[] { "BlackHat",
