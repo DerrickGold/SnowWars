@@ -1,6 +1,6 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Derrick Gold
- * Secondary Contributors: Curtis Murray
+ * Secondary Contributors: Curtis Murray, Shaun Yonkers
  * 
  * Description: Keeps track of any global variables and gameobjects. This script can be called by
  *              any other script to access any of its variables
@@ -9,6 +9,7 @@
 using UnityEngine;
 using UnityEngine.UI; 
 using System.Collections;
+using System.Collections.Generic;
 
 public class Common: MonoBehaviour {
     //Player GameObjects
@@ -43,7 +44,15 @@ public class Common: MonoBehaviour {
 
 	public Text topText;
 	public Text bottomText;
+	public Text alertText;
+	public Text buffText;
 
+	public List<Transform> buffs;
+
+	void Awake()
+	{
+		buffs = new List<Transform> ();
+	}
 	void Start()
 	{
         if (Application.loadedLevelName != "Intro")
@@ -51,6 +60,10 @@ public class Common: MonoBehaviour {
             GameObject hud = GameObject.FindGameObjectWithTag("hud");//<"hud">();
             topText = hud.transform.FindChild("teamA_score").GetComponent<Text>();
             bottomText = hud.transform.FindChild("teamB_score").GetComponent<Text>();
+			alertText = hud.transform.FindChild("Alerts").GetComponent<Text>();
+			buffText = hud.transform.FindChild("buff text").GetComponent<Text>();
+			alertText.text = "";
+			buffText.text = "";
         }
 	}
 

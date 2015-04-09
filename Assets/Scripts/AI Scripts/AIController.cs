@@ -50,7 +50,6 @@ public class AIController : CharacterBase {
         baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
-		globalStats = GameObject.FindGameObjectWithTag ("Global").GetComponent<GameplayStats> ();
 	}
 
 
@@ -211,9 +210,9 @@ public class AIController : CharacterBase {
 
 		float shortestDistance = 99999.0f;
 		Transform targetBuff = null;
-		if (globalStats.buffs.Count <= 0)
+		if (globalScript.buffs.Count <= 0)
 			return;
-		foreach (Transform o  in globalStats.buffs) {
+		foreach (Transform o  in globalScript.buffs) {
 			float dist = Vector3.Distance (transform.position, o.position);
 			if (dist < shortestDistance) {
 				shortestDistance = dist;

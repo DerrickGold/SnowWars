@@ -31,21 +31,16 @@ public class GameplayStats : MonoBehaviour
 	private List<GameObject> teamA = new List<GameObject> ();
 	private List<GameObject> teamB = new List<GameObject> ();
 
-	public List<Transform> buffs = new List<Transform> ();
-
-
     private List<string> hatColors = new List<string>();
 
-	void Awake(){
-		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
-		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
-			buffs.Add(buffsObj.GetChild(i));
-		}
-	}
 
     void Start()
     {
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
+		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
+		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
+			common.buffs.Add(buffsObj.GetChild(i));
+		}
         //Choose a random color of hat for each team
         populateHatColors();
         int teamOneColor = Random.Range(0, hatColors.Count);
@@ -120,10 +115,10 @@ public class GameplayStats : MonoBehaviour
 		common.TEAM_B_KILLS = TEAM_B_KILLS;
 		
 		if (TEAM_A_KILLS == GAME_MAX_SCORE) {
-			print ("Team a wins!");
+			common.alertText.text = "Team A Wins!";
 		}
 		else if (TEAM_B_KILLS == GAME_MAX_SCORE){
-			print ("Team b wins!");
+			common.alertText.text = "Team B Wins!";
 		}
 	}
 

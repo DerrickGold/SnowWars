@@ -405,23 +405,30 @@ public class PlayerController : CharacterBase
 		if (isEffectActive (BuffFlag.INF_AMMO)) {
 			img.enabled = true;
 			img.sprite = globalScript.infAmmonIcon;
+			globalScript.buffText.text = "Infinite Ammo";
 		} else if (isEffectActive (BuffFlag.INF_HEALTH)) {
 			img.enabled = true;
 			img.sprite = globalScript.infHealthIcon;
+			globalScript.buffText.text = "Infinite Health";
 		} else if (isEffectActive (BuffFlag.INF_STAMINA)) {
 			img.enabled = true;
 			img.sprite = globalScript.infStaminIcon;
+			globalScript.buffText.text = "Infinite Stamina";
 		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) {
 			img.enabled = true;
 			img.sprite = globalScript.healthIcon;
+			globalScript.buffText.text = "Health Boost";
 		} else if (isEffectActive (BuffFlag.SPEED_BOOST)) {
 			img.enabled = true;
 			img.sprite = globalScript.speedBoostIcon;
+			globalScript.buffText.text = "Speed Boost";
 		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
 			img.enabled = true;
 			img.sprite = globalScript.superSnowballIcon;
+			globalScript.buffText.text = "SUPER SNOWBALL";
 		} else {
 			img.enabled = false;
+			globalScript.buffText.text = "";
 		}
 	}
 
