@@ -383,8 +383,9 @@ public class CharacterBase: MonoBehaviour {
 		if (col.gameObject.tag.Equals ("PickUp"))
         {
 			//On collision with a buff, deactivate it
-			Rotator buffScript = col.gameObject.GetComponent<Rotator>();
-			buffScript.destroy = true;
+			//Rotator buffScript = col.gameObject.GetComponent<Rotator>();
+			Rotator buffScript = col.transform.parent.gameObject.GetComponent<Rotator>();
+			buffScript.destroy();
 
             //Choose a random buff
 			int randBuff = Random.Range(1,7);

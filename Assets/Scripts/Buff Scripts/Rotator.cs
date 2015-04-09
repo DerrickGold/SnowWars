@@ -14,7 +14,9 @@ public class Rotator : MonoBehaviour {
 	private Vector3 originalPos;
 	public float buffBounceSpeed;
 	public float buffBounceHeight;
-	public bool destroy = false;
+	private bool destroyed = false;
+	public float cooldownTime = 5f;
+	private float pickedUpTime;
 
 
     /****************************************************************************************************
@@ -33,7 +35,32 @@ public class Rotator : MonoBehaviour {
      ****************************************************************************************************/
 	void Update () 
 	{
-		if (destroy) gameObject.SetActive(false);
+		/*
+		if (destroy) {
+			pickedUpTime = Time.time;
+			//gameObject.SetActive (false);
+			transform.GetChild(0).gameObject.SetActive (false);
+			print (pickedUpTime);
+			StartCoroutine("cooldown");
+		}*/
+		//else transform.GetChild(0).gameObject.SetActive (true); //gameObject.SetActive (true);
+		if(!destroyed) transform.GetChild(0).gameObject.SetActive (true);
+
 		transform.position = new Vector3 (originalPos.x, originalPos.y + buffBounceHeight * Mathf.Abs (Mathf.Sin (Time.time*buffBounceSpeed)), originalPos.z);
+	}
+
+	public void destroy(){
+		destroyed = true;
+		pickedUpTime = Time.time;
+		transform.GetChild(0).gameObject.SetActive (false);
+		print (pickedUpTime);
+		StartCoroutine("cooldown");
+	}
+
+	public IEnumerator cooldown(){
+		while((Time.time-pickedUpTime) < cooldownTime ){
+			yield return null;
+		}
+		destroyed = false;
 	}
 }
