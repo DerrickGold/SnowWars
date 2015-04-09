@@ -377,10 +377,15 @@ public class CharacterBase: MonoBehaviour {
      * Values: col = The other collider                                                                 *
      * Returns: True or False for whether the character picked up a buff                                *
      ****************************************************************************************************/
-    public bool getPickup(Collider col) {
+    public bool getPickup(Collider col)
+    {
 		//Did the player pickup a buff?
-		if (col.gameObject.tag == "PickUp")
+		if (col.gameObject.tag.Equals ("PickUp"))
         {
+			//On collision with a buff, deactivate it
+			Rotator buffScript = col.gameObject.GetComponent<Rotator>();
+			buffScript.destroy = true;
+
             //Choose a random buff
 			int randBuff = Random.Range(1,7);
             BuffFlag temp = (BuffFlag)((int)1 << randBuff);

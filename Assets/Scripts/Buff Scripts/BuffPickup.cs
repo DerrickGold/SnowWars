@@ -11,18 +11,18 @@ using UnityEngine.UI;
 
 public class BuffPickup : MonoBehaviour {
 
-	private float buffDisplay;
-	private bool buffAquired;
-	private Text[] buffText = new Text[2];
+	//private float buffDisplay;
+	//private bool buffAquired;
+	//private Text[] buffText = new Text[2];
 
 
     /****************************************************************************************************
      * Description: Used to initialize required variables.                                              *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void Start () {
-		buffAquired = false;
-	}
+	//void Start () {
+		//buffAquired = false;
+	//}
 
 
     /****************************************************************************************************
@@ -48,10 +48,10 @@ public class BuffPickup : MonoBehaviour {
      ****************************************************************************************************/
     void OnTriggerEnter(Collider other) 
 	{
-		if (other.gameObject.tag == "PickUp")
-		{
-			Rotator buffScript = other.gameObject.GetComponent<Rotator>();
-			buffScript.destroy = true;
+		//if (other.gameObject.tag == "PickUp")
+		//{
+			//Rotator buffScript = other.gameObject.GetComponent<Rotator>();
+			//buffScript.destroy = true;
             /*
 			other.gameObject.SetActive(false);
 			Rotator buffScript = other.gameObject.GetComponent<Rotator>();
@@ -64,7 +64,7 @@ public class BuffPickup : MonoBehaviour {
 			buffDisplay = Time.time; 
 			buffAquired = true; //we picked up a buff 
 			*/
-		}
+		//}
 
 	}
 }
