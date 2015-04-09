@@ -17,16 +17,14 @@ public class FFAscript : MonoBehaviour {
 
 	private List<GameObject> AIList = new List<GameObject> ();
 	private List<string> hatColors = new List<string>();
-
-	void Awake(){
+	
+	// Use this for initialization
+	void Start () {
+		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
 		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
 		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
 			common.buffs.Add (buffsObj.GetChild (i));
 		}
-	}
-	// Use this for initialization
-	void Start () {
-		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
 
 		populateHatColors ();
 		float randX = Random.Range(35, 269);
