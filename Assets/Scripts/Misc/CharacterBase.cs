@@ -370,16 +370,25 @@ public class CharacterBase: MonoBehaviour {
 	}
 
 
-
-	public bool getPickup(Collider col) {
+    /****************************************************************************************************
+     * Description: This is a helper function. Checks to see if the character has collided with a       *
+     *              buff or not.                                                                        *
+     * Syntax: getPickup(col);                                                                          *
+     * Values: col = The other collider                                                                 *
+     * Returns: True or False for whether the character picked up a buff                                *
+     ****************************************************************************************************/
+    public bool getPickup(Collider col) {
 		//Did the player pickup a buff?
-		if (col.gameObject.tag.Equals ("PickUp")) {
+		if (col.gameObject.tag == "PickUp")
+        {
+            //Choose a random buff
 			int randBuff = Random.Range(1,7);
-			print(randBuff);
-			BuffFlag temp = (BuffFlag)((int)1<<randBuff);
+            BuffFlag temp = (BuffFlag)((int)1 << randBuff);
+
+            //Activate buff for 20 to 30 seconds
 			activateBuff(temp);
-			//activate buff for 20 to 30 seconds
-			setBuffTimer(temp, Random.Range(20, 30));
+            setBuffTimer(temp, Random.Range(20, 30));
+            print(randBuff);
 			return true;
 		}
 		return false;

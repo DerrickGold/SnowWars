@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AIController : CharacterBase {
+    [HideInInspector]
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
 	public State state = State.WALKING;
 
@@ -23,7 +24,6 @@ public class AIController : CharacterBase {
     private SphereCollider triggerCollider;
     public Animation throwingAnimation;
     private Common globalScript;
-	private GameplayStats globalStats;
     public Transform snowballSpawnLocation;
     private List<GameObject> allEnemies = new List<GameObject>();
     public Transform helperGameObject;
@@ -39,6 +39,9 @@ public class AIController : CharacterBase {
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
 	bool checkBuff = false;
+
+
+    public GameObject DEBUG_CUBE;
 
 
     /****************************************************************************************************
@@ -60,9 +63,11 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void Start() {
         initializeSnowMan();
+        DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
+        checkForNearestBuff();
     }
 
 
@@ -83,12 +88,9 @@ public class AIController : CharacterBase {
 
         switch (state)
         {
-
             case State.WALKING:
                 if (currentTarget)
                 {
-					
-					updateBuffs();
                     targetInSight = isTargetInView();
 
                     //Be offensive if health isn't too low
@@ -146,17 +148,14 @@ public class AIController : CharacterBase {
                         navMesh.destination = transform.position + moveDirection;
                     }
                 }
-				checkForNearestBuff();
                 break;
 
             case State.ATTACKING:
-                updateBuffs();
                 targetInSight = isTargetInView();
                 throwingAnimation.Play("AIThrowingAnimation");
                 break;
 
             case State.DEAD:
-				
                 if (!stateCoroutine)
                 {
                     targetInRange = false;
@@ -166,18 +165,22 @@ public class AIController : CharacterBase {
                 break;
 
 			case State.ITEMTRACK:
-				navMesh.speed = RUN_SPEED;
-				helperGameObject.LookAt(currentTarget);
+				navMesh.speed = WALK_SPEED;
+				//helperGameObject.LookAt(currentTarget);
+
 				//Make the head and body look towards the target
 				Head.transform.LookAt(currentTarget);
 				Thorax.transform.LookAt(currentTarget);
+
+                //Set the destination of the AI to the buff location
 				navMesh.destination = currentTarget.position;
-				navMesh.stoppingDistance = 0.1f;
+				navMesh.stoppingDistance = 0.0f;
 				break;
 
 			case State.RESPAWN:
                 respawn();
                 state = State.WALKING;
+				checkForNearestBuff();
                 break;
         }
 
@@ -189,42 +192,66 @@ public class AIController : CharacterBase {
         }
 
         //Check to see if AI is dead
-        if (Health <= 0) state = State.DEAD;
+        if (Health <= 0)
+            state = State.DEAD;
 
         //Check to see if the AI's current target is dead
-		if (currentTarget) {
+		if (currentTarget)
+        {
 			string curTargetName = currentTarget.gameObject.transform.root.name;
-			if (curTargetName == "AI(Clone)") {
-				if (currentTarget.gameObject.transform.root.GetComponent<AIController> ().Health <= 0)
-					pickRandomEnemy ();
-			} else if (curTargetName == "Player(Clone)") {
-				if (currentTarget.gameObject.transform.root.GetComponent<PlayerController> ().Health <= 0)
-					pickRandomEnemy ();
-			} else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
-				pickRandomEnemy ();
+			if (curTargetName == "AI(Clone)")
+            {
+                //If the AI target is dead, pick a new target and check if there is a buff nearby
+                if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
+                {
+                    pickRandomEnemy();
+                    checkForNearestBuff();
+                }
+            }
+            //If the player target is dead, pick a new target and check if there is a buff nearby
+            else if (curTargetName == "Player(Clone)")
+            {
+                if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
+                {
+                    pickRandomEnemy();
+                    checkForNearestBuff();
+                }
+            }
+            //If there is no target, pick a new target and check if there is a buff nearby
+            else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
+            {
+                pickRandomEnemy();
+                checkForNearestBuff();
+            }
 		}
+
+        DEBUG_CUBE.transform.position = currentTarget.position;
     }
 
 
-	void checkForNearestBuff() {
-
+	void checkForNearestBuff()
+    {
 		float shortestDistance = 99999.0f;
 		Transform targetBuff = null;
+
 		if (globalScript.buffs.Count <= 0)
 			return;
-		foreach (Transform o  in globalScript.buffs) {
+
+        //Loop through all of the buffs and grab the closest one
+		foreach (Transform o  in globalScript.buffs)
+        {
 			float dist = Vector3.Distance (transform.position, o.position);
-			if (dist < shortestDistance) {
+			if (dist < shortestDistance)
+            {
 				shortestDistance = dist;
 				targetBuff = o;
 			}
 		}
 
-		//only go after a buff if it is in view range
-		if (shortestDistance < MAX_TARGET_RANGE * 5) {
+		//Only go after a buff if it is within a suitable range
+		if (shortestDistance < MAX_TARGET_RANGE * 200) {
 			currentTarget = targetBuff;
 			state = State.ITEMTRACK;
-			print ("ITEM TRACKING ENABLED");
 		}
 	}
 
@@ -314,7 +341,8 @@ public class AIController : CharacterBase {
      * Description: PLEASE ADD A DESCRIPTION HERE ABOUT WHAT THIS FUNCTION DOES. TRY TO KEEP FORMATTING *
      * Syntax: updateBuffs();                                                                           *
      ****************************************************************************************************/
-    void updateBuffs() {
+    void updateBuffs()
+    {
         if (state == State.DEAD || state == State.RESPAWN) return;
 
         updateBuffTimers ();
@@ -377,7 +405,8 @@ public class AIController : CharacterBase {
      *              physics for ragdoll effect.                                                         *
      * Syntax: deathAnimation();                                                                        *
      ****************************************************************************************************/
-	void deathAnimation() {
+	private void deathAnimation()
+    {
 		dieAnimation();
         navMesh.enabled = false;
 	}
@@ -387,7 +416,8 @@ public class AIController : CharacterBase {
      * Description: Called when the AI needs to respawn. The AI respawns at it's starting position.     *
      * Syntax: respawn();                                                                               *
      ****************************************************************************************************/
-	void respawn() {
+	private void respawn()
+    {
 		rebuild();
 		navMesh.enabled = true;
 		Health = getMaxHealth ();
@@ -404,7 +434,8 @@ public class AIController : CharacterBase {
      * Syntax: bool value = isTargetInView();                                                           *
      * Returns: True if the target is in view | False if the target is not in view                      *
      ****************************************************************************************************/
-	bool isTargetInView() {
+	private bool isTargetInView()
+    {
 		return Physics.Raycast (Head.transform.position, Head.transform.forward);
 	}
 
@@ -454,38 +485,45 @@ public class AIController : CharacterBase {
     void OnCollisionEnter(Collision col)
     {
         //If a snowball hit the AI
-        if (col.gameObject.name == "Snowball(Clone)"){
+        if (col.gameObject.name == "Snowball(Clone)")
+        {
             Health -= col.gameObject.GetComponent<Projectile>().damage;
-			if (Health <= 0) {
+			if (Health <= 0)
+            {
 				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
 
-
-				//if this snowman was killed by someone on their own team, and this is not a free for all
-				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag){
-					myKiller.GetComponent<CharacterBase> ().score -= 1;	//lose a point for team killing
-				}
-				else{
-					myKiller.GetComponent<CharacterBase> ().score += 1;	
-				}
+				//If this snowman was killed by someone on their own team, and this is not a free for all
+				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag)
+					myKiller.GetComponent<CharacterBase> ().score -= 1;
+				else
+					myKiller.GetComponent<CharacterBase> ().score += 1;
 			}
 		}
 	}
 	
 	
 	/****************************************************************************************************
-     * Description: Called when something collides with the AI's trigger. This is used only for         *
-     *              checking to see if there is an enemy really close by.                               *
+     * Description: Called when something collides with the AI's trigger.                               *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
     void OnTriggerEnter(Collider col)
     {
-		if (col.gameObject.tag == getEnemyTag()) {
-			foreach (Transform child in col.transform.GetComponentsInChildren<Transform>()) {
-				if (child.name == "Head")
-					currentTarget = child;
+        //If an enemy got too close to the AI
+		if (col.gameObject.tag == getEnemyTag())
+        {
+			foreach (Transform child in col.transform.GetComponentsInChildren<Transform>())
+            {
+                if (child.name == "Head")
+                {
+                    currentTarget = child;
+                    state = State.WALKING;
+                }
 			}
 		}
-		if (getPickup (col)) {
+
+        //If the AI collided with a buff
+		if (getPickup(col))
+        {
 			print ("Got buff!");
 			state = State.WALKING;
 		}
