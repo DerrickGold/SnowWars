@@ -121,7 +121,6 @@ public class PlayerController : CharacterBase
                 playerState = PlayerState.IDLE;
 
             //Check to see if the players stamina has bottomed out
-            print(runOnCooldown);
             if (getStamina() <= 0)
                 runOnCooldown = true;
             //Check to see if the player can run again after cooldown is up
@@ -158,18 +157,18 @@ public class PlayerController : CharacterBase
             case PlayerState.IDLE:
                 movement(0.0f);
 				if(getStamina() < 100.0f)
-					Stamina += 0.1f;
+					Stamina += Time.deltaTime * 5;
                 break;
 
             case PlayerState.WALKING:
                 movement(WALK_SPEED);
                 if (getStamina() < 100.0f)
-					Stamina += 0.1f;
+					Stamina += Time.deltaTime * 5;
                 break;
 
             case PlayerState.RUNNING:
                 movement(RUN_SPEED);
-				Stamina -= 0.2f;
+				Stamina -= Time.deltaTime * 10;
                 if (getStamina() == 0)
 					playerState = PlayerState.WALKING;
                 break;
