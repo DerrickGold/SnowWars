@@ -49,7 +49,7 @@ public class MouseLook : MonoBehaviour {
         //Check to see if player wants to go into edit mode
         if (Input.GetKeyDown (KeyCode.BackQuote)) {
 			editMode = !editMode;
-			Screen.lockCursor = editMode;
+			Screen.lockCursor = !editMode;
 		}
 
 

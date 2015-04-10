@@ -394,7 +394,6 @@ public class CharacterBase: MonoBehaviour {
             //Activate buff for 20 to 30 seconds
 			activateBuff(temp);
             setBuffTimer(temp, Random.Range(20, 30));
-            print(randBuff);
 			return true;
 		}
 		return false;

@@ -53,8 +53,8 @@ public class MainMenu : MonoBehaviour
      ****************************************************************************************************/
     private void OnGUI()
 	{
-		if (background != null)
-			GUI.DrawTexture(new Rect(0,0,Screen.width , Screen.height),background);
+        if (background != null)
+            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), background);
 		if (LOGO != null)
 			GUI.DrawTexture(new Rect((Screen.width / 2) - 100, 30, 200, 200), LOGO);
 		

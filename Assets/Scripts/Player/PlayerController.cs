@@ -387,7 +387,6 @@ public class PlayerController : CharacterBase
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
 			if (Health <= 0) {
 				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
-				//myKiller.GetComponent<CharacterBase> ().score += 1;
 
 				//if this snowman was killed by someone on their own team, and this is not a free for all
 				//(there is a small chance that an AI might accidentally have a snowball hit the player)

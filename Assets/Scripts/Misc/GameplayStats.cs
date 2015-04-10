@@ -21,6 +21,7 @@ public class GameplayStats : MonoBehaviour
     public int TEAM_A_KILLS = 0;
     public int TEAM_B_KILLS = 0;
 	public int GAME_MAX_SCORE = 20;
+    private int spawnRange = 2;
 
     public GameObject SpawnpointsA;
     public GameObject SpawnpointsB;
@@ -63,7 +64,7 @@ public class GameplayStats : MonoBehaviour
         //This is for the player
         if (team == 0) {
             teamSizeA--;
-            play = (GameObject)Instantiate(player, spawnA[0].position + new Vector3(0, 1f, 0), spawnA[0].rotation);
+            play = (GameObject)Instantiate(player, spawnA[0].position, spawnA[0].rotation);
 			teamA.Add(play); //add player to team A list
 			play.tag = "TeamA";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamOneColor]);
@@ -72,7 +73,7 @@ public class GameplayStats : MonoBehaviour
         }
         else {
             teamSizeB--;
-			play = (GameObject)Instantiate(player, spawnB[0].position + new Vector3(0, 1f, 0), spawnB[0].rotation);
+            play = (GameObject)Instantiate(player, spawnB[0].position, spawnB[0].rotation);
 			teamB.Add(play); //add player to team B list
 			play.tag = "TeamB";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamTwoColor]);
@@ -86,7 +87,7 @@ public class GameplayStats : MonoBehaviour
         {
             //Random spawn location for this team
             spawnpoint = Random.Range(0, spawnA.Count);
-            GameObject AI = (GameObject)Instantiate(AIprefab, spawnA[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+            GameObject AI = (GameObject)Instantiate(AIprefab, getSpawnLocation(spawnA[spawnpoint].position), transform.rotation);
 			teamA.Add(AI); //add AI to team A list
 			AI.tag = "TeamA";
             AI.GetComponent<AIController>().setHatColor(hatColors[teamOneColor]);
@@ -96,7 +97,7 @@ public class GameplayStats : MonoBehaviour
         {
             //Random spawn location for this team
             spawnpoint = Random.Range(0, spawnB.Count);
-			GameObject AI = (GameObject)Instantiate(AIprefab, spawnB[spawnpoint].position + new Vector3(0, 1f, 0), transform.rotation);
+            GameObject AI = (GameObject)Instantiate(AIprefab, getSpawnLocation(spawnB[spawnpoint].position), transform.rotation);
 			teamB.Add(AI); //add AI to team B list
 			AI.tag = "TeamB";
             AI.GetComponent<AIController>().setHatColor(hatColors[teamTwoColor]);
@@ -125,6 +126,16 @@ public class GameplayStats : MonoBehaviour
 			common.gameEnd = true;
 		}
 	}
+
+    private Vector3 getSpawnLocation(Vector3 startingPosition)
+    {
+        float randomX = Random.Range(startingPosition.x - spawnRange, startingPosition.x + spawnRange);
+        float randomZ = Random.Range(startingPosition.z - spawnRange, startingPosition.z + spawnRange);
+        RaycastHit hit;
+        if (Physics.Raycast(new Vector3(randomX, 150, randomZ), -Vector3.up, out hit))
+            return hit.point;
+        return Vector3.zero;
+    }
 
     /****************************************************************************************************
      * Description: This is a helper function. This simply populates the list of hat colors that can    *

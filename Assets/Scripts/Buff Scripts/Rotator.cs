@@ -53,7 +53,6 @@ public class Rotator : MonoBehaviour {
 		destroyed = true;
 		pickedUpTime = Time.time;
 		transform.GetChild(0).gameObject.SetActive (false);
-		print (pickedUpTime);
 		StartCoroutine("cooldown");
 	}
 

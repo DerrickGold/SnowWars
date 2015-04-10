@@ -11,7 +11,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AIController : CharacterBase {
+public class AIController : CharacterBase
+{
     [HideInInspector]
 	public enum State { WALKING, PLAYERTRACK, ATTACKING, DEAD, ITEMTRACK, RESPAWN };
 	public State state = State.WALKING;
@@ -32,6 +33,7 @@ public class AIController : CharacterBase {
 
 	bool targetInSight = false;
 	bool targetInRange = false;
+    private Vector3 lastTargetPosition = Vector3.zero;
     private bool beingSafe = false;
 
 	bool stateCoroutine = false;
@@ -79,9 +81,6 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void Update()
     {
-        //DEBUGGING ONLY
-		//activateBuff(BuffFlag.SUPER_SNOWBALL);
-        //setBuffTimer(BuffFlag.SUPER_SNOWBALL, 100.0f);
         updateBuffTimers();
 
         //If the AI has a target, check if the target is in range
@@ -107,7 +106,11 @@ public class AIController : CharacterBase {
 
                         //Turn the helper gameobject towards the target (This helps us in getting the AI to circle the target)
                         helperGameObject.LookAt(currentTarget);
-                        navMesh.SetDestination(currentTarget.position + (helperGameObject.right * 10));
+                        if (navMesh.enabled == true && Vector3.Distance(currentTarget.position, lastTargetPosition) > 2)
+                        {
+                            lastTargetPosition = currentTarget.position;
+                            navMesh.SetDestination(lastTargetPosition + (helperGameObject.right * 10));
+                        }
 
                         //Throw a snowball at its target if it's in range
                         if (targetInRange)
@@ -176,7 +179,11 @@ public class AIController : CharacterBase {
 				Thorax.transform.LookAt(currentTarget);
 
                 //Set the destination of the AI to the buff location
-				navMesh.SetDestination(currentTarget.position);
+                if (navMesh.enabled == true && Vector3.Distance(currentTarget.position, lastTargetPosition) > 2)
+                {
+                    lastTargetPosition = currentTarget.position;
+                    navMesh.SetDestination(lastTargetPosition);
+                }
 				navMesh.stoppingDistance = 0.0f;
 
                 if (!resetTarget)
@@ -233,8 +240,6 @@ public class AIController : CharacterBase {
                 //checkForNearestBuff();
             }
 		}
-
-        //DEBUG_CUBE.transform.position = currentTarget.position;
     }
 
 
@@ -292,13 +297,10 @@ public class AIController : CharacterBase {
         {
 		case "TeamA":
 			return "TeamB";
-			break;
 		case "TeamB":
 			return "TeamA";
-			break;
 		default:
 			return "Team0";
-			break;
 		}
 	}
     /****************************************************************************************************

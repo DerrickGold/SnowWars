@@ -73,20 +73,22 @@ public class Common: MonoBehaviour {
 
 	void Update()
 	{
+        //Make sure not to run anything during the intro
         if (Application.loadedLevelName != "Intro")
         {
             	topText.text = TEAM_A_KILLS.ToString();
 				topText.color = TEAM_A_COLOR;
             	bottomText.text = TEAM_B_KILLS.ToString();
 				bottomText.color = TEAM_B_COLOR;
-        }
 
-		if (gameEnd) {
-			Time.timeScale = 0.0f;
-			Screen.lockCursor = false;
-			hud.transform.FindChild("menuButton").gameObject.SetActive(true);
-			hud.transform.FindChild("exitButton").gameObject.SetActive(true);
-		}
+                if (gameEnd)
+                {
+                    Time.timeScale = 0.0f;
+                    Screen.lockCursor = false;
+                    hud.transform.FindChild("menuButton").gameObject.SetActive(true);
+                    hud.transform.FindChild("exitButton").gameObject.SetActive(true);
+                }
+        }
 	}
 
 	public void exitGame()
