@@ -39,9 +39,10 @@ public class AIController : CharacterBase {
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
 	bool checkBuff = false;
+    private bool resetTarget = false;
 
 
-    public GameObject DEBUG_CUBE;
+    //public GameObject DEBUG_CUBE;
 
 
     /****************************************************************************************************
@@ -49,7 +50,8 @@ public class AIController : CharacterBase {
      *              quickly needed.                                                                     *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void Awake () {
+	void Awake ()
+    {
         baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
         navMesh = GetComponent<NavMeshAgent>();
@@ -63,11 +65,11 @@ public class AIController : CharacterBase {
      ****************************************************************************************************/
     void Start() {
         initializeSnowMan();
-        DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
+        //DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
-        checkForNearestBuff();
+        //checkForNearestBuff();
     }
 
 
@@ -105,7 +107,7 @@ public class AIController : CharacterBase {
 
                         //Turn the helper gameobject towards the target (This helps us in getting the AI to circle the target)
                         helperGameObject.LookAt(currentTarget);
-                        navMesh.destination = currentTarget.position + (helperGameObject.right * 10);
+                        navMesh.SetDestination(currentTarget.position + (helperGameObject.right * 10));
 
                         //Throw a snowball at its target if it's in range
                         if (targetInRange)
@@ -145,7 +147,8 @@ public class AIController : CharacterBase {
                         }
 
                         //Tell the AI where to go
-                        navMesh.destination = transform.position + moveDirection;
+                        if (navMesh.enabled == true)
+                            navMesh.SetDestination(transform.position + moveDirection);
                     }
                 }
                 break;
@@ -164,7 +167,7 @@ public class AIController : CharacterBase {
                 }
                 break;
 
-			case State.ITEMTRACK:
+            case State.ITEMTRACK:
 				navMesh.speed = WALK_SPEED;
 				//helperGameObject.LookAt(currentTarget);
 
@@ -173,14 +176,20 @@ public class AIController : CharacterBase {
 				Thorax.transform.LookAt(currentTarget);
 
                 //Set the destination of the AI to the buff location
-				navMesh.destination = currentTarget.position;
+				navMesh.SetDestination(currentTarget.position);
 				navMesh.stoppingDistance = 0.0f;
+
+                if (!resetTarget)
+                {
+                    resetTarget = true;
+                    StartCoroutine("pickRandomEnemy");
+                }
 				break;
 
-			case State.RESPAWN:
+            case State.RESPAWN:
                 respawn();
                 state = State.WALKING;
-				checkForNearestBuff();
+				//checkForNearestBuff();
                 break;
         }
 
@@ -205,7 +214,7 @@ public class AIController : CharacterBase {
                 if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
                 {
                     pickRandomEnemy();
-                    checkForNearestBuff();
+                    //checkForNearestBuff();
                 }
             }
             //If the player target is dead, pick a new target and check if there is a buff nearby
@@ -214,18 +223,18 @@ public class AIController : CharacterBase {
                 if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
                 {
                     pickRandomEnemy();
-                    checkForNearestBuff();
+                    //checkForNearestBuff();
                 }
             }
             //If there is no target, pick a new target and check if there is a buff nearby
             else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
             {
                 pickRandomEnemy();
-                checkForNearestBuff();
+                //checkForNearestBuff();
             }
 		}
 
-        DEBUG_CUBE.transform.position = currentTarget.position;
+        //DEBUG_CUBE.transform.position = currentTarget.position;
     }
 
 
@@ -234,17 +243,17 @@ public class AIController : CharacterBase {
      *              target dies. It checks if there are any buffs in the local vicinity.                *
      * Syntax: checkForNearestBuff();                                                                     *
      ****************************************************************************************************/
-    void checkForNearestBuff()
+    /*void checkForNearestBuff()
     {
 		float shortestDistance = 99999.0f;
 		Transform targetBuff = null;
 
 		if (globalScript.buffs.Count <= 0)
 			return;
-
         //Loop through all of the buffs and grab the closest one
 		foreach (Transform o  in globalScript.buffs)
         {
+            print("Checking for nearest buff");
 			float dist = Vector3.Distance (transform.position, o.position);
 			if (dist < shortestDistance)
             {
@@ -259,8 +268,7 @@ public class AIController : CharacterBase {
 			currentTarget = targetBuff;
 			state = State.ITEMTRACK;
 		}
-	}
-
+	}*/
 
 
     /****************************************************************************************************
@@ -301,7 +309,6 @@ public class AIController : CharacterBase {
     void getListOfEnemies()
     {
 		string enemyTag = getEnemyTag ();
-
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag(enemyTag))
         {
@@ -323,6 +330,22 @@ public class AIController : CharacterBase {
 
 
     /****************************************************************************************************
+     * Description: This is a helper function. Whenever an AI attempts to get a buff, give the AI 10    *
+     *              seconds to acquire the buff. If the AI is unable to get the buff, get a new target. *
+     * Syntax: StartCoroutine("pickRandomEnemy");                                                                       *
+     ****************************************************************************************************/
+    public IEnumerator resetAI()
+    {
+        yield return new WaitForSeconds(10);
+        if (resetTarget)
+        {
+            resetTarget = false;
+            pickRandomEnemy();
+        }
+    }
+
+
+    /****************************************************************************************************
      * Description: This is a helper function. Called when the AI needs to pick a random enemy.         *
      * Syntax: pickRandomEnemy();                                                                       *
      ****************************************************************************************************/
@@ -331,7 +354,6 @@ public class AIController : CharacterBase {
         //Reset targetInRange
         targetInRange = false;
         getListOfEnemies();
-
         //Pick a random enemy to attack from the list of all possible targets and target their head
         foreach (Transform child in allEnemies[Random.Range(0, allEnemies.Count)].GetComponentsInChildren<Transform>())
         {
@@ -511,20 +533,13 @@ public class AIController : CharacterBase {
         //If an enemy got too close to the AI
 		if (col.gameObject.tag == getEnemyTag())
         {
-			foreach (Transform child in col.transform.GetComponentsInChildren<Transform>())
-            {
-                if (child.name == "Head")
-                {
-                    currentTarget = child;
-                    state = State.WALKING;
-                }
-			}
+            currentTarget = col.transform.Find("Snowman/Head");
+            state = State.WALKING;
 		}
 
         //If the AI collided with a buff
 		if (getPickup(col))
         {
-			print ("Got buff!");
             pickRandomEnemy();
 			state = State.WALKING;
 		}
