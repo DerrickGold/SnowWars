@@ -98,7 +98,7 @@ public class AIController : CharacterBase
                     if (Health > 30 && !beingSafe)
                     {
                         //Start walking to conserve stamina for desperate measures
-                        navMesh.speed = WALK_SPEED;
+                        navMesh.speed = WALK_SPEED + getSpeedBoost();
 
                         //Make the head and body look towards the target
                         Head.transform.LookAt(currentTarget);
@@ -123,7 +123,7 @@ public class AIController : CharacterBase
                     else
                     {
                         //Run as fast as it can to escape danger!
-                        navMesh.speed = RUN_SPEED;
+                        navMesh.speed = RUN_SPEED + getSpeedBoost();
 
                         beingSafe = true;
 
