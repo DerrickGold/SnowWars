@@ -284,7 +284,7 @@ public class PlayerController : CharacterBase
             if (Input.GetMouseButton(1) && (Input.GetAxis("Horizontal") != 0) && (Input.GetAxis("Vertical") != 0))
                 moveDirection *= 0.7f;
 
-            moveDirection *= speed;
+            moveDirection *= speed + getSpeedBoost();
             moveDirection = transform.TransformDirection(moveDirection);
         }
 
