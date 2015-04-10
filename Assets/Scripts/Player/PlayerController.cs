@@ -111,7 +111,7 @@ public class PlayerController : CharacterBase
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 && !isJumping)
             {
                 //Is the player walking or running?
-                if (Input.GetKey(KeyCode.LeftShift) && Stamina > 0 && runOnCooldown == false)
+                if (Input.GetKey(KeyCode.LeftShift) && getStamina() > 0 && runOnCooldown == false)
                     playerState = PlayerState.RUNNING;
                 else
                     playerState = PlayerState.WALKING;
@@ -121,10 +121,11 @@ public class PlayerController : CharacterBase
                 playerState = PlayerState.IDLE;
 
             //Check to see if the players stamina has bottomed out
-            if (Stamina <= 0)
+            print(runOnCooldown);
+            if (getStamina() <= 0)
                 runOnCooldown = true;
             //Check to see if the player can run again after cooldown is up
-            if (runOnCooldown == true && Stamina >= 100)
+            if (runOnCooldown == true && getStamina() >= 100)
                 runOnCooldown = false;
 
             //Is the player throwing a snowball?
@@ -135,7 +136,9 @@ public class PlayerController : CharacterBase
             if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && getHealth() < 100)
             {
                 lastRegenLocation = transform.position;
-                Health += 1.0f;
+                Health += 1.0f + getHealthRecharge();
+                if (getHealth() > 100)
+                    Health = 100;
             }
 
             //Keep parts of the player body in line with the camera
@@ -196,8 +199,8 @@ public class PlayerController : CharacterBase
         }
 
         //Update the UI
-        staminaBar.value = getStamina ();
-        healthBar.value = getHealth ();
+        staminaBar.value = getStamina();
+        healthBar.value = getHealth();
 
         //Keep track of the buff timers
         updateBuffTimers();

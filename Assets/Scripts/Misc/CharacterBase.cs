@@ -21,13 +21,13 @@ public class CharacterBase: MonoBehaviour {
     };
     static public int MAX_HEALTH = 100;
     static public int MAX_STAMINA = 100;
-    static public int MAX_HEALTH_BOOST = 20;
+    static public int MAX_HEALTH_BOOST = 3;
     static public float MAX_THROW_FORCE = 20;
     static public int BASE_SNOWBALL_DAMAGE = 15;
     static public int SUPER_SNOWBALL_DAMAGE = 15;
     static public float RESPAWN_TIME = 3.0f; //In seconds
     static public float WALK_SPEED = 5.0f;
-    static public float RUN_SPEED = 7.0f;
+    static public float RUN_SPEED = 10.0f;
     static public float SPEED_BOOST = 20.0f;
     static public int AMMO_SUBTRACT_AMOUNT = 2;
     static public int SUPER_SNOWBALL_SUBTRACT = 15;
@@ -262,13 +262,24 @@ public class CharacterBase: MonoBehaviour {
 
 
     /****************************************************************************************************
+     * Description: Get the extra health recharge rate if health boost buff is active.                  *
+     * Syntax: float value = getHealthRecharge();                                                       *
+     * Returns: float representing the characters extra health recharge rate.                           *
+     ****************************************************************************************************/
+    public int getHealthRecharge()
+    {
+        if (isEffectActive(BuffFlag.MAX_HEALTH_BOOST))
+            return MAX_HEALTH_BOOST;
+        return 0;
+    }
+
+
+    /****************************************************************************************************
      * Description: Get the characters max health.                                                      *
      * Syntax: float value = getMaxHealth();                                                            *
      * Returns: float representing the characters max health                                            *
      ****************************************************************************************************/
 	public float getMaxHealth() {
-		if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) 
-			return MAX_HEALTH + MAX_HEALTH_BOOST;
 		return MAX_HEALTH;
 	}
 

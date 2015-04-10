@@ -204,7 +204,9 @@ public class AIController : CharacterBase
         if (Vector3.Distance(transform.position, lastRegenLocation) > 5 && Health < 100)
         {
             lastRegenLocation = transform.position;
-            Health += 1.0f;
+            Health += 1.0f + getHealthRecharge();
+            if (getHealth() > 100)
+                Health = 100;
         }
 
         //Check to see if AI is dead
