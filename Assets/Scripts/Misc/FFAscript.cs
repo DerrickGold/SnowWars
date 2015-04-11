@@ -1,4 +1,12 @@
-﻿using UnityEngine;
+﻿/****************************************************************************************************
+ * Primary Contributor: Shaun Yonkers
+ * 
+ * Description:  This script is placed on the global game object which creates a Free For All match. 
+ * This keeps track of all the gameplay statistics and manages spawning players when they die and at 
+ * the beginning of the match.
+ ****************************************************************************************************/
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -52,7 +60,7 @@ public class FFAscript : MonoBehaviour {
 			common.alertText.text = "Player Wins!!";
 			common.gameEnd = true;
 		}
-		// Loop through all the AI and find the two with the highest kills and see if any of them won
+		// Loop through all the AI and find the one with the highest kills and see if any of them won
 		foreach (GameObject AI in AIList) {
 			int checkScore = AI.GetComponent<CharacterBase>().score;
 			if (checkScore >= MAX_SCORE){
@@ -62,7 +70,7 @@ public class FFAscript : MonoBehaviour {
 			if (checkScore > topScore)
 				topScore = checkScore;
 		}
-		// Update the Hud to display the top two scores
+		// Update the Hud to display the playerscore and top AI score
 		if (topScore > playerScore) {
 			common.TEAM_A_KILLS = topScore;
 			common.TEAM_A_COLOR = Color.red;
@@ -77,7 +85,11 @@ public class FFAscript : MonoBehaviour {
 		}
 	}
 	
-
+/***************************************************************************************************
+* Description: This is a helper function. This simply populates the list of hat colors that can    *
+*              be chosen from.                                                                     *
+* Syntax: populateHatColors();                                                                     *
+***************************************************************************************************/
 	private void populateHatColors()
 	{
 		hatColors.AddRange(new string[] { "BlackHat",
