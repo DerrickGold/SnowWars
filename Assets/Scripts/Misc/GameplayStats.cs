@@ -132,7 +132,7 @@ public class GameplayStats : MonoBehaviour
         float randomX = Random.Range(startingPosition.x - spawnRange, startingPosition.x + spawnRange);
         float randomZ = Random.Range(startingPosition.z - spawnRange, startingPosition.z + spawnRange);
         RaycastHit hit;
-        if (Physics.Raycast(new Vector3(randomX, 150, randomZ), -Vector3.up, out hit))
+        if (Physics.Raycast(new Vector3(randomX, startingPosition.y + 10, randomZ), -Vector3.up, out hit))
             return hit.point;
         return Vector3.zero;
     }

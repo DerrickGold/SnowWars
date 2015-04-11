@@ -71,7 +71,7 @@ public class AIController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
-        //checkForNearestBuff();
+        checkForNearestBuff();
     }
 
 
@@ -223,7 +223,7 @@ public class AIController : CharacterBase
                 if (currentTarget.gameObject.transform.root.GetComponent<AIController>().Health <= 0)
                 {
                     pickRandomEnemy();
-                    //checkForNearestBuff();
+                    checkForNearestBuff();
                 }
             }
             //If the player target is dead, pick a new target and check if there is a buff nearby
@@ -232,16 +232,18 @@ public class AIController : CharacterBase
                 if (currentTarget.gameObject.transform.root.GetComponent<PlayerController>().Health <= 0)
                 {
                     pickRandomEnemy();
-                    //checkForNearestBuff();
+                    checkForNearestBuff();
                 }
             }
             //If there is no target, pick a new target and check if there is a buff nearby
             else if (curTargetName != "AI(Clone)" && curTargetName != "Player(Clone)")
             {
                 pickRandomEnemy();
-                //checkForNearestBuff();
+                checkForNearestBuff();
             }
 		}
+
+        print(currentTarget.root.name);
     }
 
 
@@ -250,7 +252,7 @@ public class AIController : CharacterBase
      *              target dies. It checks if there are any buffs in the local vicinity.                *
      * Syntax: checkForNearestBuff();                                                                     *
      ****************************************************************************************************/
-    /*void checkForNearestBuff()
+    void checkForNearestBuff()
     {
 		float shortestDistance = 99999.0f;
 		Transform targetBuff = null;
@@ -260,7 +262,6 @@ public class AIController : CharacterBase
         //Loop through all of the buffs and grab the closest one
 		foreach (Transform o  in globalScript.buffs)
         {
-            print("Checking for nearest buff");
 			float dist = Vector3.Distance (transform.position, o.position);
 			if (dist < shortestDistance)
             {
@@ -270,12 +271,12 @@ public class AIController : CharacterBase
 		}
 
 		//Only go after a buff if it is within a suitable range
-		if (shortestDistance < MAX_TARGET_RANGE * 2)
+		if (shortestDistance < MAX_TARGET_RANGE * 200000)
         {
 			currentTarget = targetBuff;
 			state = State.ITEMTRACK;
 		}
-	}*/
+	}
 
 
     /****************************************************************************************************

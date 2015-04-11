@@ -169,8 +169,11 @@ public class PlayerController : CharacterBase
             case PlayerState.RUNNING:
                 movement(RUN_SPEED);
 				Stamina -= Time.deltaTime * 10;
-                if (getStamina() == 0)
-					playerState = PlayerState.WALKING;
+                if (getStamina() <= 0)
+                {
+                    Stamina = 0;
+                    playerState = PlayerState.WALKING;
+                }
                 break;
 			case PlayerState.DEAD:
                 if (!stateCoroutine)
