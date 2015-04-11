@@ -87,11 +87,16 @@ public class Projectile : MonoBehaviour
      * Description: Called when the projectile collides with something.                                 *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void OnCollisionEnter(Collision collision) {
-		audio.Play();
-		collided = true;
+	void OnCollisionEnter(Collision collision)
+    {
+        //Do not collide with walls
+        if (collision.gameObject.layer != 9)
+        {
+            audio.Play();
+            collided = true;
 
-		Destroy (rigidbody);
-		Destroy (collider);
+            Destroy(rigidbody);
+            Destroy(collider);
+        }
 	}
 }

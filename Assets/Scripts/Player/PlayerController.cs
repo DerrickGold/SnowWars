@@ -443,15 +443,13 @@ public class PlayerController : CharacterBase
 	void OnTriggerEnter (Collider col)
 	{
         //If the player hits spikes, instant death!
-		if (col.gameObject.tag.Equals ("SPIKES"))
-			Health = getHealth() - getMaxHealth();
+		if (col.gameObject.tag == "SPIKES")
+			Health = -1;
         //Did the player pickup a buff?
 		getPickup(col);
 		//If the player has stepped into some water
-		if (col.gameObject.tag.Equals ("WATER")) {
+		if (col.gameObject.tag == "WATER")
 			inWater = true;
-		}
-
 	}
 
 
@@ -461,9 +459,8 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
 	void OnTriggerExit( Collider col){
 		//If the player stepped out of water
-		if (col.gameObject.tag.Equals ("WATER")) {
+		if (col.gameObject.tag == "WATER")
 			inWater = false;
-		}
 	}
 
 
@@ -475,7 +472,8 @@ public class PlayerController : CharacterBase
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //This is for sliding the player down too steep of slopes
-        if (hit.gameObject.tag == "Level") {
+        if (hit.gameObject.tag == "Level")
+        {
             if (!isJumping)
             {
                 if (hit.normal.x > slideAt || hit.normal.x < -slideAt || hit.normal.z > slideAt || hit.normal.z < -slideAt)

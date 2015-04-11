@@ -242,8 +242,6 @@ public class AIController : CharacterBase
                 checkForNearestBuff();
             }
 		}
-
-        print(currentTarget.root.name);
     }
 
 
