@@ -22,7 +22,6 @@ public class AIController : CharacterBase
 
 	public Transform currentTarget;
 	private NavMeshAgent navMesh;
-    private SphereCollider triggerCollider;
     public Animation throwingAnimation;
     private Common globalScript;
     public Transform snowballSpawnLocation;
@@ -31,16 +30,14 @@ public class AIController : CharacterBase
 
 	private float MovementSpeed;
 
-	bool targetInSight = false;
 	bool targetInRange = false;
     private Vector3 lastTargetPosition = Vector3.zero;
     private bool beingSafe = false;
 
 	bool stateCoroutine = false;
 	bool pauseTimer = false;
-    private bool zigZagWait = false;
+
     private int zigZagDirection = 1;
-	bool checkBuff = false;
     private bool reUpdateDestination = false;
 
 
@@ -89,8 +86,6 @@ public class AIController : CharacterBase
             case State.WALKING:
                 if (currentTarget)
                 {
-                    targetInSight = isTargetInView();
-
                     //Be offensive if health isn't too low
                     if (Health > 30 && !beingSafe)
                     {
@@ -154,7 +149,6 @@ public class AIController : CharacterBase
                 break;
 
             case State.ATTACKING:
-                targetInSight = isTargetInView();
                 throwingAnimation.Play("AIThrowingAnimation");
                 break;
 
@@ -307,7 +301,6 @@ public class AIController : CharacterBase
      ****************************************************************************************************/
     void initializeSnowMan()
     {
-		triggerCollider = GetComponent<SphereCollider> ();
 		MovementSpeed = navMesh.speed;
 	}
 
@@ -488,10 +481,8 @@ public class AIController : CharacterBase
      ****************************************************************************************************/
     IEnumerator WaitSeconds()
     {
-        zigZagWait = true;
         zigZagDirection = -zigZagDirection;
         yield return new WaitForSeconds(1);
-        zigZagWait = false;
     }
 
 

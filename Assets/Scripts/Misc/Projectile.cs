@@ -13,21 +13,18 @@ using System.Collections;
 public class Projectile : MonoBehaviour
 {
 	public GameObject SnowBallTemplate;
-    private AudioSource audio;
+    private AudioSource audio1;
     public Transform origin;
     public float originHP;
 	public bool isSuper = false;
     private bool oneShot = false;
 
-    private float speed = 60.0f;
     public float damage = CharacterBase.BASE_SNOWBALL_DAMAGE;
 	bool collided = false;
 	float scale = 1.0f;
 	float maxScale = 5.0f;
 	float minScale = 1.0f;
 	int maxCluster = 25;
-	int minClusterForce = 10;
-	int maxClusterForce = 20;
 
     /****************************************************************************************************
      * Description: Used to initialize required variables.                                              *
@@ -35,7 +32,7 @@ public class Projectile : MonoBehaviour
      ****************************************************************************************************/
 	void Start()
     {
-		audio = GetComponent<AudioSource>();
+		audio1 = GetComponent<AudioSource>();
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 	}
 
@@ -47,7 +44,7 @@ public class Projectile : MonoBehaviour
 	void Update()
     {
         //Destroy the gameobject if it hit the ground and the hit sound is finished playing
-        if (collided && !audio.isPlaying)
+        if (collided && !audio1.isPlaying)
 			Destroy (gameObject);
         else if (collided)
         {
@@ -94,7 +91,7 @@ public class Projectile : MonoBehaviour
      ****************************************************************************************************/
 	void OnCollisionEnter(Collision collision)
     {
-        audio.Play();
+        audio1.Play();
         collided = true;
 
         Destroy(rigidbody);

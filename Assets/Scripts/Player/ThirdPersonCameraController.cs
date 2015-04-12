@@ -37,11 +37,11 @@ public class ThirdPersonCameraController : MonoBehaviour
     private float yDeg = 0.0f;
     private float currentDistance;
     private float desiredDistance;
-    private float correctedDistance;
+    //private float correctedDistance;
     private bool rotateBehind = false;
     private bool mouseSideButton = false;   
     private float pbuffer = 0.0f;              //Cooldownpuffer for SideButtons
-    private float coolDown = 0.5f;             //Cooldowntime for SideButtons 
+//    private float coolDown;             //Cooldowntime for SideButtons 
     public bool shake = false;                   //Should the camera shake?
     public float shakeAmount = 0.0f;           // Amplitude of the shake. A larger value shakes the camera harder.
 
@@ -59,7 +59,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         yDeg = angles.y;
         currentDistance = distance;
         desiredDistance = distance;
-        correctedDistance = distance;
+        //correctedDistance = distance;
            
         // Make the rigid body not change rotation
         if (rigidbody)
@@ -135,7 +135,7 @@ public class ThirdPersonCameraController : MonoBehaviour
         // Calculate the desired distance
         desiredDistance -= Input.GetAxis ("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs (desiredDistance);
         desiredDistance = Mathf.Clamp (desiredDistance, minDistance, maxDistance);
-        correctedDistance = desiredDistance;
+        //correctedDistance = desiredDistance;
          
         // Calculate desired camera position
         vTargetOffset = new Vector3 (0, -targetHeight, 0);

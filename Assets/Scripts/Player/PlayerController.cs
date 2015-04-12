@@ -28,7 +28,6 @@ public class PlayerController : CharacterBase
 	public Slider healthBar;
 	public Slider staminaBar;
 
-	private bool isPaused = false;
     private bool isJumping = false;
     private bool isGrounded = false;
     private bool runOnCooldown = false;
@@ -45,7 +44,7 @@ public class PlayerController : CharacterBase
 	private GameObject hud;// = GameObject.FindGameObjectWithTag("hud");
 	private Image img;
     private Common globalScript;
-    private AudioSource audio;
+    private AudioSource audio1;
     public Transform snowballSpawnLocation;
     private Vector3 cameraInitialPosition;
 

@@ -23,7 +23,6 @@ public class Radar : MonoBehaviour
 	
 	// Center Object information
 	public Color  radarCenterColor = new Color(255, 255, 255);
-	private int team = 0; //0 = FFA | 1 = TeamA | 2 = TeamB
 	
 	// Blip information
 	public Color  radarEnemyColor = new Color(255, 0, 0);
@@ -71,10 +70,6 @@ public class Radar : MonoBehaviour
 		foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
 			if (g.name == "Player(Clone)") {
 				centerObject = g;
-				if (centerObject.tag == "TeamA")
-					team = 1;
-				else if (centerObject.tag == "TeamB")
-					team = 2;
 			}
 		}
 	}
@@ -95,10 +90,6 @@ public class Radar : MonoBehaviour
 			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
 				if (g.name == "Player(Clone)") {
 					centerObject = g;
-					if (centerObject.tag == "TeamA")
-						team = 1;
-					else if (centerObject.tag == "TeamB")
-						team = 2;
 				}
 			}
 		}
