@@ -190,10 +190,6 @@ public class PlayerController : CharacterBase
                 }
 				break;
             case PlayerState.RESPAWN:
-                if (gameObject.tag == "TeamA")
-                    globalScript.TEAM_B_KILLS++;
-				else
-                    globalScript.TEAM_A_KILLS++;
                 respawn();
                 scoreHasBeenGiven = false;
                 playerState = PlayerState.WALKING;
