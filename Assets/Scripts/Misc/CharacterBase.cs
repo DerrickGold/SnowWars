@@ -51,6 +51,7 @@ public class CharacterBase: MonoBehaviour {
 	public Vector3[] oldPartPositions = new Vector3[3];
 
 	public int score = 0;
+    public bool scoreHasBeenGiven = false;
 
 
     /****************************************************************************************************

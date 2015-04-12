@@ -73,8 +73,6 @@ public class PlayerController : CharacterBase
 		healthBar.value = Health;
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
-
-		activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
 
@@ -99,8 +97,7 @@ public class PlayerController : CharacterBase
      ****************************************************************************************************/
     void Update()
     {
-        //DEBUGGING ONLY
-		setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
+        //Checks to see if the player has any active buffs
 		checkBuffs();
 
         //Is the player moving?
@@ -198,6 +195,7 @@ public class PlayerController : CharacterBase
 				else
                     globalScript.TEAM_A_KILLS++;
                 respawn();
+                scoreHasBeenGiven = false;
                 playerState = PlayerState.WALKING;
                 break;
         }
@@ -390,19 +388,19 @@ public class PlayerController : CharacterBase
     void OnCollisionEnter(Collision col)
     {
         //Did the player get hit by a snowball?
-        if (col.gameObject.name == "Snowball(Clone)") {
+        if (col.gameObject.name == "Snowball(Clone)")
+        {
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
-			if (Health <= 0) {
+            if (Health <= 0 && !scoreHasBeenGiven)
+            {
+                scoreHasBeenGiven = true;
 				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
 
-				//if this snowman was killed by someone on their own team, and this is not a free for all
-				//(there is a small chance that an AI might accidentally have a snowball hit the player)
-				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag){
-					myKiller.GetComponent<CharacterBase> ().score -= 1;	//lose a point for team killing
-				}
-				else{
+				//If this snowman was killed by someone on their own team, and this is not a free for all
+				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag)
+					myKiller.GetComponent<CharacterBase> ().score -= 1;
+				else
 					myKiller.GetComponent<CharacterBase> ().score += 1;	
-				}
 			}
 		}
     }

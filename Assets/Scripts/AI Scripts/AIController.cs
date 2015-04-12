@@ -43,8 +43,6 @@ public class AIController : CharacterBase
 	bool checkBuff = false;
     private bool reUpdateDestination = false;
 
-    public GameObject DEBUG_CUBE;
-
 
     /****************************************************************************************************
      * Description: This is called before Start(). Helps to initialize important variables that are     *
@@ -71,8 +69,6 @@ public class AIController : CharacterBase
         spawnPosition = transform.position;
         pickRandomEnemy();
         checkForNearestBuff();
-
-        DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
     }
 
 
@@ -206,9 +202,11 @@ public class AIController : CharacterBase
                 //Reset the AI's buff
 		        resetBuffs ();
 		        initializeSnowMan ();
+
                 transform.position = spawnPosition;
 		        pickRandomEnemy ();
                 reUpdateDestination = true;
+                scoreHasBeenGiven = false;
                 state = State.WALKING;
 				checkForNearestBuff();
                 break;
@@ -267,10 +265,7 @@ public class AIController : CharacterBase
         if (Health <= 0)
         {
             state = State.DEAD;
-            print("hit");
         }
-
-        DEBUG_CUBE.transform.position = currentTarget.position;
     }
 
 
@@ -510,8 +505,9 @@ public class AIController : CharacterBase
         if (col.gameObject.name == "Snowball(Clone)")
         {
             Health -= col.gameObject.GetComponent<Projectile>().damage;
-			if (Health <= 0)
+			if (Health <= 0 && !scoreHasBeenGiven)
             {
+                scoreHasBeenGiven = true;
 				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
 
 				//If this snowman was killed by someone on their own team, and this is not a free for all
