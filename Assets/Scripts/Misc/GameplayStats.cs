@@ -114,8 +114,8 @@ public class GameplayStats : MonoBehaviour
 		foreach (GameObject snowman in teamB) {
 			TEAM_B_KILLS += snowman.GetComponent<CharacterBase> ().score;
 		}
-		common.TEAM_A_KILLS = TEAM_A_KILLS.ToString();
-		common.TEAM_B_KILLS = TEAM_B_KILLS.ToString();
+		common.TEAM_A_KILLS = "Team A: " + TEAM_A_KILLS.ToString();
+		common.TEAM_B_KILLS = "Team B: " + TEAM_B_KILLS.ToString();
 		
 		if (TEAM_A_KILLS == GAME_MAX_SCORE) {
 			common.alertText.text = "Team A Wins!";

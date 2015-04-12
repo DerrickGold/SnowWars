@@ -39,8 +39,8 @@ public class Common: MonoBehaviour {
 	public bool gameEnd = false;
 	private bool oneShot = false;
 
-	public string TEAM_A_KILLS = "0";
-	public string TEAM_B_KILLS = "0";
+	public string TEAM_A_KILLS;
+	public string TEAM_B_KILLS;
 	public Color TEAM_A_COLOR = Color.black;
 	public Color TEAM_B_COLOR = Color.black;
 	public string playerTeam;
@@ -72,6 +72,10 @@ public class Common: MonoBehaviour {
 
 			alertText.text = "";
 			buffText.text = "";
+			TEAM_A_KILLS = "You >> 0";
+			TEAM_A_COLOR = Color.red;
+			TEAM_B_KILLS = "Leading AI: 0";
+			TEAM_B_COLOR = Color.blue;
         }
 	}
 
