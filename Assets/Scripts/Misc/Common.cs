@@ -41,6 +41,7 @@ public class Common: MonoBehaviour {
 
 	public string TEAM_A_KILLS;
 	public string TEAM_B_KILLS;
+
 	public Color TEAM_A_COLOR = Color.black;
 	public Color TEAM_B_COLOR = Color.black;
 	public string playerTeam;
@@ -84,9 +85,9 @@ public class Common: MonoBehaviour {
         //Make sure not to run anything during the intro
         if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
-            	topText.text = TEAM_A_KILLS;
+            	topText.text = TEAM_A_KILLS.ToString();
 				topText.color = TEAM_A_COLOR;
-            	bottomText.text = TEAM_B_KILLS;
+            	bottomText.text = TEAM_B_KILLS.ToString();
 				bottomText.color = TEAM_B_COLOR;
 
                 if (gameEnd && !oneShot)
