@@ -163,7 +163,6 @@ public class AIController : CharacterBase
 
             case State.ITEMTRACK:
 				navMesh.speed = WALK_SPEED;
-				//helperGameObject.LookAt(currentTarget);
 
 				//Make the head and body look towards the target
 				Head.transform.LookAt(currentTarget);

@@ -93,12 +93,22 @@ public class Common: MonoBehaviour {
                 if (gameEnd && !oneShot)
                 {
 					oneShot = true;
+
+                    //Set the game time to 0 and unlock the cursor
                     Time.timeScale = 0.0f;
                     Screen.lockCursor = false;
+
+                    //Show the game over buttons and give them listeners
                     hud.transform.FindChild("menuButton").gameObject.SetActive(true);
 					hud.transform.FindChild("menuButton").GetComponent<Button>().onClick.AddListener(() => {loadMenu();});
                     hud.transform.FindChild("exitButton").gameObject.SetActive(true);
 					hud.transform.FindChild("exitButton").GetComponent<Button>().onClick.AddListener(() => {exitGame();});
+
+                    //Disable the control from the player when the game ends
+                    GameObject player = GameObject.Find("Player(Clone)");
+                    player.GetComponent<MouseLook>().enabled = false;
+                    Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
+                    //player.GetComponent<CharacterController>().enabled = false;
                 }
         }
 	}

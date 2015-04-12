@@ -195,6 +195,10 @@ public class PlayerController : CharacterBase
                 break;
         }
 
+        //Make sure the players stamina doesn't go below 0
+        if (getStamina() < 0)
+            Stamina = 0;
+
         //Update the UI
         staminaBar.value = getStamina();
         healthBar.value = getHealth();
