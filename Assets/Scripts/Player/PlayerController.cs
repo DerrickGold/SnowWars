@@ -310,6 +310,15 @@ public class PlayerController : CharacterBase
     {
         if (isGrounded)
             isJumping = false;
+
+        //Make sure the player can't jump if they are too high off the ground
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+        {
+            if (hit.distance > 1.5f)
+                isJumping = true;
+        }
+
         if (Input.GetButtonDown("Jump") && !isJumping)
         {
             isJumping = true;
