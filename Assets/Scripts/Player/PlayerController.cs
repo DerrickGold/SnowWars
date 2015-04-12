@@ -74,8 +74,7 @@ public class PlayerController : CharacterBase
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
 
-		//activateBuff(BuffFlag.INF_HEALTH);
-		//activateBuff(BuffFlag.SUPER_SNOWBALL);
+		activateBuff(BuffFlag.SUPER_SNOWBALL);
     }
 
 
@@ -101,8 +100,7 @@ public class PlayerController : CharacterBase
     void Update()
     {
         //DEBUGGING ONLY
-		//setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
-		//setBuffTimer (BuffFlag.INF_HEALTH, 100.0f);
+		setBuffTimer (BuffFlag.SUPER_SNOWBALL, 100.0f);
 		checkBuffs();
 
         //Is the player moving?
@@ -139,6 +137,10 @@ public class PlayerController : CharacterBase
                 if (getHealth() > 100)
                     Health = 100;
             }
+
+            //If the player returned to the spawn location - give them full HP
+            if (Vector3.Distance(transform.position, spawnPosition) < 2)
+                Health = 100;
 
             //Keep parts of the player body in line with the camera
             bodyRotation();

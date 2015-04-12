@@ -44,9 +44,6 @@ public class AIController : CharacterBase
     private bool resetTarget = false;
 
 
-    //public GameObject DEBUG_CUBE;
-
-
     /****************************************************************************************************
      * Description: This is called before Start(). Helps to initialize important variables that are     *
      *              quickly needed.                                                                     *
@@ -65,9 +62,9 @@ public class AIController : CharacterBase
      *              to give other gameobjects time to initialize their own variables in Awake().        *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-    void Start() {
+    void Start()
+    {
         initializeSnowMan();
-        //DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
         lastRegenLocation = transform.position;
         spawnPosition = transform.position;
         pickRandomEnemy();
@@ -106,10 +103,24 @@ public class AIController : CharacterBase
 
                         //Turn the helper gameobject towards the target (This helps us in getting the AI to circle the target)
                         helperGameObject.LookAt(currentTarget);
-                        if (navMesh.enabled == true && Vector3.Distance(currentTarget.position, lastTargetPosition) > 2)
+
+                        //If the target is too far away, only update the destination when the target has walked a considerable distance
+                        if (Vector3.Distance(transform.position, currentTarget.position) > 20)
                         {
-                            lastTargetPosition = currentTarget.position;
-                            navMesh.SetDestination(lastTargetPosition + (helperGameObject.right * 10));
+                            if (navMesh.enabled == true && Vector3.Distance(currentTarget.position, lastTargetPosition) > 15)
+                            {
+                                lastTargetPosition = currentTarget.position;
+                                navMesh.SetDestination(lastTargetPosition + (helperGameObject.right * 10));
+                            }
+                        }
+                        //If the target is close by, continuously update the destination
+                        else
+                        {
+                            if (navMesh.enabled == true && Vector3.Distance(currentTarget.position, lastTargetPosition) > 2)
+                            {
+                                lastTargetPosition = currentTarget.position;
+                                navMesh.SetDestination(lastTargetPosition + (helperGameObject.right * 10));
+                            }
                         }
 
                         //Throw a snowball at its target if it's in range
@@ -132,10 +143,10 @@ public class AIController : CharacterBase
                         Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
 
                         //Run away from the target
-                        Vector3 moveDirection = Vector3.Normalize((currentTarget.position - transform.position) * -1);
+                        //Vector3 moveDirection = Vector3.Normalize((spawnPosition - transform.position) * -1);
 
                         //Randomly zigzag
-                        if (!zigZagWait)
+                        /*if (!zigZagWait)
                         {
                             StartCoroutine("WaitSeconds");
                         }
@@ -147,11 +158,16 @@ public class AIController : CharacterBase
                             case 1:
                                 moveDirection += transform.right + (transform.forward * 5);
                                 break;
-                        }
+                        }*/
 
                         //Tell the AI where to go
                         if (navMesh.enabled == true)
-                            navMesh.SetDestination(transform.position + moveDirection);
+                            navMesh.SetDestination(spawnPosition);
+                            //navMesh.SetDestination(transform.position + moveDirection);
+
+                        //Give 100% health back if the AI manages to get back to spawn point
+                        if (Vector3.Distance(transform.position, spawnPosition) < 2)
+                            Health = 100;
                     }
                 }
                 break;
@@ -363,6 +379,7 @@ public class AIController : CharacterBase
             if (child.name == "Head")
                 currentTarget = child;
         }
+        state = State.WALKING;
     }
 
 

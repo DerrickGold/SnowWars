@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour
     public Transform origin;
     public float originHP;
 	public bool isSuper = false;
+    private bool oneShot = false;
 
     private float speed = 60.0f;
     public float damage = CharacterBase.BASE_SNOWBALL_DAMAGE;
@@ -24,7 +25,7 @@ public class Projectile : MonoBehaviour
 	float scale = 1.0f;
 	float maxScale = 5.0f;
 	float minScale = 1.0f;
-	int maxCluster = 20;
+	int maxCluster = 25;
 	int minClusterForce = 10;
 	int maxClusterForce = 20;
 
@@ -32,7 +33,8 @@ public class Projectile : MonoBehaviour
      * Description: Used to initialize required variables.                                              *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void Start() {
+	void Start()
+    {
 		audio = GetComponent<AudioSource>();
 		SnowBallTemplate = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common>().SnowBall;
 	}
@@ -42,44 +44,47 @@ public class Projectile : MonoBehaviour
      * Description: Keeps track of projectile trajectory. Deletes projectile when required.             *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void Update() {
+	void Update()
+    {
         //Destroy the gameobject if it hit the ground and the hit sound is finished playing
-        if (collided && !audio.isPlaying) {
+        if (collided && !audio.isPlaying)
 			Destroy (gameObject);
+        else if (collided)
+        {
+            //Disable the sphere collider and mesh renderer upon collision
+            GetComponent<MeshRenderer>().enabled = false;
 
-			if(isSuper) {
-				for(int i = 0; i < maxCluster; i++) {
+            //If the snowball was a super snowball
+            if (isSuper && !oneShot)
+            {
+                oneShot = true;
 
-					Vector3 tempPosition = transform.position;
+                //For every junior super snowball
+                for (int i = 0; i < maxCluster; i++)
+                {
+                    //Spawn a new junior super snowball
+                    Vector3 randomOffset = new Vector3(transform.position.x + Random.Range(-1.0f, 1.0f), transform.position.y, transform.position.z + Random.Range(-1.0f, 1.0f));
+                    Rigidbody tempProjectile = Instantiate(SnowBallTemplate.rigidbody, randomOffset, Quaternion.identity) as Rigidbody;
 
-				
-					tempPosition.x += Random.Range(-maxCluster>>1, maxCluster>>1);
-					tempPosition.z += Random.Range(-maxCluster>>1, maxCluster>>1);
-					Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
-					                                               tempPosition, Quaternion.identity) as Rigidbody;
+                    //Give each junior snowball extra damage and an owner
+                    Projectile tempScript = tempProjectile.GetComponent<Projectile>();
+                    tempScript.damage = 50;
+                    tempScript.origin = origin;
 
-					Vector3 test = new Vector3(Random.Range (-90, 90), Vector3.up.y, Random.Range (-90, 90));
-
-					instantiatedProjectile.transform.Rotate(test);
-					Projectile snowBallScript = instantiatedProjectile.GetComponent<Projectile>();
-					snowBallScript.damage = 50;
-			
-					float Velocity = Random.Range (minClusterForce, maxClusterForce);
-					instantiatedProjectile.AddForce (instantiatedProjectile.transform.up * Velocity, ForceMode.Impulse);
-				}
-
-			}
-
-			//Disable the sphere collider and mesh renderer upon collision
-		} else if (collided)
-			GetComponent<MeshRenderer> ().enabled = false;
-		else {
-			if (isSuper) {
-				if(scale < maxScale) scale += (Time.deltaTime/maxScale);
-				transform.localScale = new Vector3(minScale * scale, minScale * scale, minScale * scale);
-			}
-
-		}
+                    tempProjectile.AddForce(new Vector3(Random.Range(-5, 5), 14, Random.Range(-5, 5)), ForceMode.Impulse);
+                }
+            }
+        }
+        //Increase the size of the super snowball
+        else
+        {
+            if (isSuper)
+            {
+                if (scale < maxScale)
+                    scale += (Time.deltaTime / maxScale);
+                transform.localScale = new Vector3(minScale * scale, minScale * scale, minScale * scale);
+            }
+        }
 	}
 
 
@@ -89,14 +94,10 @@ public class Projectile : MonoBehaviour
      ****************************************************************************************************/
 	void OnCollisionEnter(Collision collision)
     {
-        //Do not collide with walls
-        if (collision.gameObject.layer != 9)
-        {
-            audio.Play();
-            collided = true;
+        audio.Play();
+        collided = true;
 
-            Destroy(rigidbody);
-            Destroy(collider);
-        }
+        Destroy(rigidbody);
+        Destroy(collider);
 	}
 }
