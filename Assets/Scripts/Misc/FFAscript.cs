@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FFAscript : MonoBehaviour {
-	public int GAME_MAX_SCORE = 10;
+	public int GAME_MAX_SCORE = 5;
 
 	private Common common;
 
@@ -71,15 +71,15 @@ public class FFAscript : MonoBehaviour {
 		}
 		// Update the Hud to display the playerscore and top AI score
 		if (topScore > playerScore) {
-			common.TEAM_A_KILLS = topScore;
+			common.TEAM_A_KILLS = topScore.ToString();
 			common.TEAM_A_COLOR = Color.red;
-			common.TEAM_B_KILLS = playerScore;
+			common.TEAM_B_KILLS = ">>>" + playerScore.ToString();
 			common.TEAM_B_COLOR = Color.blue;
 		}
 		if (playerScore > topScore) {
-			common.TEAM_A_KILLS = playerScore;
+			common.TEAM_A_KILLS = ">>>" + playerScore.ToString();
 			common.TEAM_A_COLOR = Color.blue;
-			common.TEAM_B_KILLS = topScore;
+			common.TEAM_B_KILLS = topScore.ToString();
 			common.TEAM_B_COLOR = Color.red;
 		}
 	}
