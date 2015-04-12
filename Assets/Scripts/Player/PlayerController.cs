@@ -245,6 +245,9 @@ public class PlayerController : CharacterBase
         //Give back control to the player
         gameObject.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponent<CharacterController>().enabled = true;
+
+        //Reset in water death boolean
+        inWater = false;
     }
 
 

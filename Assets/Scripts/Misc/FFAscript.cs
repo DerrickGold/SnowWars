@@ -50,7 +50,7 @@ public class FFAscript : MonoBehaviour {
             if (hit.transform.gameObject.tag != "WATER")
             {
                 oneShot = true;
-                play = (GameObject)Instantiate(player, new Vector3(hit.point.x, Terrain.activeTerrain.SampleHeight(new Vector3(randX, 0, randZ)), hit.point.z), transform.rotation);
+                play = (GameObject)Instantiate(player, hit.point, transform.rotation);
                 play.tag = "Team0";
                 play.GetComponent<PlayerController>().setHatColor(hatColors[Random.Range(0, hatColors.Count)]);
             }
@@ -74,7 +74,7 @@ public class FFAscript : MonoBehaviour {
                 if (hit.transform.gameObject.tag != "WATER")
                 {
                     oneShot = true;
-                    GameObject AI = (GameObject)Instantiate(AIprefab, new Vector3(hit.point.x, Terrain.activeTerrain.SampleHeight(new Vector3(randX, 0, randZ)), hit.point.z), transform.rotation);
+                    GameObject AI = (GameObject)Instantiate(AIprefab, hit.point, transform.rotation);
                     AI.tag = "Team0";
                     AI.GetComponent<AIController>().setHatColor(hatColors[Random.Range(0, hatColors.Count)]);
                     AIList.Add(AI);
