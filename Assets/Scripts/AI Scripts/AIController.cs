@@ -203,7 +203,7 @@ public class AIController : CharacterBase
 		        resetBuffs ();
 		        initializeSnowMan ();
 
-                transform.position = spawnPosition;
+                navMesh.Warp(spawnPosition);
 		        pickRandomEnemy ();
                 reUpdateDestination = true;
                 scoreHasBeenGiven = false;
