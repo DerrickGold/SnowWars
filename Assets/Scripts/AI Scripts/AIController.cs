@@ -41,7 +41,6 @@ public class AIController : CharacterBase
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
 	bool checkBuff = false;
-    private bool resetTarget = false;
 
 
     /****************************************************************************************************
@@ -142,28 +141,9 @@ public class AIController : CharacterBase
                         Head.transform.LookAt(2 * transform.position - currentTarget.position);
                         Thorax.transform.LookAt(2 * transform.position - currentTarget.position);
 
-                        //Run away from the target
-                        //Vector3 moveDirection = Vector3.Normalize((spawnPosition - transform.position) * -1);
-
-                        //Randomly zigzag
-                        /*if (!zigZagWait)
-                        {
-                            StartCoroutine("WaitSeconds");
-                        }
-                        switch (zigZagDirection)
-                        {
-                            case -1:
-                                moveDirection -= transform.right - (transform.forward * 5);
-                                break;
-                            case 1:
-                                moveDirection += transform.right + (transform.forward * 5);
-                                break;
-                        }*/
-
-                        //Tell the AI where to go
+                        //Tell the AI to go back to the spawn point to refill up on HP
                         if (navMesh.enabled == true)
                             navMesh.SetDestination(spawnPosition);
-                            //navMesh.SetDestination(transform.position + moveDirection);
 
                         //Give 100% health back if the AI manages to get back to spawn point
                         if (Vector3.Distance(transform.position, spawnPosition) < 2)
@@ -202,17 +182,15 @@ public class AIController : CharacterBase
                 }
 				navMesh.stoppingDistance = 0.0f;
 
-                if (!resetTarget)
-                {
-                    resetTarget = true;
-                    StartCoroutine("pickRandomEnemy");
-                }
+                //Check to make sure no one else has picked up the buff
+                if (currentTarget.FindChild("Present-01").gameObject.activeInHierarchy == false)
+                    pickRandomEnemy();
 				break;
 
             case State.RESPAWN:
                 respawn();
                 state = State.WALKING;
-				//checkForNearestBuff();
+				checkForNearestBuff();
                 break;
         }
 
@@ -285,7 +263,7 @@ public class AIController : CharacterBase
 		}
 
 		//Only go after a buff if it is within a suitable range
-		if (shortestDistance < MAX_TARGET_RANGE * 200000)
+		if (shortestDistance < MAX_TARGET_RANGE * 1000)
         {
 			currentTarget = targetBuff;
 			state = State.ITEMTRACK;
@@ -344,22 +322,6 @@ public class AIController : CharacterBase
 					if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
 				}
 			}
-        }
-    }
-
-
-    /****************************************************************************************************
-     * Description: This is a helper function. Whenever an AI attempts to get a buff, give the AI 10    *
-     *              seconds to acquire the buff. If the AI is unable to get the buff, get a new target. *
-     * Syntax: StartCoroutine("pickRandomEnemy");                                                                       *
-     ****************************************************************************************************/
-    public IEnumerator resetAI()
-    {
-        yield return new WaitForSeconds(10);
-        if (resetTarget)
-        {
-            resetTarget = false;
-            pickRandomEnemy();
         }
     }
 
