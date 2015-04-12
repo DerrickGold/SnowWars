@@ -11,11 +11,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FFAscript : MonoBehaviour {
-	public int GAME_MAX_SCORE;
+	public int GAME_MAX_SCORE = 10;
 
 	private Common common;
 
-	public int playerCount;
+	public int playerCount = 31;
 	private int topScore;
 	private int playerScore;
 	private GameObject play;
@@ -28,8 +28,6 @@ public class FFAscript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
-		playerCount = common.TEAM_A_COUNT;
-		GAME_MAX_SCORE = common.WIN_COUNT;
 		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
 		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
 			common.buffs.Add (buffsObj.GetChild (i));

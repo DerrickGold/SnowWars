@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu Scripts\MainMenu.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Misc\Common.cs">
     <Files>
-      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="105" Column="1" />
-      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="20" Column="35" />
-      <File FileName="Assets\Scripts\Misc\Common.cs" Line="89" Column="41" />
-      <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="24" Column="32" />
+      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="18" Column="2" />
+      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="19" Column="23" />
+      <File FileName="Assets\Scripts\Misc\Common.cs" Line="32" Column="29" />
+      <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="49" Column="61" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

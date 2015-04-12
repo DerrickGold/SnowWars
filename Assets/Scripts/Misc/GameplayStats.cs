@@ -16,11 +16,11 @@ public class GameplayStats : MonoBehaviour
     public GameObject AIprefab;
     public GameObject player;
 
-    public int teamSizeA;
-    public int teamSizeB;
+    public int teamSizeA = 16;
+    public int teamSizeB = 16;
     public int TEAM_A_KILLS = 0;
     public int TEAM_B_KILLS = 0;
-	public int GAME_MAX_SCORE;
+	public int GAME_MAX_SCORE = 10;
     private int spawnRange = 2;
 
     public GameObject SpawnpointsA;
@@ -40,9 +40,6 @@ public class GameplayStats : MonoBehaviour
     void Start()
     {
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
-		GAME_MAX_SCORE = common.WIN_COUNT;
-		teamSizeA = common.TEAM_A_COUNT;
-		teamSizeB = common.TEAM_B_COUNT;
 		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
 		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
 			common.buffs.Add(buffsObj.GetChild(i));

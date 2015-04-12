@@ -15,11 +15,10 @@ public class MainMenu : MonoBehaviour
 	public bool DragWindow = false;
 	public bool snowEffects = true;
 	public bool Fullscreen = false;
-
-	private Common common;
-	private float teamACount = 10.0f;
-	private float teamBCount = 10.0f;
-	private float kill2win = 5.0f;
+	
+	private float teamACount;
+	private float teamBCount;
+	private float kill2win;
 	private string clicked = "";
 	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-50, Screen.width / 4, Screen.height / 2);
     private float volume = 1.0f;
@@ -32,7 +31,6 @@ public class MainMenu : MonoBehaviour
 		Screen.lockCursor = false;
         startingScreenHeight = Screen.height;
         startingScreenWidth = Screen.width;
-		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
     }
 
 
@@ -80,20 +78,16 @@ public class MainMenu : MonoBehaviour
 		} else if (clicked == "GameMode") {
 			clicked = "GameMode";
 			WindowRect = GUI.Window (2, WindowRect, gameModeFunc, "Game Mode");
-		} else if (clicked == "FFA") {
-			WindowRect = GUI.Window (5, WindowRect, FFAModeFunc, "Free for All");
-		} else if (clicked == "TDM") {
-			WindowRect = GUI.Window (10, WindowRect, TDMModeFunc, "Team Deathmatch");
-		}
+		} 
 	}
 	
 	private void gameModeFunc(int id)
 	{
 		if (GUILayout.Button ("Team Deathmatch")) {
-			clicked = "TDM";
+			Application.LoadLevel("LevelOne");
 		}
 		if (GUILayout.Button ("Free For All")) {
-			clicked = "FFA";
+			Application.LoadLevel("LevelTwo");
 		}
 		if (GUILayout.Button("Back"))
 		{
@@ -101,38 +95,7 @@ public class MainMenu : MonoBehaviour
 		}
 
 	}
-
-	private void FFAModeFunc(int id){
-		GUILayout.Box ("Players");
-		teamACount = Mathf.RoundToInt (GUILayout.HorizontalSlider (teamACount, 1, 31));
-		GUILayout.TextArea (teamACount.ToString(), 100);
-		GUILayout.Box ("Kills to win");
-		kill2win = Mathf.RoundToInt (GUILayout.HorizontalSlider (kill2win, 1, 20));
-		GUILayout.TextArea (kill2win.ToString(), 100);
-		if (GUILayout.Button ("Play")) {
-			common.TEAM_A_COUNT = Mathf.RoundToInt (teamACount);
-			common.WIN_COUNT = Mathf.RoundToInt (kill2win);
-			Application.LoadLevel ("LevelTwo");
-		}
-	}
-
-	private void TDMModeFunc(int id){
-		GUILayout.Box ("Team A Players");
-		teamACount = Mathf.RoundToInt (GUILayout.HorizontalSlider (teamACount, 1, 16));
-		GUILayout.TextArea (teamACount.ToString(), 100);
-		GUILayout.Box ("Team B Players");
-		teamBCount = Mathf.RoundToInt (GUILayout.HorizontalSlider (teamBCount, 1, 16));
-		GUILayout.TextArea (teamBCount.ToString(), 100);
-		GUILayout.Box ("Kills to win");
-		kill2win = Mathf.RoundToInt (GUILayout.HorizontalSlider (kill2win, 1, 20));
-		GUILayout.TextArea (kill2win.ToString(), 100);
-		if (GUILayout.Button ("Play")) {
-			common.TEAM_A_COUNT = Mathf.RoundToInt (teamACount);
-			common.TEAM_B_COUNT = Mathf.RoundToInt (teamBCount);
-			common.WIN_COUNT = Mathf.RoundToInt (kill2win);
-			Application.LoadLevel ("LevelOne");
-		}
-	}
+	
     /****************************************************************************************************
      * Description: Create the menu screen when the options button is clicked                                                   *
      * Syntax: optionsFunc(int id);                                                                     *                                                                *

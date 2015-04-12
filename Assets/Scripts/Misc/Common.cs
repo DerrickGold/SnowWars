@@ -39,9 +39,6 @@ public class Common: MonoBehaviour {
 	public bool gameEnd = false;
 	private bool oneShot = false;
 
-	public int WIN_COUNT = 5;
-	public int TEAM_A_COUNT = 10;
-	public int TEAM_B_COUNT = 10;
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
 	public Color TEAM_A_COLOR = Color.black;
@@ -65,6 +62,8 @@ public class Common: MonoBehaviour {
 	{
 		if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
+			Time.timeScale = 1.0f;
+			Screen.lockCursor = true;
             hud = GameObject.FindGameObjectWithTag("hud");
             topText = hud.transform.FindChild("teamA_score").GetComponent<Text>();
             bottomText = hud.transform.FindChild("teamB_score").GetComponent<Text>();
