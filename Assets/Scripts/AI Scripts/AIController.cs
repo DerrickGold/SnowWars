@@ -41,6 +41,9 @@ public class AIController : CharacterBase
     private bool zigZagWait = false;
     private int zigZagDirection = 1;
 	bool checkBuff = false;
+    private bool reUpdateDestination = false;
+
+    public GameObject DEBUG_CUBE;
 
 
     /****************************************************************************************************
@@ -68,6 +71,8 @@ public class AIController : CharacterBase
         spawnPosition = transform.position;
         pickRandomEnemy();
         checkForNearestBuff();
+
+        DEBUG_CUBE = GameObject.Find("DEBUG_CUBE");
     }
 
 
@@ -188,10 +193,35 @@ public class AIController : CharacterBase
 				break;
 
             case State.RESPAWN:
-                respawn();
+                //Rebuild the AI's body
+                rebuild();
+
+                //Re-enable the AI's nav mesh
+		        navMesh.enabled = true;
+
+                //Reset the AI's Health and Stamina
+		        Health = getMaxHealth ();
+		        Stamina = getMaxStamina ();
+
+                //Reset the AI's buff
+		        resetBuffs ();
+		        initializeSnowMan ();
+                transform.position = spawnPosition;
+		        pickRandomEnemy ();
+                reUpdateDestination = true;
                 state = State.WALKING;
 				checkForNearestBuff();
                 break;
+        }
+
+        //Check to see if the AI needs to re-update their destination (This only occurs after the AI dies)
+        if (reUpdateDestination)
+        {
+            if (navMesh.enabled == true)
+            {
+                lastTargetPosition = currentTarget.position;
+                navMesh.SetDestination(lastTargetPosition);
+            }
         }
 
         //Check to see if the AI is moving to regain HP
@@ -202,10 +232,6 @@ public class AIController : CharacterBase
             if (getHealth() > 100)
                 Health = 100;
         }
-
-        //Check to see if AI is dead
-        if (Health <= 0)
-            state = State.DEAD;
 
         //Check to see if the AI's current target is dead
 		if (currentTarget)
@@ -236,6 +262,15 @@ public class AIController : CharacterBase
                 checkForNearestBuff();
             }
 		}
+
+        //Check to see if AI is dead
+        if (Health <= 0)
+        {
+            state = State.DEAD;
+            print("hit");
+        }
+
+        DEBUG_CUBE.transform.position = currentTarget.position;
     }
 
 
@@ -413,23 +448,6 @@ public class AIController : CharacterBase
     {
 		dieAnimation();
         navMesh.enabled = false;
-	}
-
-
-    /****************************************************************************************************
-     * Description: Called when the AI needs to respawn. The AI respawns at it's starting position.     *
-     * Syntax: respawn();                                                                               *
-     ****************************************************************************************************/
-	private void respawn()
-    {
-		rebuild();
-		navMesh.enabled = true;
-		Health = getMaxHealth ();
-		Stamina = getMaxStamina ();
-		resetBuffs ();
-		initializeSnowMan ();
-        transform.position = spawnPosition;
-		pickRandomEnemy ();
 	}
 
 
