@@ -1,4 +1,4 @@
-﻿/****************************************************************************************************
+/****************************************************************************************************
  * Primary Contributor: Derrick Gold
  * Secondary Contributors: Curtis Murray, Shaun Yonkers
  * 
@@ -37,6 +37,10 @@ public class Common: MonoBehaviour {
 	public Sprite healthIcon;
 
 	public bool gameEnd = false;
+
+	public int WIN_COUNT = 1;
+	public int TEAM_A_COUNT = 1;
+	public int TEAM_B_COUNT = 1;
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
 	public Color TEAM_A_COLOR = Color.black;
@@ -58,7 +62,7 @@ public class Common: MonoBehaviour {
 	}
 	void Start()
 	{
-        if (Application.loadedLevelName != "Intro")
+		if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
             hud = GameObject.FindGameObjectWithTag("hud");
             topText = hud.transform.FindChild("teamA_score").GetComponent<Text>();
@@ -74,7 +78,7 @@ public class Common: MonoBehaviour {
 	void Update()
 	{
         //Make sure not to run anything during the intro
-        if (Application.loadedLevelName != "Intro")
+        if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
             	topText.text = TEAM_A_KILLS.ToString();
 				topText.color = TEAM_A_COLOR;

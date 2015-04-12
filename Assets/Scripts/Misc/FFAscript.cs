@@ -11,14 +11,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FFAscript : MonoBehaviour {
-	static private int MAX_SCORE = 100;
+	public int GAME_MAX_SCORE;
 
 	private Common common;
 
-	private int maxPlayerSize = 31;
+	public int playerCount;
 	private int topScore;
 	private int playerScore;
-	private bool gameEnd = false;
 	private GameObject play;
 	public GameObject AIprefab;
 	public GameObject player;
@@ -29,6 +28,8 @@ public class FFAscript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
+		playerCount = common.TEAM_A_COUNT;
+		GAME_MAX_SCORE = common.WIN_COUNT;
 		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
 		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
 			common.buffs.Add (buffsObj.GetChild (i));
@@ -41,7 +42,7 @@ public class FFAscript : MonoBehaviour {
 		play.tag = "Team0";
 		play.GetComponent<PlayerController>().setHatColor(hatColors[Random.Range(0, hatColors.Count)]);;
 
-		for (int i = 0; i < maxPlayerSize; i++){
+		for (int i = 0; i < playerCount; i++){
 			float randomX = Random.Range(35, 269);
 			float randomZ = Random.Range(20, 280);
 			GameObject AI = (GameObject)Instantiate(AIprefab, new Vector3(randomX, Terrain.activeTerrain.SampleHeight(new Vector3(randomX, 0 , randomZ)), randomZ), transform.rotation);
@@ -56,14 +57,14 @@ public class FFAscript : MonoBehaviour {
 	void Update () {
 		//get the player score and check if they won
 		playerScore = play.GetComponent<CharacterBase> ().score;
-		if (playerScore >= MAX_SCORE) {
+		if (playerScore >= GAME_MAX_SCORE) {
 			common.alertText.text = "Player Wins!!";
 			common.gameEnd = true;
 		}
 		// Loop through all the AI and find the one with the highest kills and see if any of them won
 		foreach (GameObject AI in AIList) {
 			int checkScore = AI.GetComponent<CharacterBase>().score;
-			if (checkScore >= MAX_SCORE){
+			if (checkScore >= GAME_MAX_SCORE){
 				common.alertText.text = "AI Wins!!";
 				common.gameEnd = true;
 			}
