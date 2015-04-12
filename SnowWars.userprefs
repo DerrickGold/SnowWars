@@ -1,10 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu Scripts\MainMenu.cs">
     <Files>
-      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="126" Column="20" />
-      <File FileName="Assets\Scripts\Misc\Common.cs" Line="50" Column="22" />
-      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="33" Column="7" />
+      <File FileName="Assets\Scripts\Misc\FFAscript.cs" Line="105" Column="1" />
+      <File FileName="Assets\Scripts\Menu Scripts\MainMenu.cs" Line="20" Column="35" />
+      <File FileName="Assets\Scripts\Misc\Common.cs" Line="89" Column="41" />
       <File FileName="Assets\Scripts\Misc\GameplayStats.cs" Line="24" Column="32" />
     </Files>
   </MonoDevelop.Ide.Workbench>

@@ -17,9 +17,9 @@ public class MainMenu : MonoBehaviour
 	public bool Fullscreen = false;
 
 	private Common common;
-	private float teamACount = 1.0f;
-	private float teamBCount = 1.0f;
-	private float kill2win = 1.0f;
+	private float teamACount = 10.0f;
+	private float teamBCount = 10.0f;
+	private float kill2win = 5.0f;
 	private string clicked = "";
 	private Rect WindowRect = new Rect((Screen.width/2)-50, (Screen.height/2)-50, Screen.width / 4, Screen.height / 2);
     private float volume = 1.0f;
