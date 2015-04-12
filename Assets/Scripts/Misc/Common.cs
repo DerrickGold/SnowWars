@@ -37,10 +37,11 @@ public class Common: MonoBehaviour {
 	public Sprite healthIcon;
 
 	public bool gameEnd = false;
+	private bool oneShot = false;
 
-	public int WIN_COUNT = 1;
-	public int TEAM_A_COUNT = 1;
-	public int TEAM_B_COUNT = 1;
+	public int WIN_COUNT = 5;
+	public int TEAM_A_COUNT = 10;
+	public int TEAM_B_COUNT = 10;
 	public int TEAM_A_KILLS = 0;
 	public int TEAM_B_KILLS = 0;
 	public Color TEAM_A_COLOR = Color.black;
@@ -85,12 +86,15 @@ public class Common: MonoBehaviour {
             	bottomText.text = TEAM_B_KILLS.ToString();
 				bottomText.color = TEAM_B_COLOR;
 
-                if (gameEnd)
+                if (gameEnd && !oneShot)
                 {
+					oneShot = true;
                     Time.timeScale = 0.0f;
                     Screen.lockCursor = false;
                     hud.transform.FindChild("menuButton").gameObject.SetActive(true);
+					hud.transform.FindChild("menuButton").GetComponent<Button>().onClick.AddListener(() => {loadMenu();});
                     hud.transform.FindChild("exitButton").gameObject.SetActive(true);
+					hud.transform.FindChild("exitButton").GetComponent<Button>().onClick.AddListener(() => {exitGame();});
                 }
         }
 	}
