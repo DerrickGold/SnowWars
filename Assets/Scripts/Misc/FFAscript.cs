@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FFAscript : MonoBehaviour {
-	public int GAME_MAX_SCORE = 10;
+	public int GAME_MAX_SCORE;
 
 	private Common common;
 
@@ -27,6 +27,7 @@ public class FFAscript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		GAME_MAX_SCORE = 5;
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
 
         //Get all the buffs in the map

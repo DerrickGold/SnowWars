@@ -20,7 +20,7 @@ public class GameplayStats : MonoBehaviour
     public int teamSizeB = 16;
     public int TEAM_A_KILLS = 0;
     public int TEAM_B_KILLS = 0;
-	public int GAME_MAX_SCORE = 10;
+	public int GAME_MAX_SCORE;
     private int spawnRange = 2;
 
     public GameObject SpawnpointsA;
@@ -39,6 +39,7 @@ public class GameplayStats : MonoBehaviour
 
     void Start()
     {
+		GAME_MAX_SCORE = 10;
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
 		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
 		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
