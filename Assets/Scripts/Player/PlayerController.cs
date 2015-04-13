@@ -41,7 +41,7 @@ public class PlayerController : CharacterBase
     private float slideAt = 0.6f;
 
     //Game variables
-	private GameObject hud;// = GameObject.FindGameObjectWithTag("hud");
+	private GameObject hud;
 	private Image img;
     private Common globalScript;
     private AudioSource audio1;
@@ -416,42 +416,56 @@ public class PlayerController : CharacterBase
 		}
     }
 
-	void checkBuffs(){
-		if (isEffectActive (BuffFlag.INF_AMMO)) {
+
+    /****************************************************************************************************
+     * Description: Checks to see if a buff is active on a character.                                   *
+     * Syntax: checkBuffs;                                                                              *
+     ****************************************************************************************************/
+	void checkBuffs()
+    {
+		if (isEffectActive (BuffFlag.INF_AMMO)) 
+        {
 			img.enabled = true;
 			img.sprite = globalScript.infAmmonIcon;
 			globalScript.buffText.text = "Infinite Ammo";
-		} else if (isEffectActive (BuffFlag.INF_HEALTH)) {
+		} else if (isEffectActive (BuffFlag.INF_HEALTH)) 
+        {
 			img.enabled = true;
 			img.sprite = globalScript.infHealthIcon;
 			globalScript.buffText.text = "Infinite Health";
-		} else if (isEffectActive (BuffFlag.INF_STAMINA)) {
+		} else if (isEffectActive (BuffFlag.INF_STAMINA))
+        {
 			img.enabled = true;
 			img.sprite = globalScript.infStaminIcon;
 			globalScript.buffText.text = "Infinite Stamina";
-		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST)) {
+		} else if (isEffectActive (BuffFlag.MAX_HEALTH_BOOST))
+        {
 			img.enabled = true;
 			img.sprite = globalScript.healthIcon;
 			globalScript.buffText.text = "Health Boost";
-		} else if (isEffectActive (BuffFlag.SPEED_BOOST)) {
+		} else if (isEffectActive (BuffFlag.SPEED_BOOST))
+        {
 			img.enabled = true;
 			img.sprite = globalScript.speedBoostIcon;
 			globalScript.buffText.text = "Speed Boost";
-		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL)) {
+		} else if (isEffectActive (BuffFlag.SUPER_SNOWBALL))
+        {
 			img.enabled = true;
 			img.sprite = globalScript.superSnowballIcon;
 			globalScript.buffText.text = "SUPER SNOWBALL";
-		} else {
+		} else
+        {
 			img.enabled = false;
 			globalScript.buffText.text = "";
 		}
 	}
 
+
 	/****************************************************************************************************
      * Description: This is called whenever something with IsTrigger set collides with the player.      *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void OnTriggerEnter (Collider col)
+    void OnTriggerEnter (Collider col)
 	{
         //If the player hits spikes, instant death!
 		if (col.gameObject.tag == "SPIKES")

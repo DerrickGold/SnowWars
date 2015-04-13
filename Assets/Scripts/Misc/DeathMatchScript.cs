@@ -1,15 +1,16 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Jaymeson Wickins
- * 
- * Description: This script is placed on the global game object. This keeps track of all the gameplay
- * statistics and manages spawning players when they die and at the beginning of the match.
+ * Primary Contributor: Jaymeson Wickins                                                            *
+ *                                                                                                  *
+ * Description: Deals with team death matches and keeps track of the game. Things that this script  *
+ *              handles include keeping track of score, spawning of players, team colors, team      *
+ *              distribution and keeps track of important gameobjects (such as buffs).              *
  ****************************************************************************************************/
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameplayStats : MonoBehaviour
+public class DeathMatchScript : MonoBehaviour
 {
 	private Common common;
 
@@ -37,14 +38,20 @@ public class GameplayStats : MonoBehaviour
     private List<string> hatColors = new List<string>();
 
 
+    /****************************************************************************************************
+     * Description: Obtains buffs, spawns teams, assigns colors.                                        *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void Start()
     {
 		GAME_MAX_SCORE = 10;
 		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
-		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform; //get all the buffs in the map
-		for (int i = 0; i < buffsObj.childCount; i++) { //add all the buffs to the list of buffs
+        //Get all the buffs in the map
+		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform;
+        //Add all the buffs to the list of buffs
+        for (int i = 0; i < buffsObj.childCount; i++)
 			common.buffs.Add(buffsObj.GetChild(i));
-		}
+
         //Choose a random color of hat for each team
         populateHatColors();
         int teamOneColor = Random.Range(0, hatColors.Count);
@@ -63,19 +70,21 @@ public class GameplayStats : MonoBehaviour
             spawnB.Add(child);
 
         //This is for the player
-        if (team == 0) {
+        if (team == 0)
+        {
             teamSizeA--;
             play = (GameObject)Instantiate(player, spawnA[0].position, spawnA[0].rotation);
-			teamA.Add(play); //add player to team A list
+			teamA.Add(play);
 			play.tag = "TeamA";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamOneColor]);
 			common.TEAM_A_COLOR = Color.blue;
 			common.TEAM_B_COLOR = Color.red;
         }
-        else {
+        else
+        {
             teamSizeB--;
             play = (GameObject)Instantiate(player, spawnB[0].position, spawnB[0].rotation);
-			teamB.Add(play); //add player to team B list
+			teamB.Add(play);
 			play.tag = "TeamB";
             play.GetComponent<PlayerController>().setHatColor(hatColors[teamTwoColor]);
 			common.TEAM_A_COLOR = Color.red;
@@ -105,29 +114,48 @@ public class GameplayStats : MonoBehaviour
         }
     }
 
+    /****************************************************************************************************
+     * Description: Keeps track of team scores and notifies the Common script to update the GUI. Also   *
+     *              detects when the game has finished.                                                 *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Update()
 	{
 		TEAM_A_KILLS = 0;
 		TEAM_B_KILLS = 0;
-		foreach (GameObject snowman in teamA) {
+
+        //Gets the score for team A
+		foreach (GameObject snowman in teamA)
 			TEAM_A_KILLS += snowman.GetComponent<CharacterBase> ().score;
-		}
-		foreach (GameObject snowman in teamB) {
+
+        //Gets the score for team B
+		foreach (GameObject snowman in teamB)
 			TEAM_B_KILLS += snowman.GetComponent<CharacterBase> ().score;
-		}
+
 		common.TEAM_A_KILLS = "Team A: " + TEAM_A_KILLS.ToString();
 		common.TEAM_B_KILLS = "Team B: " + TEAM_B_KILLS.ToString();
 		
-		if (TEAM_A_KILLS == GAME_MAX_SCORE) {
+        //If the game has finished, display the winner
+		if (TEAM_A_KILLS == GAME_MAX_SCORE)
+        {
 			common.alertText.text = "Team A Wins!";
 			common.gameEnd = true;
 		}
-		else if (TEAM_B_KILLS == GAME_MAX_SCORE){
+		else if (TEAM_B_KILLS == GAME_MAX_SCORE)
+        {
 			common.alertText.text = "Team B Wins!";
 			common.gameEnd = true;
 		}
 	}
 
+
+    /****************************************************************************************************
+     * Description: This is a helper function. This assists in choosing a slightly random location to   *
+     *              spawn at.                                                                           *
+     * Syntax: Vector3 location = getSpawnLocation(Vecotr3 startingPosition);                           *
+     * Values: startingPosition = The location at which to spawn around                                 *
+     * Returns: A Vector3 representing the location to spawn at.                                        *
+     ****************************************************************************************************/
     private Vector3 getSpawnLocation(Vector3 startingPosition)
     {
         float randomX = Random.Range(startingPosition.x - spawnRange, startingPosition.x + spawnRange);

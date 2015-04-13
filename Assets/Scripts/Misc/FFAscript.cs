@@ -10,7 +10,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FFAscript : MonoBehaviour {
+public class FFAscript : MonoBehaviour
+{
 	public int GAME_MAX_SCORE;
 
 	private Common common;
@@ -24,24 +25,30 @@ public class FFAscript : MonoBehaviour {
 
 	private List<GameObject> AIList = new List<GameObject> ();
 	private List<string> hatColors = new List<string>();
-	
-	// Use this for initialization
-	void Start () {
-		GAME_MAX_SCORE = 5;
-		common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
+
+
+    /****************************************************************************************************
+     * Description: Deals with spawning the player and all of the AI randomly around the map. Also      *
+     *              grabs a list of the buffs.                                                          *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Start ()
+    {
+        GAME_MAX_SCORE = 5;
+        common = GameObject.FindGameObjectWithTag ("Global").GetComponent<Common> ();
 
         //Get all the buffs in the map
-		Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform;
+        Transform buffsObj = GameObject.FindGameObjectWithTag ("Buffs").transform;
 		
         //Add all the buffs to the list of buffs
         for (int i = 0; i < buffsObj.childCount; i++)
-			common.buffs.Add (buffsObj.GetChild (i));
+            common.buffs.Add (buffsObj.GetChild (i));
 
         //Grab a list of all the hat colors
-		populateHatColors ();
+        populateHatColors ();
 
-		float randX = Random.Range(35, 269);
-		float randZ = Random.Range(20, 280);
+        float randX = Random.Range(35, 269);
+        float randZ = Random.Range(20, 280);
 
         //Spawn the player anywhere but the water
         bool oneShot = false;
@@ -63,9 +70,9 @@ public class FFAscript : MonoBehaviour {
         }
 
         //Spawn the appropriate amount of AI
-		for (int i = 0; i < playerCount; i++)
+        for (int i = 0; i < playerCount; i++)
         {
-			randX = Random.Range(35, 269);
+            randX = Random.Range(35, 269);
             randZ = Random.Range(20, 280);
 
             oneShot = false;
@@ -86,49 +93,59 @@ public class FFAscript : MonoBehaviour {
                     randZ = Random.Range(20, 280);
                 }
             }
-		}
+        }
 
-	}
+    }
+
+
+    /****************************************************************************************************
+     * Description: Update the score for each player and AI to see who is winning.                      *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+    void Update ()
+    {
+        //Get the player score and check if they won
+        playerScore = play.GetComponent<CharacterBase> ().score;
+        if (playerScore >= GAME_MAX_SCORE)
+        {
+            common.alertText.text = "Player Wins!!";
+            common.gameEnd = true;
+        }
+        //Loop through all the AI and find the one with the highest kills and see if any of them won
+        foreach (GameObject AI in AIList)
+        {
+            int checkScore = AI.GetComponent<CharacterBase>().score;
+            if (checkScore >= GAME_MAX_SCORE){
+                common.alertText.text = "AI Wins!!";
+                common.gameEnd = true;
+            }
+            if (checkScore > topScore)
+                topScore = checkScore;
+        }
+        //Update the Hud to display the playerscore and top AI score
+        if (topScore > playerScore)
+        {
+            common.TEAM_A_KILLS = "Leading AI: " + topScore.ToString();
+            common.TEAM_A_COLOR = Color.red;
+            common.TEAM_B_KILLS = "You >> " + playerScore.ToString();
+            common.TEAM_B_COLOR = Color.blue;
+        }
+        if (playerScore > topScore)
+        {
+            common.TEAM_A_KILLS = "You >> " + playerScore.ToString();
+            common.TEAM_A_COLOR = Color.blue;
+            common.TEAM_B_KILLS = "Leading AI: " + topScore.ToString();
+            common.TEAM_B_COLOR = Color.red;
+        }
+    }
 	
-	// Update the score for each player and AI to see who is winning
-	void Update () {
-		//get the player score and check if they won
-		playerScore = play.GetComponent<CharacterBase> ().score;
-		if (playerScore >= GAME_MAX_SCORE) {
-			common.alertText.text = "Player Wins!!";
-			common.gameEnd = true;
-		}
-		// Loop through all the AI and find the one with the highest kills and see if any of them won
-		foreach (GameObject AI in AIList) {
-			int checkScore = AI.GetComponent<CharacterBase>().score;
-			if (checkScore >= GAME_MAX_SCORE){
-				common.alertText.text = "AI Wins!!";
-				common.gameEnd = true;
-			}
-			if (checkScore > topScore)
-				topScore = checkScore;
-		}
-		// Update the Hud to display the playerscore and top AI score
-		if (topScore > playerScore) {
-			common.TEAM_A_KILLS = "Leading AI: " + topScore.ToString();
-			common.TEAM_A_COLOR = Color.red;
-			common.TEAM_B_KILLS = "You >> " + playerScore.ToString();
-			common.TEAM_B_COLOR = Color.blue;
-		}
-		if (playerScore > topScore) {
-			common.TEAM_A_KILLS = "You >> " + playerScore.ToString();
-			common.TEAM_A_COLOR = Color.blue;
-			common.TEAM_B_KILLS = "Leading AI: " + topScore.ToString();
-			common.TEAM_B_COLOR = Color.red;
-		}
-	}
-	
-/***************************************************************************************************
-* Description: This is a helper function. This simply populates the list of hat colors that can    *
-*              be chosen from.                                                                     *
-* Syntax: populateHatColors();                                                                     *
-***************************************************************************************************/
-	private void populateHatColors()
+
+    /***************************************************************************************************
+    * Description: This is a helper function. This simply populates the list of hat colors that can    *
+    *              be chosen from.                                                                     *
+    * Syntax: populateHatColors();                                                                     *
+    ***************************************************************************************************/
+    private void populateHatColors()
 	{
 		hatColors.AddRange(new string[] { "BlackHat",
 			"BlueHat",

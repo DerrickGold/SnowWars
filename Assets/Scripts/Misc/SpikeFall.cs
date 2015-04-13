@@ -1,48 +1,65 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Jaymeson Wickins
- * 
- * Description: This is attached to an empty parent game object of spikes. The game object has a 
- * collider that will tell this script to drop the spikes whenever a snowman collides with it.  
+ * Primary Contributor: Jaymeson Wickins                                                            *
+ *                                                                                                  *
+ * Description: This is attached to an empty parent game object of spikes. The game object has a    *
+ *              collider that will tell this script to drop the spikes whenever a snowman collides  *
+ *              with it.                                                                            *
  ****************************************************************************************************/
 
 using UnityEngine;
 using System.Collections;
 
-public class SpikeFall : MonoBehaviour {
-
-	public float FALL_SPEED; //fall speed of the spikes
+public class SpikeFall : MonoBehaviour
+{
+	public float FALL_SPEED;
 	public float FALL_HEIGHT = 65f;
-	private Vector3 originalPosition; //spikes original position
-	private bool fallen; //if the spikes are falling
-	private Transform spikes; //the spikes themselves
+	private Vector3 originalPosition;
+	private bool fallen;
+	private Transform spikes;
 
-	// Use this for initialization
-	void Start () {
+
+	/****************************************************************************************************
+     * Description: This is used to initialize required variables.                                      *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+	void Start ()
+    {
 		FALL_SPEED = 9f;
-		spikes = transform.Find ("Trap"); //find the child object named "Trap", these are the spikes
+		spikes = transform.Find ("Trap");
 		originalPosition = spikes.position; 
 	}
 
-	//whenever something enters the fall region
-	void OnTriggerEnter(Collider col){
-		//if spikes are not already falling
-		if (fallen == false) {
-			//any snowman, AI or player, will have "Team" in their tag
-			//if snowman collides with region, drop spikes
-			if (col.gameObject.tag.Contains ("Team")) {
+
+	/****************************************************************************************************
+     * Description: Deals with anything that collides with the spikes hitbox.                           *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
+	void OnTriggerEnter(Collider col)
+    {
+		//If spikes are not already falling
+		if (fallen == false)
+        {
+			if (col.gameObject.tag.Contains ("Team"))
+            {
 				fallen = true;
 				StartCoroutine ("fall");
 			}
 		}
 	}
 
-	//coroutine to drop the spikes over a few seconds
-	public IEnumerator fall(){
-		while (spikes.position.y > FALL_HEIGHT) { //fall a certain distance
+	/****************************************************************************************************
+     * Description: This coroutine deals with timing the dropping of the spikes just fast enough to     *
+     *              kill any player or AI that is attempting to walk under them.                        *
+     * Syntax: StartCoroutine("fall");                                                                  *
+     ****************************************************************************************************/
+	public IEnumerator fall()
+    {
+		while (spikes.position.y > FALL_HEIGHT) 
+        {
 			spikes.position = new Vector3(originalPosition.x, spikes.position.y-FALL_SPEED*Time.deltaTime, originalPosition.z );
 			yield return null;
 		}
-		//after falling a certain distance, revert the spikes back to original position
+		//After falling a certain distance, revert the spikes back to original position
 		spikes.position = originalPosition; 
 		fallen = false; //spikes are done falling
 	}

@@ -11,7 +11,8 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Common: MonoBehaviour {
+public class Common: MonoBehaviour
+{
     //Player GameObjects
     [HideInInspector]
     public GameObject player;
@@ -55,10 +56,20 @@ public class Common: MonoBehaviour {
 
 	private GameObject hud;
 
+    /****************************************************************************************************
+     * Description: Assigns required variables.                                                         *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Awake()
 	{
 		buffs = new List<Transform> ();
 	}
+
+
+    /****************************************************************************************************
+     * Description: Sets important game variables.                                                      *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Start()
 	{
 		if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
@@ -80,6 +91,11 @@ public class Common: MonoBehaviour {
         }
 	}
 
+
+    /****************************************************************************************************
+     * Description: Keeps track of player and AI score, as well as keeps track of game progress.        *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
 	void Update()
 	{
         //Make sure not to run anything during the intro
@@ -113,11 +129,21 @@ public class Common: MonoBehaviour {
         }
 	}
 
+
+    /****************************************************************************************************
+     * Description: Closes the game.                                                                    *
+     * Syntax: exitGame();                                                                              *
+     ****************************************************************************************************/
 	public void exitGame()
 	{
 		Application.Quit ();
 	}
 
+
+    /****************************************************************************************************
+     * Description: Loads the main menu.                                                                *
+     * Syntax: loadMenu();                                                                              *
+     ****************************************************************************************************/
 	public void loadMenu()
 	{
 		Application.LoadLevel ("MainMenu");

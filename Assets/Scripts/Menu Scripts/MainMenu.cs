@@ -1,8 +1,8 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Shaun Yonkers
- * 
- * Description: This script is the driving force behind the main menu as well as the in-game menu.
- *              This allows the player to start and stop games, change options, etc.
+ * Primary Contributor: Shaun Yonkers                                                               *
+ *                                                                                                  *
+ * Description: This script is the driving force behind the main menu as well as the in-game menu.  *
+ *              This allows the player to start and stop games, change options, etc.                *
  ****************************************************************************************************/
 
 using UnityEngine;
@@ -26,6 +26,11 @@ public class MainMenu : MonoBehaviour
     private float startingScreenHeight;
     private float startingScreenWidth;
 
+
+    /****************************************************************************************************
+     * Description: This is used mainly for initializing required variables.                            *
+     * Syntax: ---                                                                                      *
+     ****************************************************************************************************/
     void Start()
     {
 		Screen.lockCursor = false;
@@ -51,7 +56,7 @@ public class MainMenu : MonoBehaviour
 	
 
     /****************************************************************************************************
-     * Description: Decide what is drawn on the gui based on the clicked variable.                                                 *
+     * Description: Decide what is drawn on the gui based on the clicked variable.                      *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
     private void OnGUI()
@@ -80,27 +85,34 @@ public class MainMenu : MonoBehaviour
 			WindowRect = GUI.Window (2, WindowRect, gameModeFunc, "Game Mode");
 		} 
 	}
-	
-	private void gameModeFunc(int id)
-	{
-		if (GUILayout.Button ("Team Deathmatch")) {
-			Application.LoadLevel("LevelOne");
-		}
-		if (GUILayout.Button ("Free For All")) {
-			Application.LoadLevel("LevelTwo");
-		}
-		if (GUILayout.Button("Back"))
-		{
-			clicked = "";
-		}
 
-	}
-	
+
     /****************************************************************************************************
-     * Description: Create the menu screen when the options button is clicked                                                   *
+     * Description: Loads the selected game mode.                                                       *
+     * Syntax: gameModeFun(int id);                                                                     *
+     * Values: id = The type of gamemode the player clicked                                             *
+     ****************************************************************************************************/
+    private void gameModeFunc(int id)
+    {
+        if (GUILayout.Button ("Team Deathmatch")) {
+            Application.LoadLevel("LevelOne");
+        }
+        if (GUILayout.Button ("Free For All")) {
+            Application.LoadLevel("LevelTwo");
+        }
+        if (GUILayout.Button("Back"))
+        {
+            clicked = "";
+        }
+
+    }
+	
+
+    /****************************************************************************************************
+     * Description: Create the menu screen when the options button is clicked                           *
      * Syntax: optionsFunc(int id);                                                                     *                                                                *
      ****************************************************************************************************/
-	private void optionsFunc(int id)
+    private void optionsFunc(int id)
 	{
 		if (GUILayout.Button("Video"))
 		{
@@ -123,53 +135,48 @@ public class MainMenu : MonoBehaviour
 
 
     /****************************************************************************************************
-     * Description: Navigte the main menu to decide what screen to create.                                                   *
-     * Syntax: menuFunc(int id);                                                                     *
-     * Values:                                                                                          *
-     *          id = DESCRIBE WHAT id IS                                                                *
+     * Description: Navigte the main menu to decide what screen to create.                              *
+     * Syntax: menuFunc(int id);                                                                        *
+     * Values: id = The menu button ID that the player clicked on                                       *
      ****************************************************************************************************/
 	private void menuFunc(int id)
 	{
-		//Buttons 
 		if (GUILayout.Button("Play Game"))
-		{
-			//Play game is clicked
 			clicked = "GameMode";
-		}
 		if (GUILayout.Button("Options"))
-		{
 			clicked = "options";
-		}
 		if (GUILayout.Button("Quit Game"))
-		{
 			Application.Quit();
-		}
 		if (DragWindow)
 			GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
 	}
 
 
     /****************************************************************************************************
-     * Description: Create the resolution buttons in the video options                                              *
-     * Syntax: resolutionBtns();                                                                        (
+     * Description: Create the resolution buttons in the video options                                  *
+     * Syntax: resolutionBtns();                                                                        *
      ****************************************************************************************************/
-	private void resolutionBtns(){
+	private void resolutionBtns()
+    {
 		GUI.TextField(new Rect(300, 50, 100, 50), "Resolution");
-			//1080p
-			if(GUI.Button(new Rect(400, 50, 93,50), "1080p")) {
-				Screen.SetResolution(1920, 1080, Fullscreen);
-				Debug.Log ("1080p");
-			}
-			//720p
-			if(GUI.Button(new Rect(493, 50, 93, 50), "720p")) {
-				Screen.SetResolution(1280, 720, Fullscreen);
-				Debug.Log ("720p");
-			}
-			//480p
-			if(GUI.Button(new Rect(586, 50, 93, 50), "480p")) {
-				Screen.SetResolution(640, 480, Fullscreen);
-				Debug.Log ("480p");
-			}
+		//1080p
+		if(GUI.Button(new Rect(400, 50, 93,50), "1080p"))
+        {
+			Screen.SetResolution(1920, 1080, Fullscreen);
+			Debug.Log ("1080p");
+		}
+		//720p
+		if(GUI.Button(new Rect(493, 50, 93, 50), "720p"))
+        {
+			Screen.SetResolution(1280, 720, Fullscreen);
+			Debug.Log ("720p");
+		}
+		//480p
+		if(GUI.Button(new Rect(586, 50, 93, 50), "480p"))
+        {
+			Screen.SetResolution(640, 480, Fullscreen);
+			Debug.Log ("480p");
+		}
 	}
 
 
@@ -177,21 +184,26 @@ public class MainMenu : MonoBehaviour
      * Description: Called when the player changes the value of antiAliasing in the menu.               *
      * Syntax: antiAlias();                                                                             *
      ****************************************************************************************************/
-	private void antiAlias(){
+	private void antiAlias()
+    {
 		GUI.TextField (new Rect (300, 100, 100, 50), "Anti-Alising");
-		if (GUI.Button (new Rect (400, 100, 69.75f, 50), "2X")) {
+		if (GUI.Button (new Rect (400, 100, 69.75f, 50), "2X"))
+        {
 			QualitySettings.antiAliasing = 2;
 			Debug.Log ("2X");
 		}
-		if (GUI.Button (new Rect (469.75f, 100, 69.75f, 50), "4X")) {
+		if (GUI.Button (new Rect (469.75f, 100, 69.75f, 50), "4X"))
+        {
 			QualitySettings.antiAliasing = 4;
 			Debug.Log ("4X");
 		}
-		if (GUI.Button (new Rect (539.5f, 100, 69.75f, 50), "8X")) {
+		if (GUI.Button (new Rect (539.5f, 100, 69.75f, 50), "8X"))
+        {
 			QualitySettings.antiAliasing = 8;
 			Debug.Log ("8X");
 		}
-		if (GUI.Button (new Rect (609.25f, 100, 69.75f, 50), "Off")) {
+		if (GUI.Button (new Rect (609.25f, 100, 69.75f, 50), "Off"))
+        {
 			QualitySettings.antiAliasing = 0;
 			Debug.Log ("Off");
 		}
@@ -201,16 +213,19 @@ public class MainMenu : MonoBehaviour
      * Syntax: tripleBufferingBtns();                                                                   *
      ****************************************************************************************************/
 
-	private void tripleBufferingBtns(){
-				GUI.TextField (new Rect (300, 150, 100, 50), "Triple Buffering");
-				if (GUI.Button (new Rect (400, 150, 100.0f, 50), "On")) {
-						QualitySettings.maxQueuedFrames = 3;
-						Debug.Log ("On");
-				}
-				if (GUI.Button (new Rect (500, 150, 100.0f, 50), "Off")) {
-						QualitySettings.maxQueuedFrames = 0;
-						Debug.Log ("Off");
-				}
+	private void tripleBufferingBtns()
+    {
+		GUI.TextField (new Rect (300, 150, 100, 50), "Triple Buffering");
+		if (GUI.Button (new Rect (400, 150, 100.0f, 50), "On"))
+        {
+				QualitySettings.maxQueuedFrames = 3;
+				Debug.Log ("On");
+		}
+		if (GUI.Button (new Rect (500, 150, 100.0f, 50), "Off"))
+        {
+				QualitySettings.maxQueuedFrames = 0;
+				Debug.Log ("Off");
+		}
 	}
 	/****************************************************************************************************
      * Description: Called when the player turns vertical sync on or off in the menu.                   *

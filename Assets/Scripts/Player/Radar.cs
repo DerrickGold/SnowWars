@@ -18,7 +18,7 @@ public class Radar : MonoBehaviour
 	public Color radarBackgroundA = new Color(255, 255, 0);
 	public Color radarBackgroundB = new Color(0, 255, 255);
 	public Texture2D radarTexture;
-	public float radarSize = 0.10f;  // The amount of the screen the radar will use
+	public float radarSize = 0.10f;
 	public float radarZoom = 2.0f;
 	
 	// Center Object information
@@ -43,14 +43,14 @@ public class Radar : MonoBehaviour
      ****************************************************************************************************/
 	void Start ()
 	{
-		// Determine the size of the radar
+		//Determine the size of the radar
 		radarWidth = (int)(Screen.width * radarSize);
 		radarHeight = radarWidth;
 		
-		// Set the location of the radar
+		//Set the location of the radar
 		radarCenter = new Vector2(Screen.width - radarWidth / 2, radarHeight / 2);
 		
-		// Create the blip textures
+		//Create the blip textures
 		radarCenterTexture = new Texture2D(3, 3, TextureFormat.RGB24, false);
 		radarBlip1Texture = new Texture2D(3, 3, TextureFormat.RGB24, false);
 		radarBlip2Texture = new Texture2D(3, 3, TextureFormat.RGB24, false);
@@ -66,11 +66,11 @@ public class Radar : MonoBehaviour
 		}
 
 		
-		// Get our center object
-		foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
-			if (g.name == "Player(Clone)") {
+		//Get our center object
+		foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject)))
+        {
+			if (g.name == "Player(Clone)")
 				centerObject = g;
-			}
 		}
 	}
 	
@@ -79,25 +79,29 @@ public class Radar : MonoBehaviour
      * Description: Used to update and draw the radar.                                                  *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void OnGUI (){
+	void OnGUI ()
+    {
 		// Draw the radar background
 		if (radarType != RadarTypes.Transparent)
 		{
 			Rect radarRect = new Rect(radarCenter.x - radarWidth / 2, radarCenter.y - radarHeight / 2, radarWidth, radarHeight);
 			GUI.DrawTexture(radarRect, radarTexture);
 		}
-		if (centerObject == null) {
-			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
-				if (g.name == "Player(Clone)") {
+		if (centerObject == null)
+        {
+			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject)))
+            {
+				if (g.name == "Player(Clone)")
 					centerObject = g;
-				}
 			}
 		}
 		// Find all game objects
-		if (centerObject != null) {
-			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject))) {
-				if (g.name == "AI(Clone)") {
-					////
+		if (centerObject != null)
+        {
+			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject)))
+            {
+				if (g.name == "AI(Clone)")
+                {
 					if (centerObject.tag == g.tag)
 						drawBlip (g, radarBlip2Texture);
 					else
@@ -105,14 +109,6 @@ public class Radar : MonoBehaviour
 				}
 			}
 		}
-			
-		/* Iterate through them and call drawBlip function
-		foreach (GameObject go in gos)
-			drawBlip(go, radarBlip1Texture);
-		gos = GameObject.FindGameObjectsWithTag(radarBlip2Tag);
-			
-		foreach (GameObject go in gos)
-			drawBlip(go, radarBlip2Texture);*/
 
 		// Draw center oject
 		Rect centerRect;
@@ -122,7 +118,6 @@ public class Radar : MonoBehaviour
 	}
 	
 
-	// Draw a blip for an object
     /****************************************************************************************************
      * Description: This is a helper function. Used to draw a dot (blip) for an individual gameobject.  *
      * Syntax: drawBlip(GameObject go, Texture2D blipTexture);                                          *
@@ -136,7 +131,6 @@ public class Radar : MonoBehaviour
 		{
 			Vector3 centerPos = centerObject.transform.position;
 			Vector3 extPos = go.transform.position;
-
 			
 			// Get the distance to the object from the centerObject
 			float dist = Vector3.Distance(centerPos, extPos);
@@ -150,11 +144,11 @@ public class Radar : MonoBehaviour
 			bX = dist*Mathf.Cos(deltay * Mathf.Deg2Rad)*-1;
 			bY = dist*Mathf.Sin(deltay * Mathf.Deg2Rad);
 
-			// Scale the objects position to fit within the radar
+			//Scale the objects position to fit within the radar
 			bX = bX * radarZoom;
 			bY = bY * radarZoom;
 
-			// For a round radar, make sure we are within the circle
+			//For a round radar, make sure we are within the circle
 			if(dist <= (radarWidth - 2) * 0.5 / radarZoom)
 			{
 				Rect clipRect = new Rect(radarCenter.x - bX - 1.5f, radarCenter.y + bY - 1.5f, 3, 3);
@@ -192,25 +186,19 @@ public class Radar : MonoBehaviour
 		Color c = new Color(0, 0, 0);
 		int size = (int)((radarWidth / 2) / 4);
 		
-		// Clear the texture
+		//Clear the texture
 		for (int x = 0; x < radarWidth; x++)
 		{
 			for (int y = 0; y < radarWidth; y++)
-			{
 				tex.SetPixel(x, y, c);
-			}
 		}
 		
 		for (int r = 4; r > 0; r--)
 		{
 			if (r % 2 == 0)
-			{
 				c = a;
-			}
 			else
-			{
 				c = b;
-			}
 			DrawFilledCircle(tex, (int)(radarWidth / 2), (int)(radarHeight / 2), (r * size), c);
 		}
 		

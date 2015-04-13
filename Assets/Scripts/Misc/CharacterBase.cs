@@ -10,7 +10,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class CharacterBase: MonoBehaviour {
+public class CharacterBase: MonoBehaviour
+{
 	public enum BuffFlag {
 		MAX_HEALTH_BOOST = 1<<1, 
 		INF_AMMO = 1<<2,
@@ -99,8 +100,9 @@ public class CharacterBase: MonoBehaviour {
      *          part = The gameobject that needs to have the sphere collider enabled or removed         *
      *          flag = Specifies whether to enable or remove the sphere collider                        *
      ****************************************************************************************************/
-	public void toggleCollider(GameObject part, bool flag) {
-		SphereCollider temp = part.GetComponent<SphereCollider> ();
+	public void toggleCollider(GameObject part, bool flag)
+    {
+		SphereCollider temp = part.GetComponent<SphereCollider>();
 		temp.enabled = flag;
 	}
 
@@ -110,14 +112,11 @@ public class CharacterBase: MonoBehaviour {
      *              reassembles their body parts back to the starting spawn position.                   *
      * Syntax: rebuild();                                                                               *
      ****************************************************************************************************/
-	public void rebuild() {
+	public void rebuild()
+    {
 		Destroy (Base.rigidbody);
 		Destroy (Thorax.rigidbody);
 		Destroy (Head.rigidbody);
-
-		//toggleCollider (Base, false);
-		//toggleCollider (Thorax, false);
-		//toggleCollider (Head, false);
 		
 		Base.transform.localPosition = oldPartPositions [0];
         Base.transform.rotation = Base.transform.root.rotation;
@@ -132,8 +131,10 @@ public class CharacterBase: MonoBehaviour {
      * Description: Used to apply physics to the characters body to simulate a ragdoll.                 *
      * Syntax: dieAnimation();                                                                          *
      ****************************************************************************************************/
-	public void dieAnimation() {
+	public void dieAnimation()
+    {
 		Instantiate(deathExplosionEffect, transform.position, transform.rotation);
+
 		//Add physics to the players body
         if (Base.GetComponent<Rigidbody>() == null)
         {
@@ -161,20 +162,24 @@ public class CharacterBase: MonoBehaviour {
     public void setHatColor(string colorOfHat)
     {
         //If hat is a random color
-        if (colorOfHat != "Random") {
-            foreach (Material mat in hatColors) {
+        if (colorOfHat != "Random")
+        {
+            foreach (Material mat in hatColors)
+            {
                 if (mat.name == colorOfHat)
                     hatTop.GetComponent<MeshRenderer>().material = mat;
             }
         }
         //If hat is a specific color
-        else {
+        else
+        {
             int color = Random.Range(0, 6);
             hatTop.GetComponent<MeshRenderer>().material = hatColors[color];
         }
 
         //Set the base of the hat to always be black
-        foreach (Material mat in hatColors) {
+        foreach (Material mat in hatColors)
+        {
             if (mat.name == "BlackHat")
                 hatBase.GetComponent<MeshRenderer>().material = mat;
         }
@@ -187,9 +192,9 @@ public class CharacterBase: MonoBehaviour {
      * Values:                                                                                          *
      *          effect = The effect that needs to be activated on the character                         *
      ****************************************************************************************************/
-    public void activateBuff(BuffFlag effect) {
+    public void activateBuff(BuffFlag effect)
+    {
 		ActiveBuffs |= (int)effect;
-		//re-activate timer
 	}
 
 
@@ -199,9 +204,9 @@ public class CharacterBase: MonoBehaviour {
      * Values:                                                                                          *
      *          effect = The effect that needs to be cleared off of the character                       *
      ****************************************************************************************************/
-	public void clearBuff(BuffFlag effect) {
+	public void clearBuff(BuffFlag effect)
+    {
 		ActiveBuffs &= (int)~effect;
-		//remove timer
 	}
 
 
@@ -212,7 +217,8 @@ public class CharacterBase: MonoBehaviour {
      *          effect = The effect that needs to be checked for                                        *
      * Returns: True if effect is active | False if effect is inactive                                  *
      ****************************************************************************************************/
-	public bool isEffectActive(BuffFlag effect) {
+	public bool isEffectActive(BuffFlag effect)
+    {
 		return (ActiveBuffs & (int)effect) > 0;
 	}
 
@@ -224,7 +230,8 @@ public class CharacterBase: MonoBehaviour {
      *          effect = The effect requires a set time                                                 *
      *          time = How long the effect should last for                                              *
      ****************************************************************************************************/
-	public void setBuffTimer(BuffFlag effect, float time) {
+	public void setBuffTimer(BuffFlag effect, float time)
+    {
 		BuffTimers[(int)effect % BuffCount] = time;
 	}
 
@@ -233,15 +240,18 @@ public class CharacterBase: MonoBehaviour {
      * Description: Update all effect times for a player or AI.                                         *
      * Syntax: updateBuffTimers();                                                                      *
      ****************************************************************************************************/
-	public void updateBuffTimers() {
-		for (int i = 0; i < BuffCount; i++) { 
+	public void updateBuffTimers()
+    {
+		for (int i = 0; i < BuffCount; i++)
+        { 
 			BuffFlag curEffect = (BuffFlag)(1<<(i + 1));
 			if (!isEffectActive (curEffect)) continue;
 
 			int timer = (int)curEffect % BuffCount;
 			BuffTimers[timer] -= Time.deltaTime;
 
-			if (BuffTimers[timer] <= 0.0f) {
+			if (BuffTimers[timer] <= 0.0f)
+            {
 				clearBuff (curEffect);
 				BuffTimers[timer] = 0.0f;
 			}
@@ -254,11 +264,11 @@ public class CharacterBase: MonoBehaviour {
      * Description: Reset all buff timers.                                                              *
      * Syntax: resetBuffs();                                                                            *
      ****************************************************************************************************/
-	public void resetBuffs() {
+	public void resetBuffs()
+    {
 		ActiveBuffs = 0;
-		for(int i = 0; i < BuffCount; i++) {
+		for(int i = 0; i < BuffCount; i++)
 			BuffTimers[i] = 0;
-		}
 	}
 
 
@@ -280,7 +290,8 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: float value = getMaxHealth();                                                            *
      * Returns: float representing the characters max health                                            *
      ****************************************************************************************************/
-	public float getMaxHealth() {
+	public float getMaxHealth()
+    {
 		return MAX_HEALTH;
 	}
 
@@ -290,7 +301,8 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: float value = getHealth();                                                               *
      * Returns: float representing the characters current health                                        *
      ****************************************************************************************************/
-	public float getHealth() {
+	public float getHealth()
+    {
 		if(isEffectActive (BuffFlag.INF_HEALTH))
 			return getMaxHealth();
 		return Health;
@@ -302,7 +314,8 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: float value = getMaxStamina();                                                           *
      * Returns: float representing the characters max stamina                                           *
      ****************************************************************************************************/
-	public int getMaxStamina() {
+	public int getMaxStamina()
+    {
 		return MAX_STAMINA;
 	}
 
@@ -312,7 +325,8 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: float value = getStamina();                                                              *
      * Returns: float representing the characters current stamina                                       *
      ****************************************************************************************************/
-	public float getStamina() {
+	public float getStamina()
+    {
 		if (isEffectActive (BuffFlag.INF_STAMINA))
 			return MAX_STAMINA;
 		return Stamina;
@@ -323,7 +337,8 @@ public class CharacterBase: MonoBehaviour {
      * Description: Processess a throw from the character. Subtracts the characters health if required. *
      * Syntax: subtractAmmo();                                                                          *
      ****************************************************************************************************/
-	public void subtractAmmo() {
+	public void subtractAmmo()
+    {
 		//Infinite ammo, doesn't subtract from health
 		if (isEffectActive(BuffFlag.INF_AMMO) || isEffectActive(BuffFlag.INF_HEALTH)) return;
 
@@ -340,7 +355,8 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: float value = getSpeedBoost();                                                           *
      * Returns: float representing the new speed to use for the character                               *
      ****************************************************************************************************/
-	public float getSpeedBoost() {
+	public float getSpeedBoost()
+    {
 		if (isEffectActive(BuffFlag.SPEED_BOOST)) return SPEED_BOOST;
 		return 0.0f;
 	}
@@ -351,10 +367,10 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: int value = getSnowBallDamage();                                                         *
      * Returns: int representing the damage output of the characters snowball                           *
      ****************************************************************************************************/
-	public int getSnowBallDamage() {
-		if (isEffectActive(BuffFlag.SUPER_SNOWBALL)) {
+	public int getSnowBallDamage()
+    {
+		if (isEffectActive(BuffFlag.SUPER_SNOWBALL))
 			return BASE_SNOWBALL_DAMAGE + SUPER_SNOWBALL_DAMAGE;
-		}
 		return BASE_SNOWBALL_DAMAGE;
 	}
 
@@ -364,13 +380,15 @@ public class CharacterBase: MonoBehaviour {
      * Syntax: superSizeSnowBall(snowBall);                                                             *
      * Returns: Nothing                          *
      ****************************************************************************************************/
-	public void superSizeSnowBall(Rigidbody snowBall){ 
+	public void superSizeSnowBall(Rigidbody snowBall)
+    { 
 		ParticleRenderer[] superEffect = snowBall.GetComponentsInChildren<ParticleRenderer>();
-		//if effect is active, enable the effect for the super snowball
-		foreach(ParticleRenderer pr in superEffect) {
+
+		//If effect is active, enable the effect for the super snowball
+		foreach(ParticleRenderer pr in superEffect)
 			pr.gameObject.SetActive(isEffectActive (BuffFlag.SUPER_SNOWBALL));
-		}
-		//make sure we disable the lightsource too
+
+		//Make sure we disable the lightsource too
 		Light superLight = snowBall.GetComponentInChildren<Light> ();
 		superLight.gameObject.SetActive (isEffectActive (BuffFlag.SUPER_SNOWBALL));
 		

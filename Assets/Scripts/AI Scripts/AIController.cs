@@ -46,7 +46,7 @@ public class AIController : CharacterBase
      *              quickly needed.                                                                     *
      * Syntax: ---                                                                                      *
      ****************************************************************************************************/
-	void Awake ()
+	void Awake()
     {
         baseInitialization();
         globalScript = GameObject.FindGameObjectWithTag("Global").GetComponent<Common>();
@@ -274,6 +274,7 @@ public class AIController : CharacterBase
 
 		if (globalScript.buffs.Count <= 0)
 			return;
+
         //Loop through all of the buffs and grab the closest one
 		foreach (Transform o  in globalScript.buffs)
         {
@@ -328,17 +329,20 @@ public class AIController : CharacterBase
     void getListOfEnemies()
     {
 		string enemyTag = getEnemyTag ();
+
         //Get a list of all enemys in the game
         foreach (GameObject g in GameObject.FindGameObjectsWithTag(enemyTag))
         {
             //Don't add itself!
             if (g != gameObject)
             {
+                //If it is another AI
 				if (g.GetComponent<AIController>() != null){
 					State aiState = g.GetComponent<AIController>().state;
 					if (aiState != State.DEAD && aiState != State.RESPAWN)
                     	allEnemies.Add(g);
 				}
+                //If it is the player
 				else if (g.GetComponent<PlayerController>() != null){
 					PlayerController.PlayerState playerState = g.GetComponent<PlayerController>().playerState;
 					if (playerState != PlayerController.PlayerState.DEAD) allEnemies.Add(globalScript.player);
@@ -398,8 +402,6 @@ public class AIController : CharacterBase
         float velocity = Mathf.Sqrt(Mathf.Pow(verticalSpeed, 2) + Mathf.Pow(horizontalSpeed, 2));
 
         return -Mathf.Atan2(verticalSpeed / velocity, horizontalSpeed / velocity) + Mathf.PI;
-
-		//return (90 - (Mathf.Rad2Deg * Mathf.Atan (verticalSpeed / horizontalSpeed)))*Common.AIAimAdjustFactor;
 	}
 
 
@@ -410,7 +412,8 @@ public class AIController : CharacterBase
      ****************************************************************************************************/
     public void throwing()
     {
-		if (!stateCoroutine) {
+		if (!stateCoroutine)
+        {
 			Rigidbody instantiatedProjectile = Instantiate(SnowBallTemplate.rigidbody,
 			                                               snowballSpawnLocation.position, snowballSpawnLocation.rotation) as Rigidbody;
 
@@ -459,12 +462,14 @@ public class AIController : CharacterBase
      *          maxTime = Maximum number of seconds to stay in the current state                        *
      *          next = Next state to switch to after the timer has finished                             *
      ****************************************************************************************************/
-    IEnumerator defaultStateTimer(float minTime, float maxTime, State next) {
+    IEnumerator defaultStateTimer(float minTime, float maxTime, State next)
+    {
 		stateCoroutine = true;
 		float curTime = 0;
 		float endTime = (Random.value * (maxTime - minTime)) + minTime;
 
-		while(curTime < endTime) {
+		while(curTime < endTime) 
+        {
 			if(!pauseTimer) curTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}

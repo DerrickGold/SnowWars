@@ -1,14 +1,15 @@
 ﻿/****************************************************************************************************
- * Primary Contributor: Jaymeson Wickins
- * 
- * Description: This script controls the movement of the physical buffs laying around the levels.
+ * Primary Contributor: Jaymeson Wickins                                                            *
+ *                                                                                                  *
+ * Description: This script controls the movement of the physical buffs laying around the levels.   *
  ****************************************************************************************************/
 
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
-public class Rotator : MonoBehaviour {
+public class Rotator : MonoBehaviour
+{
 	public Text buffText;
 	public Text buffIcon;
 	private Vector3 originalPos;
@@ -35,31 +36,24 @@ public class Rotator : MonoBehaviour {
      ****************************************************************************************************/
 	void Update () 
 	{
-		/*
-		if (destroy) {
-			pickedUpTime = Time.time;
-			//gameObject.SetActive (false);
-			transform.GetChild(0).gameObject.SetActive (false);
-			print (pickedUpTime);
-			StartCoroutine("cooldown");
-		}*/
-		//else transform.GetChild(0).gameObject.SetActive (true); //gameObject.SetActive (true);
-		if(!destroyed) transform.GetChild(0).gameObject.SetActive (true);
+		if(!destroyed)
+            transform.GetChild(0).gameObject.SetActive (true);
 
 		transform.position = new Vector3 (originalPos.x, originalPos.y + buffBounceHeight * Mathf.Abs (Mathf.Sin (Time.time*buffBounceSpeed)), originalPos.z);
 	}
 
-	public void destroy(){
+	public void destroy()
+    {
 		destroyed = true;
 		pickedUpTime = Time.time;
 		transform.GetChild(0).gameObject.SetActive (false);
 		StartCoroutine("cooldown");
 	}
 
-	public IEnumerator cooldown(){
-		while((Time.time-pickedUpTime) < cooldownTime ){
+	public IEnumerator cooldown()
+    {
+		while((Time.time-pickedUpTime) < cooldownTime )
 			yield return null;
-		}
 		destroyed = false;
 	}
 }

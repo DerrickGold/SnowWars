@@ -26,6 +26,7 @@ public class Projectile : MonoBehaviour
 	float minScale = 1.0f;
 	int maxCluster = 25;
 
+
     /****************************************************************************************************
      * Description: Used to initialize required variables.                                              *
      * Syntax: ---                                                                                      *
