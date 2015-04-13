@@ -3,7 +3,9 @@
  *                                                                                                  *
  * Description: Deals with team death matches and keeps track of the game. Things that this script  *
  *              handles include keeping track of score, spawning of players, team colors, team      *
- *              distribution and keeps track of important gameobjects (such as buffs).              *
+ *              distribution and keeps track of important gameobjects (such as buffs).   			*
+ *				Note: player's team is always team blue indicated by the color of the scores in the *
+ *				bottom right hand corner of the HUD.												*
  ****************************************************************************************************/
 
 using UnityEngine;
