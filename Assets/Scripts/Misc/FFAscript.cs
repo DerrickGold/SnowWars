@@ -130,7 +130,7 @@ public class FFAscript : MonoBehaviour
             common.TEAM_B_KILLS = "You >> " + playerScore.ToString();
             common.TEAM_B_COLOR = Color.blue;
         }
-        if (playerScore > topScore)
+        if (playerScore >= topScore)
         {
             common.TEAM_A_KILLS = "You >> " + playerScore.ToString();
             common.TEAM_A_COLOR = Color.blue;
