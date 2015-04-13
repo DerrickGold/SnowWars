@@ -58,7 +58,7 @@ public class FFAscript : MonoBehaviour
             if (hit.transform.gameObject.tag != "WATER")
             {
                 oneShot = true;
-                play = (GameObject)Instantiate(player, hit.point, transform.rotation);
+                play = (GameObject)Instantiate(player, new Vector3(hit.point.x, hit.point.y + 2, hit.point.z), transform.rotation);
                 play.tag = "Team0";
                 play.GetComponent<PlayerController>().setHatColor(hatColors[Random.Range(0, hatColors.Count)]);
             }
