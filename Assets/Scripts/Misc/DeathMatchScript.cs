@@ -138,12 +138,12 @@ public class DeathMatchScript : MonoBehaviour
 		common.TEAM_B_KILLS = "Team B: " + TEAM_B_KILLS.ToString();
 		
         //If the game has finished, display the winner
-		if (TEAM_A_KILLS == GAME_MAX_SCORE)
+		if (TEAM_A_KILLS >= GAME_MAX_SCORE)
         {
 			common.alertText.text = "Team A Wins!";
 			common.gameEnd = true;
 		}
-		else if (TEAM_B_KILLS == GAME_MAX_SCORE)
+		else if (TEAM_B_KILLS >= GAME_MAX_SCORE)
         {
 			common.alertText.text = "Team B Wins!";
 			common.gameEnd = true;
