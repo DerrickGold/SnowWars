@@ -1,6 +1,6 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Derrick Gold
- * Secondary Contributors: Curtis Murray
+ * Secondary Contributors: Curtis Murray, Shaun Yonkers
  * 
  * Description: Anything that is common between the player and the AI is put into this script. Both
  *              the player and the AI inherit this script. Things such as hitpoints, buffs, ammo,

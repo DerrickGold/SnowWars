@@ -11,10 +11,8 @@ using System.Collections;
 
 public class Radar : MonoBehaviour
 {
-	public enum RadarTypes : int {Textured, Round, Transparent};
 	
 	// Display Location
-	public RadarTypes radarType = RadarTypes.Transparent;
 	public Color radarBackgroundA = new Color(255, 255, 0);
 	public Color radarBackgroundB = new Color(0, 255, 255);
 	public Texture2D radarTexture;
@@ -59,12 +57,6 @@ public class Radar : MonoBehaviour
 		CreateBlipTexture(radarBlip1Texture, radarEnemyColor);
 		CreateBlipTexture(radarBlip2Texture, radarFriendlyColor);
 
-		if (radarType != RadarTypes.Textured)
-		{
-			radarTexture = new Texture2D(radarWidth, radarHeight, TextureFormat.RGB24, false);
-			CreateRoundTexture(radarTexture, radarBackgroundA, radarBackgroundB);
-		}
-
 		
 		//Get our center object
 		foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject)))
@@ -82,11 +74,10 @@ public class Radar : MonoBehaviour
 	void OnGUI ()
     {
 		// Draw the radar background
-		if (radarType != RadarTypes.Transparent)
-		{
-			Rect radarRect = new Rect(radarCenter.x - radarWidth / 2, radarCenter.y - radarHeight / 2, radarWidth, radarHeight);
-			GUI.DrawTexture(radarRect, radarTexture);
-		}
+		Rect radarRect = new Rect(radarCenter.x - radarWidth / 2, radarCenter.y - radarHeight / 2, radarWidth, radarHeight);
+		GUI.DrawTexture(radarRect, radarTexture);
+
+		//find the center object (the player)
 		if (centerObject == null)
         {
 			foreach (GameObject g in GameObject.FindObjectsOfType(typeof(GameObject)))
@@ -171,60 +162,4 @@ public class Radar : MonoBehaviour
 		tex.SetPixels(cols, 0);
 		tex.Apply();
 	}
-	
-
-    /****************************************************************************************************
-     * Description: This is a helper function. Used to create a round bullseye texture.                 *
-     * Syntax: CreateRoundTexture(Texture2D texture, Color colorOne, Color colorTwo);                   *
-     * Values:                                                                                          *
-     *          texture = The texture to use when creating the round bullseye                           *
-     *          colorOne = DESCRIBE WHAT THE FIRST COLOR IS USED FOR                                    *
-     *          colorTwo = DESCRIBE WHAT THE SECOND COLOR IS USED FOR                                   *
-     ****************************************************************************************************/
-    void CreateRoundTexture(Texture2D tex, Color a, Color b)
-	{
-		Color c = new Color(0, 0, 0);
-		int size = (int)((radarWidth / 2) / 4);
-		
-		//Clear the texture
-		for (int x = 0; x < radarWidth; x++)
-		{
-			for (int y = 0; y < radarWidth; y++)
-				tex.SetPixel(x, y, c);
-		}
-		
-		for (int r = 4; r > 0; r--)
-		{
-			if (r % 2 == 0)
-				c = a;
-			else
-				c = b;
-			DrawFilledCircle(tex, (int)(radarWidth / 2), (int)(radarHeight / 2), (r * size), c);
-		}
-		
-		tex.Apply();
-	}
-
-
-    /****************************************************************************************************
-     * Description: This is a helper function. Used to draw a filled colored circle into a texture.     *
-     * Syntax: DrawFilledCircle(Texture2D texture, int cx, int cy, int r, Color c);                     *
-     * Values:                                                                                          *
-     *          texture = The texture to use when creating a filled colored circle                      *
-     *          cx = DESCRIBE WHAT CX INT IS USED FOR                                                   *
-     *          cy = DESCRIBE WHAT CY INT IS USED FOR                                                   *
-     *          r = DESCRIBE WHAT R INT IS USED FOR                                                     *
-     *          c = The color that should be applied to the colored circle                              *
-     ****************************************************************************************************/
-    // Draw a filled colored circle onto a texture
-	void DrawFilledCircle(Texture2D tex, int cx, int cy, int r, Color c)
-	{
-		for (int x = -r; x < r ; x++)
-		{
-			int height = (int)Mathf.Sqrt(r * r - x * x);
-			
-			for (int y = -height; y < height; y++)
-				tex.SetPixel(x + cx, y + cy, c);
-		}
-	}		
 }

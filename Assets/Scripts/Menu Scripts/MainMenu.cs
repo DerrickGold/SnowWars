@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
     /****************************************************************************************************
      * Description: Loads the selected game mode.                                                       *
      * Syntax: gameModeFun(int id);                                                                     *
-     * Values: id = The type of gamemode the player clicked                                             *
+     * Values: id = unique id needed to create a gui.window                                             *
      ****************************************************************************************************/
     private void gameModeFunc(int id)
     {
@@ -110,7 +110,8 @@ public class MainMenu : MonoBehaviour
 
     /****************************************************************************************************
      * Description: Create the menu screen when the options button is clicked                           *
-     * Syntax: optionsFunc(int id);                                                                     *                                                                *
+     * Syntax: optionsFunc(int id);
+	 * Values: id: Unique id needed to create gui.window                                                                     *                                                                *
      ****************************************************************************************************/
     private void optionsFunc(int id)
 	{
@@ -121,10 +122,6 @@ public class MainMenu : MonoBehaviour
 		GUILayout.Box("Volume");
 		volume = GUILayout.HorizontalSlider(volume ,0.0f,1.0f);
 		AudioListener.volume = volume;
-		if (GUILayout.Button ("Snow Effects"))
-		{
-			snowEffects = !snowEffects;
-		}
 		if (GUILayout.Button("Back"))
 		{
 			clicked = "";
@@ -137,7 +134,7 @@ public class MainMenu : MonoBehaviour
     /****************************************************************************************************
      * Description: Navigte the main menu to decide what screen to create.                              *
      * Syntax: menuFunc(int id);                                                                        *
-     * Values: id = The menu button ID that the player clicked on                                       *
+     * Values: id = Unique id needed to create gui.window                                       *
      ****************************************************************************************************/
 	private void menuFunc(int id)
 	{

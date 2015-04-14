@@ -47,6 +47,7 @@ public class FFAscript : MonoBehaviour
         //Grab a list of all the hat colors
         populateHatColors ();
 
+		//find a random x and z location to spawn the player
         float randX = Random.Range(35, 269);
         float randZ = Random.Range(20, 280);
 

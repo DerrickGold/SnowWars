@@ -1,6 +1,6 @@
 /****************************************************************************************************
- * Primary Contributor: Derrick Gold
- * Secondary Contributors: Curtis Murray, Shaun Yonkers
+ * Primary Contributor: Shaun Yonkers
+ * Secondary Contributors: Derrick Gold, Curtis Murray
  * 
  * Description: Keeps track of any global variables and gameobjects. This script can be called by
  *              any other script to access any of its variables
@@ -72,8 +72,10 @@ public class Common: MonoBehaviour
      ****************************************************************************************************/
 	void Start()
 	{
+		//if the scene is not one of the intro levels
 		if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
+			//we are in a game so we need to be able to update the gui componenets
 			Time.timeScale = 1.0f;
 			Screen.lockCursor = true;
             hud = GameObject.FindGameObjectWithTag("hud");
@@ -82,6 +84,7 @@ public class Common: MonoBehaviour
 			alertText = hud.transform.FindChild("Alerts").GetComponent<Text>();
 			buffText = hud.transform.FindChild("buff text").GetComponent<Text>();
 
+			//set the defaults incase anything persisted from the previous game 
 			alertText.text = "";
 			buffText.text = "";
 			TEAM_A_KILLS = "You >> 0";
@@ -105,7 +108,8 @@ public class Common: MonoBehaviour
 				topText.color = TEAM_A_COLOR;
             	bottomText.text = TEAM_B_KILLS.ToString();
 				bottomText.color = TEAM_B_COLOR;
-
+				
+				// if the game has sent the first signal the game has ended
                 if (gameEnd && !oneShot)
                 {
 					oneShot = true;
@@ -124,7 +128,6 @@ public class Common: MonoBehaviour
                     GameObject player = GameObject.Find("Player(Clone)");
                     player.GetComponent<MouseLook>().enabled = false;
                     Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
-                    //player.GetComponent<CharacterController>().enabled = false;
                 }
         }
 	}
