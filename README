@@ -12,7 +12,10 @@ In FFA, all snowmen are fighting for individual domination! No teams, everyone f
 Default winning scores for Deathmatch and Free For All are 10 kills and 5 kills respectively, and can be edited in the scripts.
 FFAScript.cs is the script that handles the Free For All mode and DeathMatchScript.cs handles the team deathmatch mode.
 
-Use WASD to move and use the space bar to jump. First person view, using the mouse to look around.
+Use WASD to move.
+Space bar to jump. 
+Hold shift to sprint. Note: if stamina runs out, snowman becomes burned out and must wait for stamina to fully recharge before sprinting becomes possible again.
+First person view, using the mouse to look around.
 
 
 -------BUFFS-------
