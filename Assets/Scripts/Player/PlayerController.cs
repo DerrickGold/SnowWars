@@ -190,6 +190,7 @@ public class PlayerController : CharacterBase
 				break;
             case PlayerState.RESPAWN:
                 respawn();
+                Screen.lockCursor = true;
                 scoreHasBeenGiven = false;
                 playerState = PlayerState.WALKING;
                 break;
