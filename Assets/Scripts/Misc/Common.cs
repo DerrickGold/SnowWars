@@ -1,6 +1,6 @@
 /****************************************************************************************************
  * Primary Contributor: Shaun Yonkers
- * Secondary Contributors: Derrick Gold, Curtis Murray
+ * Secondary Contributors: Derrick Gold, Curtis Murray, Jaymeson Wickins
  * 
  * Description: Keeps track of any global variables and gameobjects. This script can be called by
  *              any other script to access any of its variables

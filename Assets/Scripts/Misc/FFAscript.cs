@@ -1,6 +1,7 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Shaun Yonkers
- * 
+ * Also: created terrain and map for free for all level       										*                                                                                          *
+ * 																									*
  * Description:  This script is placed on the global game object which creates a Free For All match. 
  * This keeps track of all the gameplay statistics and manages spawning players when they die and at 
  * the beginning of the match.

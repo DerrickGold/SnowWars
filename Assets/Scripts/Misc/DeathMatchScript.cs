@@ -1,6 +1,7 @@
 ﻿/****************************************************************************************************
  * Primary Contributor: Jaymeson Wickins                                                            *
- *                                                                                                  *
+ * Also: created terrain and map for deathmatch level       										*                                                                                          *
+ * 																									*
  * Description: Deals with team death matches and keeps track of the game. Things that this script  *
  *              handles include keeping track of score, spawning of players, team colors, team      *
  *              distribution and keeps track of important gameobjects (such as buffs).   			*
