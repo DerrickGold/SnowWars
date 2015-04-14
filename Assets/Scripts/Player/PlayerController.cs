@@ -400,19 +400,24 @@ public class PlayerController : CharacterBase
     void OnCollisionEnter(Collision col)
     {
         //Did the player get hit by a snowball?
-        if (col.gameObject.name == "Snowball(Clone)")
+        if (col.gameObject.tag == "Snowball")
         {
             Health = getHealth() - col.gameObject.GetComponent<Projectile>().damage;
             if (Health <= 0 && !scoreHasBeenGiven)
             {
                 scoreHasBeenGiven = true;
-				GameObject myKiller = col.gameObject.GetComponent<Projectile> ().origin.gameObject;
 
-				//If this snowman was killed by someone on their own team, and this is not a free for all
-				if(!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag)
-					myKiller.GetComponent<CharacterBase> ().score -= 1;
-				else
-					myKiller.GetComponent<CharacterBase> ().score += 1;	
+                //Make sure the snowball has an owner before assigning scores
+                if (col.gameObject.GetComponent<Projectile>().origin != null)
+                {
+                    GameObject myKiller = col.gameObject.GetComponent<Projectile>().origin.gameObject;
+
+                    //If this snowman was killed by someone on their own team, and this is not a free for all
+                    if (!gameObject.CompareTag("Team0") && gameObject.tag == myKiller.tag)
+                        myKiller.GetComponent<CharacterBase>().score -= 1;
+                    else
+                        myKiller.GetComponent<CharacterBase>().score += 1;
+                }
 			}
 		}
     }

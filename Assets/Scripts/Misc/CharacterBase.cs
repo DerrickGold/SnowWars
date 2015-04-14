@@ -395,7 +395,6 @@ public class CharacterBase: MonoBehaviour
 		Projectile snowBallScript = snowBall.GetComponent<Projectile>();
 		snowBallScript.damage = getSnowBallDamage();
 		snowBallScript.origin = transform;
-		snowBallScript.originHP = Health;
 		snowBallScript.isSuper = isEffectActive (BuffFlag.SUPER_SNOWBALL);
 	}
 

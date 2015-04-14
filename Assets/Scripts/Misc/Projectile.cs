@@ -14,8 +14,7 @@ public class Projectile : MonoBehaviour
 {
 	public GameObject SnowBallTemplate;
     private AudioSource audio1;
-    public Transform origin;
-    public float originHP;
+    public Transform origin = null;
 	public bool isSuper = false;
     private bool oneShot = false;
 
