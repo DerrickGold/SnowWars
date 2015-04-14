@@ -101,6 +101,10 @@ public class Common: MonoBehaviour
      ****************************************************************************************************/
 	void Update()
 	{
+        //Close the game if ESC has been pressed
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+
         //Make sure not to run anything during the intro
         if ((Application.loadedLevelName != "Intro") && (Application.loadedLevelName != "MainMenu"))
         {
